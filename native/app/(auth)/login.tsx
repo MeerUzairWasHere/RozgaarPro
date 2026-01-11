@@ -1,9 +1,15 @@
-import { View, Text, TextInput, Keyboard, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Keyboard,
+  Pressable,
+  TouchableOpacity,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ArrowLeft, Phone, Lock, Eye, EyeOff, Mail } from "lucide-react-native";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
-import { Button } from "@/components/Button";
 import { Toast } from "toastify-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -142,16 +148,17 @@ export default function LoginScreen() {
             </View>
 
             {/* Forgot */}
-            <Button
-              variant="ghost"
-              size="sm"
+            <TouchableOpacity
               className="self-end"
               onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
             >
-              <Text className="text-sm text-primary font-medium">
+              <Text
+                className="text-sm mt-4
+               text-primary font-medium"
+              >
                 Forgot password?
               </Text>
-            </Button>
+            </TouchableOpacity>
           </Animated.View>
 
           {/* Login Button */}
@@ -176,7 +183,7 @@ export default function LoginScreen() {
           <Text className="text-sm text-slate-500">
             Don’t have an account?{" "}
             <Text
-              onPress={() => router.push(ROUTES.SIGNUP)}
+              onPress={() => router.replace(ROUTES.SIGNUP)}
               className="text-blue-600 font-semibold"
             >
               Create account

@@ -9,11 +9,16 @@ import { Search, Wrench, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuthStore } from "@/store";
+import { USER_ROLE } from "@/types";
 
 export default function RoleSelectScreen() {
   const router = useRouter();
 
-  const handleSelectRole = (role: "customer" | "worker") => {
+  const { setUserRole } = useAuthStore();
+
+  const handleSelectRole = (role: USER_ROLE) => {
+    setUserRole(role);
     router.push(ROUTES.LOGIN);
   };
 
@@ -50,7 +55,7 @@ export default function RoleSelectScreen() {
           <Animated.View entering={FadeInLeft.delay(300)}>
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => handleSelectRole("customer")}
+              onPress={() => handleSelectRole(USER_ROLE.USER)}
               className="flex-row gap-4 p-6 bg-white border border-gray-200 rounded-3xl"
             >
               <View className="w-14 h-14 rounded-2xl bg-blue-100 items-center justify-center">
@@ -59,7 +64,7 @@ export default function RoleSelectScreen() {
 
               <View className="flex-1">
                 <Text className="text-lg font-semibold text-slate-900 mb-1">
-                  I need a worker
+                  I am a user
                 </Text>
                 <Text className="text-sm text-slate-500 leading-5">
                   Find and hire skilled professionals for your home or business
@@ -72,7 +77,7 @@ export default function RoleSelectScreen() {
           <Animated.View entering={FadeInRight.delay(400)}>
             <TouchableOpacity
               activeOpacity={0.9}
-              onPress={() => handleSelectRole("worker")}
+              onPress={() => handleSelectRole(USER_ROLE.FREELANCER)}
               className="flex-row gap-4 p-6 bg-white border border-gray-200 rounded-3xl"
             >
               <View className="w-14 h-14 rounded-2xl bg-violet-100 items-center justify-center">
@@ -81,7 +86,7 @@ export default function RoleSelectScreen() {
 
               <View className="flex-1">
                 <Text className="text-lg font-semibold text-slate-900 mb-1">
-                  I am a worker
+                  I am a freelancer
                 </Text>
                 <Text className="text-sm text-slate-500 leading-5">
                   Get discovered by customers and find work nearby

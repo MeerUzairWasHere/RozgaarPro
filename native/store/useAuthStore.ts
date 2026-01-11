@@ -1,15 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-type LoginMethod = "phone" | "email";
-type SignupStep = "form" | "otp" | "done";
+import { LOGIN_METHOD, SIGN_UP_STEP, USER_ROLE } from "@/types";
 
 type AuthStore = {
   isAuthenticated: boolean;
-
-  loginMethod: LoginMethod;
-  signupStep: SignupStep;
+  loginMethod: LOGIN_METHOD;
+  signupStep: SIGN_UP_STEP;
+  userRole: USER_ROLE;
 
   name: string;
   phone: string;
@@ -25,7 +23,8 @@ type AuthStore = {
   ) => void;
 
   setShowPassword: (show: boolean) => void;
-  setLoginMethod: (method: LoginMethod) => void;
+  setLoginMethod: (method: LOGIN_METHOD) => void;
+  setUserRole: (role: USER_ROLE) => void;
 
   login: () => Promise<boolean>;
   signup: () => Promise<boolean>;
@@ -39,13 +38,15 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       isAuthenticated: false,
 
-      loginMethod: "phone",
-      signupStep: "form",
+      loginMethod: LOGIN_METHOD.PHONE,
+      signupStep: SIGN_UP_STEP.FORM,
 
       name: "",
       phone: "",
       email: "",
       password: "",
+
+      userRole: USER_ROLE.USER,
 
       showPassword: false,
       loading: false,
@@ -55,6 +56,8 @@ export const useAuthStore = create<AuthStore>()(
       setShowPassword: (show) => set({ showPassword: show }),
 
       setField: (field, value) => set({ [field]: value } as Partial<AuthStore>),
+
+      setUserRole: (role) => set({ userRole: role }),
 
       // ---------------- LOGIN ----------------
       login: async () => {
@@ -90,7 +93,7 @@ export const useAuthStore = create<AuthStore>()(
 
         set({
           loading: false,
-          signupStep: "otp",
+          signupStep: SIGN_UP_STEP.OTP,
         });
 
         return true;
@@ -105,7 +108,7 @@ export const useAuthStore = create<AuthStore>()(
         set({
           loading: false,
           isAuthenticated: true,
-          signupStep: "done",
+          signupStep: SIGN_UP_STEP.DONE,
         });
 
         return true;
@@ -119,7 +122,7 @@ export const useAuthStore = create<AuthStore>()(
           phone: "",
           email: "",
           password: "",
-          signupStep: "form",
+          signupStep: SIGN_UP_STEP.FORM,
         }),
     }),
     {
