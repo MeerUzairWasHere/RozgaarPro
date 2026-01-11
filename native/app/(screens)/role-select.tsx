@@ -25,7 +25,7 @@ export default function RoleSelectScreen() {
           <Briefcase size={32} color="#fff" />
         </Animated.View>
 
-        <Animated.Text entering={FadeInDown.delay(100)} style={styles.title}>
+        <Animated.Text entering={FadeInDown.delay(100)} className={"text-2xl font-bold text-gray-900 mb-2"}>
           Welcome to RozgaarPro
         </Animated.Text>
 

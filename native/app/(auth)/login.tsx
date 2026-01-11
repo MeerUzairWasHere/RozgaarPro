@@ -13,6 +13,7 @@ import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
 import { Button } from "@/components/Button";
 import { Toast } from "toastify-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -40,145 +41,152 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.replace(ROUTES.SELECT_ROLE)}>
-          <ArrowLeft size={24} color="#0f172a" />
-        </TouchableOpacity>
-      </View>
-
-      {/* Content */}
-      <View style={styles.content}>
-        <Animated.View entering={FadeInDown}>
-          <Text style={styles.title}>Welcome back</Text>
-          <Text style={styles.subtitle}>Login to your account to continue</Text>
-        </Animated.View>
-
-        {/* Toggle */}
-        <Animated.View entering={FadeInDown.delay(100)} style={styles.toggle}>
-          <TouchableOpacity
-            style={[
-              styles.toggleBtn,
-              loginMethod === "phone" && styles.toggleActive,
-            ]}
-            onPress={() => {
-              Keyboard.dismiss();
-              setLoginMethod("phone");
-            }}
-          >
-            <Text
-              style={
-                loginMethod === "phone"
-                  ? styles.toggleTextActive
-                  : styles.toggleText
-              }
-            >
-              Phone Number
-            </Text>
+    <SafeAreaView>
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.replace(ROUTES.SELECT_ROLE)}>
+            <ArrowLeft size={24} color="#0f172a" />
           </TouchableOpacity>
+        </View>
 
-          <TouchableOpacity
-            style={[
-              styles.toggleBtn,
-              loginMethod === "email" && styles.toggleActive,
-            ]}
-            onPress={() => {
-              Keyboard.dismiss();
-              setLoginMethod("email");
-            }}
-          >
-            <Text
-              style={
-                loginMethod === "email"
-                  ? styles.toggleTextActive
-                  : styles.toggleText
-              }
-            >
-              Email
+        {/* Content */}
+        <View style={styles.content}>
+          <Animated.View entering={FadeInDown}>
+            <Text style={styles.title}>Welcome back</Text>
+            <Text style={styles.subtitle}>
+              Login to your account to continue
             </Text>
-          </TouchableOpacity>
-        </Animated.View>
+          </Animated.View>
 
-        {/* Form */}
-        <Animated.View entering={FadeInDown.delay(200)} style={styles.form}>
-          {/* Phone / Email */}
-          <View style={styles.inputWrapper}>
-            {loginMethod === "email" ? (
-              <Mail size={20} color="#64748b" />
-            ) : (
-              <Phone size={20} color="#64748b" />
-            )}
-            <TextInput
-              placeholder={
-                loginMethod === "email" ? "Email address" : "Phone number"
-              }
-              placeholderTextColor="#94a3b8"
-              keyboardType={
-                loginMethod === "email" ? "email-address" : "phone-pad"
-              }
-              value={loginMethod === "email" ? email : phone}
-              onChangeText={(v) =>
-                setField(loginMethod === "email" ? "email" : "phone", v)
-              }
-              style={styles.input}
-            />
-          </View>
-          {/* Password */}
-          <View style={styles.inputWrapper}>
-            <Lock size={20} color="#64748b" />
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor="#94a3b8"
-              secureTextEntry={!showPassword}
-              value={password}
-              onChangeText={(v) => setField("password", v)}
-              style={styles.input}
-            />
-
-            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-              {showPassword ? (
-                <EyeOff size={20} color="#64748b" />
-              ) : (
-                <Eye size={20} color="#64748b" />
-              )}
+          {/* Toggle */}
+          <Animated.View entering={FadeInDown.delay(100)} style={styles.toggle}>
+            <TouchableOpacity
+              style={[
+                styles.toggleBtn,
+                loginMethod === "phone" && styles.toggleActive,
+              ]}
+              onPress={() => {
+                Keyboard.dismiss();
+                setLoginMethod("phone");
+              }}
+            >
+              <Text
+                style={
+                  loginMethod === "phone"
+                    ? styles.toggleTextActive
+                    : styles.toggleText
+                }
+              >
+                Phone Number
+              </Text>
             </TouchableOpacity>
-          </View>
 
-          <Button
-            style={styles.forgot}
-            onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
-            variant="ghost"
-            size="sm"
-          >
-            <Text style={styles.forgotText}>Forgot password?</Text>
-          </Button>
-        </Animated.View>
+            <TouchableOpacity
+              style={[
+                styles.toggleBtn,
+                loginMethod === "email" && styles.toggleActive,
+              ]}
+              onPress={() => {
+                Keyboard.dismiss();
+                setLoginMethod("email");
+              }}
+            >
+              <Text
+                style={
+                  loginMethod === "email"
+                    ? styles.toggleTextActive
+                    : styles.toggleText
+                }
+              >
+                Email
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
 
-        {/* Login Button */}
-        <Animated.View entering={FadeInDown.delay(300)}>
-          <TouchableOpacity
-            style={[styles.loginBtn, loading && { opacity: 0.6 }]}
-            onPress={() => handleLogin()}
-            disabled={loading}
-          >
-            <Text style={styles.loginText}>
-              {loading ? "Logging in..." : "Login"}
+          {/* Form */}
+          <Animated.View entering={FadeInDown.delay(200)} style={styles.form}>
+            {/* Phone / Email */}
+            <View style={styles.inputWrapper}>
+              {loginMethod === "email" ? (
+                <Mail size={20} color="#64748b" />
+              ) : (
+                <Phone size={20} color="#64748b" />
+              )}
+              <TextInput
+                placeholder={
+                  loginMethod === "email" ? "Email address" : "Phone number"
+                }
+                placeholderTextColor="#94a3b8"
+                keyboardType={
+                  loginMethod === "email" ? "email-address" : "phone-pad"
+                }
+                value={loginMethod === "email" ? email : phone}
+                onChangeText={(v) =>
+                  setField(loginMethod === "email" ? "email" : "phone", v)
+                }
+                style={styles.input}
+              />
+            </View>
+            {/* Password */}
+            <View style={styles.inputWrapper}>
+              <Lock size={20} color="#64748b" />
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor="#94a3b8"
+                secureTextEntry={!showPassword}
+                value={password}
+                onChangeText={(v) => setField("password", v)}
+                style={styles.input}
+              />
+
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <EyeOff size={20} color="#64748b" />
+                ) : (
+                  <Eye size={20} color="#64748b" />
+                )}
+              </TouchableOpacity>
+            </View>
+
+            <Button
+              style={styles.forgot}
+              onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
+              variant="ghost"
+              size="sm"
+            >
+              <Text style={styles.forgotText}>Forgot password?</Text>
+            </Button>
+          </Animated.View>
+
+          {/* Login Button */}
+          <Animated.View entering={FadeInDown.delay(300)}>
+            <TouchableOpacity
+              style={[styles.loginBtn, loading && { opacity: 0.6 }]}
+              onPress={() => handleLogin()}
+              disabled={loading}
+            >
+              <Text style={styles.loginText}>
+                {loading ? "Logging in..." : "Login"}
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+
+        {/* Footer */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            Don’t have an account?{" "}
+            <Text
+              style={styles.link}
+              onPress={() => router.push(ROUTES.SIGNUP)}
+            >
+              Create account
             </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-
-      {/* Footer */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>
-          Don’t have an account?{" "}
-          <Text style={styles.link} onPress={() => router.push(ROUTES.SIGNUP)}>
-            Create account
           </Text>
-        </Text>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -189,13 +197,11 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 16,
-    marginTop: 50,
   },
 
   content: {
     flex: 1,
     paddingHorizontal: 24,
-    marginTop: 120,
   },
 
   title: {
