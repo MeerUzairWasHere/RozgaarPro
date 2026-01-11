@@ -4,14 +4,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type OnboardingState = {
   completed: boolean;
-  completeOnboarding: () => void;
+  completeOnboarding: (v: boolean) => void;
 };
 
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
       completed: false,
-      completeOnboarding: () => set({ completed: true }),
+      completeOnboarding: (completed) => set({ completed }),
     }),
     {
       name: "onboarding-storage",

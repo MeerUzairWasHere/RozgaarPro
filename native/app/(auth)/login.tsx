@@ -1,22 +1,15 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  StyleSheet,
-  Keyboard,
-} from "react-native";
+import { View, Text, TextInput, Keyboard, Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ArrowLeft, Phone, Lock, Eye, EyeOff, Mail } from "lucide-react-native";
-import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
 import { Button } from "@/components/Button";
 import { Toast } from "toastify-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { cn } from "@/utils/utils";
 
 export default function LoginScreen() {
-  const router = useRouter();
   const {
     loginMethod,
     setLoginMethod,
@@ -41,73 +34,65 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-1">
         {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.replace(ROUTES.SELECT_ROLE)}>
+        <View className="p-4">
+          <Pressable
+            onPress={() => router.back()}
+            android_ripple={{ color: "rgba(0,0,0,0.12)" }}
+            className="p-2 rounded-full overflow-hidden self-start"
+          >
             <ArrowLeft size={24} color="#0f172a" />
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Content */}
-        <View style={styles.content}>
+        <View className="flex-1 px-6">
           <Animated.View entering={FadeInDown}>
-            <Text style={styles.title}>Welcome back</Text>
-            <Text style={styles.subtitle}>
+            <Text className="text-3xl font-bold text-slate-900 mb-1">
+              Welcome back
+            </Text>
+            <Text className="text-sm text-slate-500 mb-8">
               Login to your account to continue
             </Text>
           </Animated.View>
 
           {/* Toggle */}
-          <Animated.View entering={FadeInDown.delay(100)} style={styles.toggle}>
-            <TouchableOpacity
-              style={[
-                styles.toggleBtn,
-                loginMethod === "phone" && styles.toggleActive,
-              ]}
-              onPress={() => {
-                Keyboard.dismiss();
-                setLoginMethod("phone");
-              }}
-            >
-              <Text
-                style={
-                  loginMethod === "phone"
-                    ? styles.toggleTextActive
-                    : styles.toggleText
-                }
+          <Animated.View
+            entering={FadeInDown.delay(100)}
+            className="flex-row bg-slate-100 rounded-xl p-1 mb-6"
+          >
+            {["phone", "email"].map((type) => (
+              <Pressable
+                key={type}
+                onPress={() => {
+                  Keyboard.dismiss();
+                  setLoginMethod(type as any);
+                }}
+                android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+                className={`flex-1 py-2 rounded-lg overflow-hidden items-center ${
+                  loginMethod === type ? "bg-white" : ""
+                }`}
               >
-                Phone Number
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.toggleBtn,
-                loginMethod === "email" && styles.toggleActive,
-              ]}
-              onPress={() => {
-                Keyboard.dismiss();
-                setLoginMethod("email");
-              }}
-            >
-              <Text
-                style={
-                  loginMethod === "email"
-                    ? styles.toggleTextActive
-                    : styles.toggleText
-                }
-              >
-                Email
-              </Text>
-            </TouchableOpacity>
+                <Text
+                  className={
+                    (cn("text-sm"),
+                    loginMethod === type
+                      ? "text-slate-900 font-semibold"
+                      : "text-slate-500 font-medium")
+                  }
+                >
+                  {type === "phone" ? "Phone Number" : "Email"}
+                </Text>
+              </Pressable>
+            ))}
           </Animated.View>
 
           {/* Form */}
-          <Animated.View entering={FadeInDown.delay(200)} style={styles.form}>
+          <Animated.View entering={FadeInDown.delay(200)} className="space-y-4">
             {/* Phone / Email */}
-            <View style={styles.inputWrapper}>
+            <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
               {loginMethod === "email" ? (
                 <Mail size={20} color="#64748b" />
               ) : (
@@ -125,11 +110,15 @@ export default function LoginScreen() {
                 onChangeText={(v) =>
                   setField(loginMethod === "email" ? "email" : "phone", v)
                 }
-                style={styles.input}
+                className="flex-1 text-base ml-2 mb-1"
               />
             </View>
+
             {/* Password */}
-            <View style={styles.inputWrapper}>
+            <View
+              className="flex-row items-center mt-4
+             border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3"
+            >
               <Lock size={20} color="#64748b" />
               <TextInput
                 placeholder="Password"
@@ -137,49 +126,58 @@ export default function LoginScreen() {
                 secureTextEntry={!showPassword}
                 value={password}
                 onChangeText={(v) => setField("password", v)}
-                style={styles.input}
+                className="flex-1 text-base  ml-2 mb-1"
               />
-
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Pressable
+                onPress={() => setShowPassword(!showPassword)}
+                android_ripple={{ color: "rgba(0,0,0,0.12)" }}
+                className="p-2 rounded-full overflow-hidden"
+              >
                 {showPassword ? (
                   <EyeOff size={20} color="#64748b" />
                 ) : (
                   <Eye size={20} color="#64748b" />
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
+            {/* Forgot */}
             <Button
-              style={styles.forgot}
-              onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
               variant="ghost"
               size="sm"
+              className="self-end"
+              onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
             >
-              <Text style={styles.forgotText}>Forgot password?</Text>
+              <Text className="text-sm text-primary font-medium">
+                Forgot password?
+              </Text>
             </Button>
           </Animated.View>
 
           {/* Login Button */}
           <Animated.View entering={FadeInDown.delay(300)}>
-            <TouchableOpacity
-              style={[styles.loginBtn, loading && { opacity: 0.6 }]}
-              onPress={() => handleLogin()}
+            <Pressable
+              onPress={handleLogin}
               disabled={loading}
+              android_ripple={{ color: "rgba(255,255,255,0.25)" }}
+              className={`h-14 rounded-2xl bg-blue-600 items-center justify-center mt-8 overflow-hidden ${
+                loading ? "opacity-60" : ""
+              }`}
             >
-              <Text style={styles.loginText}>
+              <Text className="text-white text-base font-semibold">
                 {loading ? "Logging in..." : "Login"}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </Animated.View>
         </View>
 
         {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>
+        <View className="p-6 items-center">
+          <Text className="text-sm text-slate-500">
             Don’t have an account?{" "}
             <Text
-              style={styles.link}
               onPress={() => router.push(ROUTES.SIGNUP)}
+              className="text-blue-600 font-semibold"
             >
               Create account
             </Text>
@@ -189,122 +187,3 @@ export default function LoginScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  header: {
-    padding: 16,
-  },
-
-  content: {
-    flex: 1,
-    paddingHorizontal: 24,
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: "#0f172a",
-    marginBottom: 4,
-  },
-
-  subtitle: {
-    fontSize: 14,
-    color: "#64748b",
-    marginBottom: 32,
-  },
-
-  toggle: {
-    flexDirection: "row",
-    backgroundColor: "#f1f5f9",
-    borderRadius: 12,
-    padding: 4,
-    marginBottom: 24,
-  },
-
-  toggleBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    alignItems: "center",
-    borderRadius: 8,
-  },
-
-  toggleActive: {
-    backgroundColor: "#ffffff",
-  },
-
-  toggleText: {
-    color: "#64748b",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-
-  toggleTextActive: {
-    color: "#0f172a",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-
-  form: {
-    gap: 16,
-  },
-
-  inputWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    borderWidth: 2,
-    borderColor: "#e5e7eb",
-    borderRadius: 14,
-    paddingHorizontal: 16,
-    height: 56,
-  },
-
-  input: {
-    flex: 1,
-    fontSize: 16,
-  },
-
-  forgot: {
-    alignItems: "flex-end",
-  },
-
-  forgotText: {
-    fontSize: 14,
-    color: "#2563eb",
-    fontWeight: "500",
-  },
-
-  loginBtn: {
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: "#2563eb",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 32,
-  },
-
-  loginText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-
-  footer: {
-    padding: 24,
-    alignItems: "center",
-  },
-
-  footerText: {
-    fontSize: 14,
-    color: "#64748b",
-  },
-
-  link: {
-    color: "#2563eb",
-    fontWeight: "600",
-  },
-});

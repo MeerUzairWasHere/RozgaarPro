@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Pressable, Platform } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
@@ -34,74 +34,81 @@ const slides = [
 export default function OnboardingScreen() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
-
-  const completeOnboarding = useOnboardingStore(
-    (state) => state.completeOnboarding
-  );
+  const completeOnboarding = useOnboardingStore((s) => s.completeOnboarding);
 
   const handleFinish = () => {
-    completeOnboarding();
-    router.replace(ROUTES.LOGIN);
-  };
-
-  const handleNext = () => {
-    if (currentSlide < slides.length - 1) {
-      setCurrentSlide((prev) => prev + 1);
-    } else {
-      handleFinish();
-    }
-  };
-
-  const handleSkip = () => {
-    handleFinish();
+    completeOnboarding(true);
+    router.replace(ROUTES.SELECT_ROLE);
   };
 
   const slide = slides[currentSlide];
   const Icon = slide.icon;
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white">
       {/* Skip */}
-      <View style={styles.skipContainer}>
-        <TouchableOpacity onPress={handleSkip}>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
+      <View className="items-end px-9 pt-10">
+        <Pressable
+          onPress={handleFinish}
+          android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+          className="rounded-full px-3 py-2 overflow-hidden"
+        >
+          <Text className="text-slate-500 font-medium">Skip</Text>
+        </Pressable>
       </View>
 
       {/* Content */}
-      <View style={styles.content}>
+      <View className="flex-1 items-center justify-center px-8">
         <Animated.View
           key={currentSlide}
           entering={FadeInRight}
           exiting={FadeOutLeft}
-          style={styles.center}
+          className="items-center"
         >
-          <View style={[styles.iconWrapper, { backgroundColor: slide.color }]}>
+          <View
+            style={{ backgroundColor: slide.color }}
+            className="h-28 w-28 rounded-full items-center justify-center mb-10"
+          >
             <Icon size={56} color="white" />
           </View>
 
-          <Text style={styles.title}>{slide.title}</Text>
+          <Text className="text-2xl font-bold text-slate-900 text-center mb-4">
+            {slide.title}
+          </Text>
 
-          <Text style={styles.description}>{slide.description}</Text>
+          <Text className="text-base text-slate-500 text-center leading-6 max-w-[280px]">
+            {slide.description}
+          </Text>
         </Animated.View>
       </View>
 
       {/* Footer */}
-      <View style={styles.footer}>
+      <View className="px-8 pb-10">
         {/* Dots */}
-        <View style={styles.dots}>
+        <View className="flex-row justify-center mb-6">
           {slides.map((_, index) => (
-            <TouchableOpacity
+            <Pressable
               key={index}
               onPress={() => setCurrentSlide(index)}
-              style={[styles.dot, index === currentSlide && styles.activeDot]}
+              android_ripple={{ color: "rgba(0,0,0,0.15)" }}
+              className={`h-2 rounded-full mx-1 overflow-hidden ${
+                index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-slate-300"
+              }`}
             />
           ))}
         </View>
 
         {/* Button */}
-        <Button onPress={handleNext} style={styles.button}>
-          <Text style={styles.buttonText}>
+        <Button
+          onPress={() =>
+            currentSlide === slides.length - 1
+              ? handleFinish()
+              : setCurrentSlide((p) => p + 1)
+          }
+          android_ripple={{ color: "rgba(255,255,255,0.25)" }}
+          className="h-14 rounded-2xl bg-blue-600 items-center justify-center overflow-hidden"
+        >
+          <Text className="text-white text-base font-semibold">
             {currentSlide === slides.length - 1 ? "Get Started" : "Next"}
           </Text>
         </Button>
@@ -109,85 +116,3 @@ export default function OnboardingScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-  },
-  skipContainer: {
-    alignItems: "flex-end",
-    padding: 36,
-    marginTop: 16,
-  },
-  skipText: {
-    color: "#64748b",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  content: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 32,
-  },
-  center: {
-    alignItems: "center",
-  },
-  iconWrapper: {
-    width: 112,
-    height: 112,
-    borderRadius: 56,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 40,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 16,
-    color: "#0f172a",
-  },
-  description: {
-    fontSize: 16,
-    textAlign: "center",
-    color: "#64748b",
-    lineHeight: 22,
-    maxWidth: 280,
-  },
-  footer: {
-    padding: 32,
-  },
-  dots: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 24,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: "#cbd5e1",
-    marginHorizontal: 4,
-  },
-  activeDot: {
-    width: 32,
-    backgroundColor: "#2563eb",
-  },
-  button: {
-    height: 56,
-    borderRadius: 16,
-    flexDirection: "row",
-    alignItems: "center",
-    textAlign: "center",
-    justifyContent: "center",
-    gap: 8,
-    backgroundColor: "#2563eb",
-  },
-  buttonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});

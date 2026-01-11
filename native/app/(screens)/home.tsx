@@ -2,14 +2,15 @@ import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
 import { Button } from "@/components/Button";
-import { useAuthStore } from "@/store";
+import { useAuthStore, useOnboardingStore } from "@/store";
 
 export default function HomeScreen() {
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
-
+  const toggleOnboarding = useOnboardingStore((s) => s.completeOnboarding);
   const handleLogout = () => {
     logout(); // clear auth state
+    toggleOnboarding(false); // reset onboarding state
     router.replace(ROUTES.SELECT_ROLE); // go back to role select
   };
 
@@ -17,7 +18,7 @@ export default function HomeScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>This is Home</Text>
 
-      <Button onPress={handleLogout} className="hidden">
+      <Button onPress={handleLogout}>
         <Text>Logout</Text>
       </Button>
     </View>

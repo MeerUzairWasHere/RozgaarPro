@@ -55,6 +55,7 @@ export const Button = forwardRef<any, ButtonProps>(
         ]}
         disabled={isDisabled}
         {...props}
+        android_ripple={{ color: "#ddd" }}
       >
         <View style={styles.content}>
           {loading ? (

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -8,177 +8,98 @@ import Animated, {
 import { Search, Wrench, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RoleSelectScreen() {
   const router = useRouter();
 
   const handleSelectRole = (role: "customer" | "worker") => {
-    // you can persist role here later
-    router.replace(ROUTES.LOGIN);
+    router.push(ROUTES.LOGIN);
   };
 
   return (
-    <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Animated.View entering={FadeIn} style={styles.iconBox}>
-          <Briefcase size={32} color="#fff" />
-        </Animated.View>
+    <SafeAreaView className="flex-1 bg-white">
+      <View className="flex-1 px-6">
+        {/* Header */}
+        <View className="items-center pt-8 pb-10 mt-24">
+          <Animated.View
+            entering={FadeIn}
+            className="w-16 h-16 rounded-2xl bg-blue-600 items-center justify-center mb-4"
+          >
+            <Briefcase size={32} color="#fff" />
+          </Animated.View>
 
-        <Animated.Text entering={FadeInDown.delay(100)} className={"text-2xl font-bold text-gray-900 mb-2"}>
-          Welcome to RozgaarPro
-        </Animated.Text>
+          <Animated.Text
+            entering={FadeInDown.delay(100)}
+            className="text-2xl font-bold text-slate-900 mb-2"
+          >
+            Welcome to RozgaarPro
+          </Animated.Text>
 
-        <Animated.Text entering={FadeInDown.delay(200)} style={styles.subtitle}>
-          How would you like to use the app?
+          <Animated.Text
+            entering={FadeInDown.delay(200)}
+            className="text-sm text-slate-500 text-center"
+          >
+            How would you like to use the app?
+          </Animated.Text>
+        </View>
+
+        {/* Role Cards */}
+        <View className="flex-1 space-y-4 flex gap-4">
+          {/* Customer */}
+          <Animated.View entering={FadeInLeft.delay(300)}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => handleSelectRole("customer")}
+              className="flex-row gap-4 p-6 bg-white border border-gray-200 rounded-3xl"
+            >
+              <View className="w-14 h-14 rounded-2xl bg-blue-100 items-center justify-center">
+                <Search size={28} color="#2563eb" />
+              </View>
+
+              <View className="flex-1">
+                <Text className="text-lg font-semibold text-slate-900 mb-1">
+                  I need a worker
+                </Text>
+                <Text className="text-sm text-slate-500 leading-5">
+                  Find and hire skilled professionals for your home or business
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+
+          {/* Worker */}
+          <Animated.View entering={FadeInRight.delay(400)}>
+            <TouchableOpacity
+              activeOpacity={0.9}
+              onPress={() => handleSelectRole("worker")}
+              className="flex-row gap-4 p-6 bg-white border border-gray-200 rounded-3xl"
+            >
+              <View className="w-14 h-14 rounded-2xl bg-violet-100 items-center justify-center">
+                <Wrench size={28} color="#9333ea" />
+              </View>
+
+              <View className="flex-1">
+                <Text className="text-lg font-semibold text-slate-900 mb-1">
+                  I am a worker
+                </Text>
+                <Text className="text-sm text-slate-500 leading-5">
+                  Get discovered by customers and find work nearby
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+
+        {/* Footer */}
+        <Animated.Text
+          entering={FadeIn.delay(600)}
+          className="text-center text-xs text-slate-500 py-6"
+        >
+          By continuing, you agree to our{" "}
+          <Text className="text-blue-600 font-medium">Terms of Service</Text>
         </Animated.Text>
       </View>
-
-      {/* Role Cards */}
-      <View style={styles.cards}>
-        {/* Customer */}
-        <Animated.View entering={FadeInLeft.delay(300)}>
-          <TouchableOpacity
-            style={styles.card}
-            activeOpacity={0.9}
-            onPress={() => handleSelectRole("customer")}
-          >
-            <View style={[styles.cardIcon, styles.primaryBg]}>
-              <Search size={28} color="#2563eb" />
-            </View>
-
-            <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>I need a worker</Text>
-              <Text style={styles.cardText}>
-                Find and hire skilled professionals for your home or business
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-
-        {/* Worker */}
-        <Animated.View entering={FadeInRight.delay(400)}>
-          <TouchableOpacity
-            style={styles.card}
-            activeOpacity={0.9}
-            onPress={() => handleSelectRole("worker")}
-          >
-            <View style={[styles.cardIcon, styles.accentBg]}>
-              <Wrench size={28} color="#9333ea" />
-            </View>
-
-            <View style={styles.cardContent}>
-              <Text style={styles.cardTitle}>I am a worker</Text>
-              <Text style={styles.cardText}>
-                Get discovered by customers and find work nearby
-              </Text>
-            </View>
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-
-      {/* Footer */}
-      <Animated.Text entering={FadeIn.delay(600)} style={styles.footerText}>
-        By continuing, you agree to our{" "}
-        <Text style={styles.link}>Terms of Service</Text>
-      </Animated.Text>
-    </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    padding: 24,
-  },
-
-  header: {
-    alignItems: "center",
-    paddingTop: 32,
-    paddingBottom: 40,
-    marginTop: 100,
-  },
-
-  iconBox: {
-    width: 64,
-    height: 64,
-    borderRadius: 16,
-    backgroundColor: "#2563eb",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#0f172a",
-    marginBottom: 8,
-  },
-
-  subtitle: {
-    fontSize: 14,
-    color: "#64748b",
-  },
-
-  cards: {
-    flex: 1,
-    gap: 16,
-  },
-
-  card: {
-    flexDirection: "row",
-    gap: 16,
-    padding: 24,
-    backgroundColor: "#ffffff",
-    borderRadius: 24,
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-  },
-
-  cardIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  primaryBg: {
-    backgroundColor: "#dbeafe",
-  },
-
-  accentBg: {
-    backgroundColor: "#ede9fe",
-  },
-
-  cardContent: {
-    flex: 1,
-  },
-
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: "#0f172a",
-    marginBottom: 4,
-  },
-
-  cardText: {
-    fontSize: 14,
-    color: "#64748b",
-    lineHeight: 20,
-  },
-
-  footerText: {
-    textAlign: "center",
-    fontSize: 13,
-    color: "#64748b",
-    paddingVertical: 24,
-  },
-
-  link: {
-    color: "#2563eb",
-    fontWeight: "500",
-  },
-});
