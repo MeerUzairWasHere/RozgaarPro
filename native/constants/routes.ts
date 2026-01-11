@@ -1,7 +1,8 @@
 export const ROUTES = {
-  HOME: "/(screens)/home",
   ONBOARDING: "/(screens)/onboarding",
+  SELECT_ROLE: "/(screens)/role-select",
   LOGIN: "/(auth)/login",
   SIGNUP: "/(auth)/signup",
-  SELECT_ROLE: "/(screens)/role-select",
+  FORGOT_PASSWORD: "/(auth)/forgot-password",
+  HOME: "/(screens)/home",
 } as const;

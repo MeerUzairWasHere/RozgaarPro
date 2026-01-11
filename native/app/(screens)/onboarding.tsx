@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
-import { Button } from "@/components/Button";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
+import { Button } from "@/components/Button";
 
 const slides = [
   {

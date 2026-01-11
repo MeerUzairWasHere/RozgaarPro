@@ -1,4 +1,3 @@
-
 import {
   View,
   Text,
@@ -12,6 +11,8 @@ import { ArrowLeft, Phone, Lock, Eye, EyeOff, Mail } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
+import { Button } from "@/components/Button";
+import { Toast } from "toastify-react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -30,10 +31,12 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     const success = await login();
-
     if (success) {
       router.replace(ROUTES.HOME);
+      Toast.success("Login Successful!");
     }
+    Toast.error("Login Failed. Please check your credentials.");
+    console.log(success);
   };
 
   return (
@@ -121,7 +124,6 @@ export default function LoginScreen() {
               style={styles.input}
             />
           </View>
-
           {/* Password */}
           <View style={styles.inputWrapper}>
             <Lock size={20} color="#64748b" />
@@ -143,16 +145,21 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity style={styles.forgot}>
+          <Button
+            style={styles.forgot}
+            onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
+            variant="ghost"
+            size="sm"
+          >
             <Text style={styles.forgotText}>Forgot password?</Text>
-          </TouchableOpacity>
+          </Button>
         </Animated.View>
 
         {/* Login Button */}
         <Animated.View entering={FadeInDown.delay(300)}>
           <TouchableOpacity
             style={[styles.loginBtn, loading && { opacity: 0.6 }]}
-            onPress={handleLogin}
+            onPress={() => handleLogin()}
             disabled={loading}
           >
             <Text style={styles.loginText}>
