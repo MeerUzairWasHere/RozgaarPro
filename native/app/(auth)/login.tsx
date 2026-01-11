@@ -14,6 +14,7 @@ import { Toast } from "toastify-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { cn } from "@/utils/utils";
+import { LOGIN_METHOD } from "@/types";
 
 export default function LoginScreen() {
   const {
@@ -99,24 +100,32 @@ export default function LoginScreen() {
           <Animated.View entering={FadeInDown.delay(200)} className="space-y-4">
             {/* Phone / Email */}
             <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
-              {loginMethod === "email" ? (
+              {loginMethod === LOGIN_METHOD.EMAIL ? (
                 <Mail size={20} color="#64748b" />
               ) : (
                 <Phone size={20} color="#64748b" />
               )}
               <TextInput
                 placeholder={
-                  loginMethod === "email" ? "Email address" : "Phone number"
+                  loginMethod === LOGIN_METHOD.EMAIL
+                    ? "Email address"
+                    : "Phone number"
                 }
                 placeholderTextColor="#94a3b8"
                 keyboardType={
-                  loginMethod === "email" ? "email-address" : "phone-pad"
+                  loginMethod === LOGIN_METHOD.EMAIL
+                    ? "email-address"
+                    : "phone-pad"
                 }
-                value={loginMethod === "email" ? email : phone}
+                value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
                 onChangeText={(v) =>
-                  setField(loginMethod === "email" ? "email" : "phone", v)
+                  setField(
+                    loginMethod === LOGIN_METHOD.EMAIL ? "email" : "phone",
+                    v
+                  )
                 }
                 className="flex-1 text-base ml-2 mb-1"
+                maxLength={loginMethod === LOGIN_METHOD.EMAIL ? 30 : 10}
               />
             </View>
 
