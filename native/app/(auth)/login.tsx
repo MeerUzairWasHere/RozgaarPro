@@ -32,11 +32,11 @@ export default function LoginScreen() {
   const handleLogin = async () => {
     const success = await login();
     if (success) {
-      router.replace(ROUTES.HOME);
       Toast.success("Login Successful!");
+      router.replace(ROUTES.HOME);
+    } else {
+      Toast.error("Login Failed. Please check your credentials.");
     }
-    Toast.error("Login Failed. Please check your credentials.");
-    console.log(success);
   };
 
   return (

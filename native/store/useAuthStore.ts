@@ -1,8 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Keyboard, ToastAndroid } from "react-native";
-import { Toast } from "toastify-react-native";
 
 type LoginMethod = "phone" | "email";
 
@@ -49,9 +47,11 @@ export const useAuthStore = create<AuthStore>()(
 
       login: async () => {
         const { phone, email, password, loginMethod } = get();
+        if (loginMethod === "phone" && (phone.length < 10 || phone.length > 10))
+          return false;
 
-        if (loginMethod === "phone" && phone.length < 10) return false;
         if (loginMethod === "email" && !email.includes("@")) return false;
+
         if (!password) return false;
 
         set({ loading: true });
