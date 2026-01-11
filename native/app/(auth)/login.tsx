@@ -1,24 +1,175 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  StyleSheet,
+  Keyboard,
+} from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
+import { ArrowLeft, Phone, Lock, Eye, EyeOff, Mail } from "lucide-react-native";
 import { useRouter } from "expo-router";
-import Input from "../../components/Input";
+import { ROUTES } from "@/constants";
+import { useAuthStore } from "@/store";
 
-export default function Login() {
+export default function LoginScreen() {
   const router = useRouter();
+  const {
+    loginMethod,
+    setLoginMethod,
+    setField,
+    phone,
+    email,
+    password,
+    login,
+    loading,
+    showPassword,
+    setShowPassword,
+  } = useAuthStore();
+
+  const handleLogin = async () => {
+    const success = await login();
+
+    if (success) {
+      router.replace(ROUTES.HOME);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.replace(ROUTES.SELECT_ROLE)}>
+          <ArrowLeft size={24} color="#0f172a" />
+        </TouchableOpacity>
+      </View>
 
-      <Input placeholder="Email" />
-      <Input placeholder="Password" secureTextEntry />
+      {/* Content */}
+      <View style={styles.content}>
+        <Animated.View entering={FadeInDown}>
+          <Text style={styles.title}>Welcome back</Text>
+          <Text style={styles.subtitle}>Login to your account to continue</Text>
+        </Animated.View>
 
-      <Pressable style={styles.button}>
-        <Text style={styles.buttonText}>Login</Text>
-      </Pressable>
+        {/* Toggle */}
+        <Animated.View entering={FadeInDown.delay(100)} style={styles.toggle}>
+          <TouchableOpacity
+            style={[
+              styles.toggleBtn,
+              loginMethod === "phone" && styles.toggleActive,
+            ]}
+            onPress={() => {
+              Keyboard.dismiss();
+              setLoginMethod("phone");
+            }}
+          >
+            <Text
+              style={
+                loginMethod === "phone"
+                  ? styles.toggleTextActive
+                  : styles.toggleText
+              }
+            >
+              Phone Number
+            </Text>
+          </TouchableOpacity>
 
-      <Pressable onPress={() => router.push("/(auth)/signup")}>
-        <Text style={styles.link}>Create an account</Text>
-      </Pressable>
+          <TouchableOpacity
+            style={[
+              styles.toggleBtn,
+              loginMethod === "email" && styles.toggleActive,
+            ]}
+            onPress={() => {
+              Keyboard.dismiss();
+              setLoginMethod("email");
+            }}
+          >
+            <Text
+              style={
+                loginMethod === "email"
+                  ? styles.toggleTextActive
+                  : styles.toggleText
+              }
+            >
+              Email
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Form */}
+        <Animated.View entering={FadeInDown.delay(200)} style={styles.form}>
+          {/* Phone / Email */}
+          <View style={styles.inputWrapper}>
+            {loginMethod === "email" ? (
+              <Mail size={20} color="#64748b" />
+            ) : (
+              <Phone size={20} color="#64748b" />
+            )}
+            <TextInput
+              placeholder={
+                loginMethod === "email" ? "Email address" : "Phone number"
+              }
+              placeholderTextColor="#94a3b8"
+              keyboardType={
+                loginMethod === "email" ? "email-address" : "phone-pad"
+              }
+              value={loginMethod === "email" ? email : phone}
+              onChangeText={(v) =>
+                setField(loginMethod === "email" ? "email" : "phone", v)
+              }
+              style={styles.input}
+            />
+          </View>
+
+          {/* Password */}
+          <View style={styles.inputWrapper}>
+            <Lock size={20} color="#64748b" />
+            <TextInput
+              placeholder="Password"
+              placeholderTextColor="#94a3b8"
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={(v) => setField("password", v)}
+              style={styles.input}
+            />
+
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              {showPassword ? (
+                <EyeOff size={20} color="#64748b" />
+              ) : (
+                <Eye size={20} color="#64748b" />
+              )}
+            </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity style={styles.forgot}>
+            <Text style={styles.forgotText}>Forgot password?</Text>
+          </TouchableOpacity>
+        </Animated.View>
+
+        {/* Login Button */}
+        <Animated.View entering={FadeInDown.delay(300)}>
+          <TouchableOpacity
+            style={[styles.loginBtn, loading && { opacity: 0.6 }]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            <Text style={styles.loginText}>
+              {loading ? "Logging in..." : "Login"}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
+      </View>
+
+      {/* Footer */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          Don’t have an account?{" "}
+          <Text style={styles.link} onPress={() => router.push(ROUTES.SIGNUP)}>
+            Create account
+          </Text>
+        </Text>
+      </View>
     </View>
   );
 }
@@ -26,28 +177,120 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
-    justifyContent: "center",
+    backgroundColor: "#ffffff",
   },
+  header: {
+    padding: 16,
+    marginTop: 50,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    marginTop: 120,
+  },
+
   title: {
-    fontSize: 32,
-    fontWeight: "bold",
+    fontSize: 28,
+    fontWeight: "700",
+    color: "#0f172a",
+    marginBottom: 4,
+  },
+
+  subtitle: {
+    fontSize: 14,
+    color: "#64748b",
+    marginBottom: 32,
+  },
+
+  toggle: {
+    flexDirection: "row",
+    backgroundColor: "#f1f5f9",
+    borderRadius: 12,
+    padding: 4,
     marginBottom: 24,
   },
-  button: {
-    backgroundColor: "#2563eb",
-    padding: 16,
+
+  toggleBtn: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: "center",
     borderRadius: 8,
-    marginTop: 8,
   },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
+
+  toggleActive: {
+    backgroundColor: "#ffffff",
+  },
+
+  toggleText: {
+    color: "#64748b",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+
+  toggleTextActive: {
+    color: "#0f172a",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+
+  form: {
+    gap: 16,
+  },
+
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    borderWidth: 2,
+    borderColor: "#e5e7eb",
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    height: 56,
+  },
+
+  input: {
+    flex: 1,
     fontSize: 16,
   },
-  link: {
-    marginTop: 16,
+
+  forgot: {
+    alignItems: "flex-end",
+  },
+
+  forgotText: {
+    fontSize: 14,
     color: "#2563eb",
-    textAlign: "center",
+    fontWeight: "500",
+  },
+
+  loginBtn: {
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: "#2563eb",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 32,
+  },
+
+  loginText: {
+    color: "#ffffff",
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  footer: {
+    padding: 24,
+    alignItems: "center",
+  },
+
+  footerText: {
+    fontSize: 14,
+    color: "#64748b",
+  },
+
+  link: {
+    color: "#2563eb",
+    fontWeight: "600",
   },
 });

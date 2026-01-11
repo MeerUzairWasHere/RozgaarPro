@@ -4,6 +4,8 @@ import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { Button } from "@/components/Button";
+import { useOnboardingStore } from "@/store/useOnboardingStore";
+import { ROUTES } from "@/constants";
 
 const slides = [
   {
@@ -33,16 +35,25 @@ export default function OnboardingScreen() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
 
+  const completeOnboarding = useOnboardingStore(
+    (state) => state.completeOnboarding
+  );
+
+  const handleFinish = () => {
+    completeOnboarding();
+    router.replace(ROUTES.LOGIN);
+  };
+
   const handleNext = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide((prev) => prev + 1);
     } else {
-      router.replace("/(auth)/login");
+      handleFinish();
     }
   };
 
   const handleSkip = () => {
-    router.replace("/(auth)/login");
+    handleFinish();
   };
 
   const slide = slides[currentSlide];
@@ -169,6 +180,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     flexDirection: "row",
     alignItems: "center",
+    textAlign: "center",
     justifyContent: "center",
     gap: 8,
     backgroundColor: "#2563eb",

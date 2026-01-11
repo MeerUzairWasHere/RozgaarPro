@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet } from "react-native";
 export default function Input(props: any) {
   return (
     <View style={styles.container}>
-      <TextInput {...props} style={styles.input} placeholderTextColor="#999" />
+      <TextInput {...props} style={styles.input} />
     </View>
   );
 }
