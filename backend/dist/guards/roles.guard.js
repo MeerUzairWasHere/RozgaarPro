@@ -8,7 +8,7 @@ const rolesGuard = (...allowedRoles) => {
         if (!req.user) {
             return next(new errors_1.ForbiddenError("User not authenticated"));
         }
-        if (req.user.role === client_1.Role.SuperAdmin) {
+        if (req.user.role === client_1.Role.SUPER_ADMIN) {
             return next();
         }
         const userRole = req.user.role;

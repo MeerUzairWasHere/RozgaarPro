@@ -20,7 +20,7 @@ exports.validateUserCreateInput = zod_1.z.object({
         .string("password is required")
         .min(8, { message: "password must be at least 8 characters long" })
         .max(255, { message: "password must be at most 255 characters long" }),
-    role: zod_1.z.enum(client_1.Role).default(client_1.Role.User),
+    role: zod_1.z.enum(client_1.Role).default(client_1.Role.USER),
     isVerified: zod_1.z.boolean().default(false).optional(),
     verificationToken: zod_1.z.string().max(255).optional().nullable(),
     passwordToken: zod_1.z.string().max(255).optional().nullable(),

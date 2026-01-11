@@ -24,7 +24,7 @@ class AuthService {
         return __awaiter(this, void 0, void 0, function* () {
             const { email, name, password, username } = data;
             const userCount = yield this.userRepository.getUserCount();
-            const role = userCount === 0 ? client_1.Role.SuperAdmin : client_1.Role.User;
+            const role = userCount === 0 ? client_1.Role.SUPER_ADMIN : client_1.Role.USER;
             const hashedPassword = yield (0, utils_1.hashPassword)(password);
             const verificationToken = (0, crypto_1.randomBytes)(40).toString("hex");
             yield this.userRepository.createUser({
@@ -33,9 +33,9 @@ class AuthService {
                 username,
                 password: hashedPassword,
                 role,
-                verificationToken: role === client_1.Role.User ? verificationToken : null,
-                isVerified: role === client_1.Role.SuperAdmin ? true : false,
-                verified: role === client_1.Role.SuperAdmin ? new Date() : null,
+                verificationToken: role === client_1.Role.USER ? verificationToken : null,
+                isVerified: role === client_1.Role.SUPER_ADMIN ? true : false,
+                verified: role === client_1.Role.SUPER_ADMIN ? new Date() : null,
             });
             const hasCompany = yield this.companyService.getCompany();
             if (hasCompany === null || hasCompany === void 0 ? void 0 : hasCompany.verified_resend_domain) {

@@ -4,7 +4,7 @@ exports.checkPermissions = void 0;
 const client_1 = require("@prisma/client");
 const errors_1 = require("../errors");
 const checkPermissions = (requestUser, resourceUserId) => {
-    if (requestUser.role === client_1.Role.Admin)
+    if (requestUser.role === client_1.Role.ADMIN)
         return;
     if (requestUser.id === resourceUserId.toString())
         return;

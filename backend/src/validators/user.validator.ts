@@ -19,7 +19,7 @@ export const validateUserCreateInput = z.object({
     .string("password is required")
     .min(8, { message: "password must be at least 8 characters long" })
     .max(255, { message: "password must be at most 255 characters long" }),
-  role: z.enum(Role).default(Role.User),
+  role: z.enum(Role).default(Role.USER),
   isVerified: z.boolean().default(false).optional(),
   verificationToken: z.string().max(255).optional().nullable(),
   passwordToken: z.string().max(255).optional().nullable(),

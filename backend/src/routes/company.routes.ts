@@ -15,18 +15,18 @@ router
   .route("/")
   .post(
     authGuard,
-    rolesGuard(Role.Admin),
+    rolesGuard(Role.ADMIN),
     validate(validateCompanyCreateInput),
     companyController.createCompany
   )
-  .get(authGuard, rolesGuard(Role.Admin), companyController.getCompany)
-  .delete(authGuard, rolesGuard(Role.Admin), companyController.deleteCompany);
+  .get(authGuard, rolesGuard(Role.ADMIN), companyController.getCompany)
+  .delete(authGuard, rolesGuard(Role.ADMIN), companyController.deleteCompany);
 
 router
   .route("/:companyId")
   .patch(
     authGuard,
-    rolesGuard(Role.Admin),
+    rolesGuard(Role.ADMIN),
     validate(validateCompanyUpdateInput),
     companyController.updateCompany
   );

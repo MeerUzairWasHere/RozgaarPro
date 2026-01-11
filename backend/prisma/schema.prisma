@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,29 +7,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+////////////////////
+/// ENUMS
+////////////////////
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+  FREELANCER
+}
+
+enum FreelancerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+////////////////////
+/// USER
+////////////////////
+
 model User {
   id                          String    @id @default(uuid())
   username                    String    @unique
-  name                        String    @db.VarChar(255)
+  name                        String
   email                       String    @unique
-  password                    String    @db.VarChar(255)
-  role                        Role      @default(User)
+  role                        Role      @default(USER)
+  password                    String
+  passwordToken               String?   @db.VarChar(255)
+  passwordTokenExpirationDate DateTime?
   verificationToken           String?   @db.VarChar(255)
   isVerified                  Boolean   @default(false)
   verified                    DateTime?
-  passwordToken               String?   @db.VarChar(255)
-  passwordTokenExpirationDate DateTime?
   createdAt                   DateTime  @default(now())
   updatedAt                   DateTime  @updatedAt
-  Token                       Token[]
+
+  // Relations
+  refreshTokens Token[]
+  freelancer    Freelancer?
+  jobs          Job[]
 }
 
-enum Role {
-  SuperAdmin
-  Admin
-  User
-}
-
+////////////////////
+/// REFRESH TOKEN
+////////////////////
 model Token {
   id           String   @id @default(uuid())
   refreshToken String   @unique
@@ -47,6 +63,51 @@ model Token {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+////////////////////
+/// FREELANCER
+////////////////////
+
+model Freelancer {
+  id         String           @id @default(uuid())
+  userId     String           @unique
+  skill      String // mason, carpenter, electrician
+  experience Int // years
+  location   String
+  phone      String
+  status     FreelancerStatus @default(PENDING)
+  rating     Float            @default(0)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  // Relations
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs Job[]
+}
+
+////////////////////
+/// JOB / REQUEST
+////////////////////
+
+model Job {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  location     String
+  budget       Float?
+  userId       String
+  freelancerId String?
+  isCompleted  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id])
+  freelancer Freelancer? @relation(fields: [freelancerId], references: [id])
+}
+
+////////////////////
+/// COMPANY (Optional)
+////////////////////
 
 model Company {
   id                     String   @id @default(uuid())

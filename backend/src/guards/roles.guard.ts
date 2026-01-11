@@ -8,7 +8,7 @@ export const rolesGuard = (...allowedRoles: Role[]) => {
       return next(new ForbiddenError("User not authenticated"));
     }
 
-    if (req.user.role === Role.SuperAdmin) {
+    if (req.user.role === Role.SUPER_ADMIN) {
       return next();
     }
 
