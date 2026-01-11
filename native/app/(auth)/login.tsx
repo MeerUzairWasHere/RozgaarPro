@@ -167,12 +167,13 @@ export default function LoginScreen() {
               onPress={handleLogin}
               disabled={loading}
               android_ripple={{ color: "rgba(255,255,255,0.25)" }}
-              className={`h-14 rounded-2xl bg-blue-600 items-center justify-center mt-8 overflow-hidden ${
+              className={cn(
+                "h-14 rounded-2xl bg-primary items-center justify-center mt-8 overflow-hidden",
                 loading ? "opacity-60" : ""
-              }`}
+              )}
             >
               <Text className="text-white text-base font-semibold">
-                {loading ? "Logging in..." : "Login"}
+                {loading ? "Signing in..." : "Sign In"}
               </Text>
             </Pressable>
           </Animated.View>
@@ -184,7 +185,7 @@ export default function LoginScreen() {
             Don’t have an account?{" "}
             <Text
               onPress={() => router.replace(ROUTES.SIGNUP)}
-              className="text-blue-600 font-semibold"
+              className="text-primary font-semibold"
             >
               Create account
             </Text>

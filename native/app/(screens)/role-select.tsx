@@ -11,11 +11,18 @@ import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "@/store";
 import { USER_ROLE } from "@/types";
+import { useEffect } from "react";
 
 export default function RoleSelectScreen() {
   const router = useRouter();
 
-  const { setUserRole } = useAuthStore();
+  const { setUserRole, isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace(isAuthenticated ? ROUTES.HOME : ROUTES.SELECT_ROLE);
+    }
+  }, [isAuthenticated]);
 
   const handleSelectRole = (role: USER_ROLE) => {
     setUserRole(role);
@@ -102,7 +109,7 @@ export default function RoleSelectScreen() {
           className="text-center text-xs text-slate-500 py-6"
         >
           By continuing, you agree to our{" "}
-          <Text className="text-blue-600 font-medium">Terms of Service</Text>
+          <Text className="text-primary font-medium">Terms of Service</Text>
         </Animated.Text>
       </View>
     </SafeAreaView>

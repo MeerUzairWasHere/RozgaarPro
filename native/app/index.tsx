@@ -6,6 +6,8 @@ export default function Index() {
   const onboardingCompleted = useOnboardingStore((state) => state.completed);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
+
+
   // 1️⃣ User already logged in
   if (isAuthenticated) {
     return <Redirect href={ROUTES.HOME} />;
