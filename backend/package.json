@@ -1,7 +1,7 @@
 {
-  "name": "type-pen",
-  "version": "3.1.0",
-  "description": "A TypeScript-based backend starter with PostgreSQL, Express, and Node.js. Flexible and frontend-agnostic—connect with React, Angular, Vue, or any framework!",
+  "name": "rozgaarpro",
+  "version": "1.0.0",
+  "description": "RozgaarPro backend.",
   "main": "index.js",
   "scripts": {
     "start": "tsc && node ./dist/index.js",
@@ -47,7 +47,6 @@
     "morgan": "^1.10.1",
     "multer": "^2.0.2",
     "resend": "^6.5.2",
-    "swagger-ui-express": "^5.0.1",
     "zod": "^4.1.4"
   },
   "devDependencies": {
@@ -58,7 +57,6 @@
     "@types/morgan": "^1.9.10",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.3.0",
-    "@types/swagger-ui-express": "^4.1.8",
     "prisma": "^6.15.0"
   }
 }

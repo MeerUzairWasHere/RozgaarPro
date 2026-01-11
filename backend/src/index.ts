@@ -7,8 +7,6 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import rateLimiter from "express-rate-limit";
 import cors from "cors";
-import swaggerUi from "swagger-ui-express";
-import { openApiSpec } from "./openApiSpec";
 
 // Routers
 import authRoutes from "./routes/auth.routes";
@@ -68,10 +66,6 @@ app.use(cors());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/company", companyRouter);
 app.use("/api/v1/users", userRouter);
-
-
-// Remove this in production
-app.use("/documentation", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
 // app.get("*", (req, res) => {
 //   // res.redirect("/documentation"); // comment out this route when starting
