@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useRouter } from "expo-router";
-import Input from "../../components/Input";
 
 export default function Signup() {
   const router = useRouter();
@@ -8,10 +7,6 @@ export default function Signup() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-
-      <Input placeholder="Name" />
-      <Input placeholder="Email" />
-      <Input placeholder="Password" secureTextEntry />
 
       <Pressable style={styles.button}>
         <Text style={styles.buttonText}>Create Account</Text>
