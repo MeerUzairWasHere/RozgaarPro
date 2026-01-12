@@ -1,7 +1,7 @@
-import { View, Text, Pressable, TextInput } from "react-native";
+import { View, Text, Pressable } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { ArrowLeft, User, Phone, Lock, Eye, EyeOff } from "lucide-react-native";
-import { Redirect, router } from "expo-router";
+import { ArrowLeft, User, Phone, Lock } from "lucide-react-native";
+import { router } from "expo-router";
 import { useAuthStore } from "@/store";
 import { SIGN_UP_STEP, USER_ROLE } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,7 +9,7 @@ import { ROUTES } from "@/constants";
 import UserRoleBadge from "@/components/UserRoleBadge";
 import { Toast } from "toastify-react-native";
 import VerifyOTPScreen from "./verifyOtp";
-import { useEffect } from "react";
+import CustomInput from "@/components/CustomInput";
 
 export default function SignupScreen() {
   const {
@@ -18,14 +18,11 @@ export default function SignupScreen() {
     password,
     userRole,
     loading,
-    showPassword,
-    setShowPassword,
+
     setField,
     signup,
     signupStep,
   } = useAuthStore();
-
- 
 
   const handleSignup = async () => {
     const success = await signup();
@@ -74,53 +71,30 @@ export default function SignupScreen() {
                 className="flex gap-4"
               >
                 {/* Name */}
-                <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
-                  <User size={20} color="#64748b" />
-                  <TextInput
-                    placeholder="Full Name"
-                    placeholderTextColor="#94a3b8"
-                    value={name}
-                    onChangeText={(v) => setField("name", v)}
-                    className="flex-1 text-base ml-2 mb-1"
-                  />
-                </View>
+                <CustomInput
+                  icon={<User size={15} color="#64748b" />}
+                  placeholder="Full Name"
+                  value={name}
+                  onChangeText={(text) => setField("name", text)}
+                />
 
-                {/* Phone */}
-                <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
-                  <Phone size={20} color="#64748b" />
-                  <TextInput
-                    placeholder="Phone Number"
-                    placeholderTextColor="#94a3b8"
-                    keyboardType="phone-pad"
-                    value={phone}
-                    onChangeText={(v) => setField("phone", v)}
-                    className="flex-1 text-base ml-2 mb-1"
-                  />
-                </View>
+                {/* Email */}
+                <CustomInput
+                  icon={<Phone size={15} color="#64748b" />}
+                  placeholder="Phone Number"
+                  value={phone}
+                  onChangeText={(text) => setField("phone", text)}
+                />
 
                 {/* Password */}
-                <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
-                  <Lock size={20} color="#64748b" />
-                  <TextInput
-                    placeholder="Password"
-                    placeholderTextColor="#94a3b8"
-                    value={password}
-                    secureTextEntry={!showPassword}
-                    onChangeText={(v) => setField("password", v)}
-                    className="flex-1 text-base ml-2 mb-1"
-                  />
-                  <Pressable
-                    onPress={() => setShowPassword(!showPassword)}
-                    android_ripple={{ color: "rgba(0,0,0,0.12)" }}
-                    className="p-2 rounded-full overflow-hidden"
-                  >
-                    {showPassword ? (
-                      <EyeOff size={20} color="#64748b" />
-                    ) : (
-                      <Eye size={20} color="#64748b" />
-                    )}
-                  </Pressable>
-                </View>
+                <CustomInput
+                  icon={<Lock size={15} color="#64748b" />}
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={(text) => setField("password", text)}
+                  secureTextEntry={true}
+                  keyboardType={"default"}
+                />
               </Animated.View>
 
               {/* Signup Button */}
