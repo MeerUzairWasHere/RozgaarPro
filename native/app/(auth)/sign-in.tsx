@@ -15,6 +15,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
+import CustomInput from "@/components/CustomInput";
 
 export default function LoginScreen() {
   const {
@@ -26,8 +27,6 @@ export default function LoginScreen() {
     password,
     login,
     loading,
-    showPassword,
-    setShowPassword,
   } = useAuthStore();
 
   const handleLogin = async () => {
@@ -70,7 +69,7 @@ export default function LoginScreen() {
             entering={FadeInDown.delay(100)}
             className="flex-row bg-slate-100 rounded-xl p-1 mb-6"
           >
-            {["phone", "email"].map((type) => (
+            {[LOGIN_METHOD.PHONE, LOGIN_METHOD.EMAIL].map((type) => (
               <Pressable
                 key={type}
                 onPress={() => {
@@ -78,9 +77,10 @@ export default function LoginScreen() {
                   setLoginMethod(type as any);
                 }}
                 android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-                className={`flex-1 py-2 rounded-lg overflow-hidden items-center ${
+                className={cn(
+                  "flex-1 py-2 rounded-lg overflow-hidden items-center",
                   loginMethod === type ? "bg-white" : ""
-                }`}
+                )}
               >
                 <Text
                   className={
@@ -97,64 +97,42 @@ export default function LoginScreen() {
           </Animated.View>
 
           {/* Form */}
-          <Animated.View entering={FadeInDown.delay(200)} className="space-y-4">
+          <Animated.View entering={FadeInDown.delay(200)} className="gap-4">
             {/* Phone / Email */}
-            <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
-              {loginMethod === LOGIN_METHOD.EMAIL ? (
-                <Mail size={20} color="#64748b" />
-              ) : (
-                <Phone size={20} color="#64748b" />
-              )}
-              <TextInput
-                placeholder={
-                  loginMethod === LOGIN_METHOD.EMAIL
-                    ? "Email address"
-                    : "Phone number"
-                }
-                placeholderTextColor="#94a3b8"
-                keyboardType={
-                  loginMethod === LOGIN_METHOD.EMAIL
-                    ? "email-address"
-                    : "phone-pad"
-                }
-                value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
-                onChangeText={(v) =>
-                  setField(
-                    loginMethod === LOGIN_METHOD.EMAIL ? "email" : "phone",
-                    v
-                  )
-                }
-                className="flex-1 text-base ml-2 mb-1"
-                maxLength={loginMethod === LOGIN_METHOD.EMAIL ? 30 : 10}
-              />
-            </View>
+            <CustomInput
+              icon={
+                loginMethod === LOGIN_METHOD.EMAIL ? (
+                  <Mail size={15} color="#64748b" />
+                ) : (
+                  <Phone size={15} color="#64748b" />
+                )
+              }
+              placeholder={
+                loginMethod === LOGIN_METHOD.EMAIL ? "Email" : "Phone Number"
+              }
+              value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
+              onChangeText={(text) =>
+                setField(
+                  loginMethod === LOGIN_METHOD.EMAIL ? "email" : "phone",
+                  text
+                )
+              }
+              keyboardType={
+                loginMethod === LOGIN_METHOD.EMAIL
+                  ? "email-address"
+                  : "phone-pad"
+              }
+            />
 
             {/* Password */}
-            <View
-              className="flex-row items-center mt-4
-             border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3"
-            >
-              <Lock size={20} color="#64748b" />
-              <TextInput
-                placeholder="Password"
-                placeholderTextColor="#94a3b8"
-                secureTextEntry={!showPassword}
-                value={password}
-                onChangeText={(v) => setField("password", v)}
-                className="flex-1 text-base  ml-2 mb-1"
-              />
-              <Pressable
-                onPress={() => setShowPassword(!showPassword)}
-                android_ripple={{ color: "rgba(0,0,0,0.12)" }}
-                className="p-2 rounded-full overflow-hidden"
-              >
-                {showPassword ? (
-                  <EyeOff size={20} color="#64748b" />
-                ) : (
-                  <Eye size={20} color="#64748b" />
-                )}
-              </Pressable>
-            </View>
+            <CustomInput
+              icon={<Lock size={15} color="#64748b" />}
+              placeholder="Password"
+              value={password}
+              onChangeText={(text) => setField("password", text)}
+              secureTextEntry={true}
+              keyboardType={"default"}
+            />
 
             {/* Forgot */}
             <TouchableOpacity

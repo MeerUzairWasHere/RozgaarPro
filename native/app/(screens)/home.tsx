@@ -11,7 +11,7 @@ export default function HomeScreen() {
   const handleLogout = () => {
     logout(); // clear auth state
     toggleOnboarding(false); // reset onboarding state
-    router.replace(ROUTES.SELECT_ROLE); // go back to role select
+    router.replace(ROUTES.ONBOARDING); // go back to role select
   };
 
   return (

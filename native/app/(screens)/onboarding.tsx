@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
 import { Button } from "@/components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const slides = [
   {
@@ -45,20 +46,20 @@ export default function OnboardingScreen() {
   const Icon = slide.icon;
 
   return (
-    <View className="flex-1 bg-white">
-      {/* Skip */}
-      <View className="items-end px-9 pt-10">
+    <SafeAreaView className="flex-1 bg-white">
+      {/* Top */}
+      <View className="flex-row justify-end px-6 pt-2">
         <Pressable
           onPress={handleFinish}
           android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-          className="rounded-full px-3 py-2 overflow-hidden"
+          className="rounded-full px-4 py-2 overflow-hidden"
         >
           <Text className="text-slate-500 font-medium">Skip</Text>
         </Pressable>
       </View>
 
-      {/* Content */}
-      <View className="flex-1 items-center justify-center px-8">
+      {/* Center */}
+      <View className="flex-1 justify-center items-center px-8">
         <Animated.View
           key={currentSlide}
           entering={FadeInRight}
@@ -82,7 +83,7 @@ export default function OnboardingScreen() {
         </Animated.View>
       </View>
 
-      {/* Footer */}
+      {/* Bottom */}
       <View className="px-8 pb-10">
         {/* Dots */}
         <View className="flex-row justify-center mb-6">
@@ -90,8 +91,7 @@ export default function OnboardingScreen() {
             <Pressable
               key={index}
               onPress={() => setCurrentSlide(index)}
-              android_ripple={{ color: "rgba(0,0,0,0.15)" }}
-              className={`h-2 rounded-full mx-1 overflow-hidden ${
+              className={`h-2 rounded-full mx-1 ${
                 index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-slate-300"
               }`}
             />
@@ -113,6 +113,6 @@ export default function OnboardingScreen() {
           </Text>
         </Button>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

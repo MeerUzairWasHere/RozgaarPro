@@ -14,7 +14,6 @@ type AuthStore = {
   email: string;
   password: string;
 
-  showPassword: boolean;
   loading: boolean;
 
   setField: (
@@ -22,7 +21,6 @@ type AuthStore = {
     value: string
   ) => void;
 
-  setShowPassword: (show: boolean) => void;
   setLoginMethod: (method: LOGIN_METHOD) => void;
   setUserRole: (role: USER_ROLE) => void;
 
@@ -48,12 +46,9 @@ export const useAuthStore = create<AuthStore>()(
 
       userRole: USER_ROLE.USER,
 
-      showPassword: false,
       loading: false,
 
       setLoginMethod: (method) => set({ loginMethod: method }),
-
-      setShowPassword: (show) => set({ showPassword: show }),
 
       setField: (field, value) => set({ [field]: value } as Partial<AuthStore>),
 
