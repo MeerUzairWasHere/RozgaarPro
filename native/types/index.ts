@@ -12,3 +12,4 @@ export enum SIGN_UP_STEP {
   OTP = "otp",
   DONE = "done",
 }
+

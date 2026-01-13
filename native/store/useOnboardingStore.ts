@@ -18,7 +18,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       storage: {
         getItem: async (name) => {
           const value = await AsyncStorage.getItem(name);
-          return value ? JSON.parse(value) : null;
+          return value ? JSON.parse(value) : false;
         },
         setItem: async (name, value) => {
           await AsyncStorage.setItem(name, JSON.stringify(value));

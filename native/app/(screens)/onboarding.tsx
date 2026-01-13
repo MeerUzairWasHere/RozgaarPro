@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { View, Text, Pressable, Platform } from "react-native";
+import { View, Text, Pressable, useColorScheme } from "react-native";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
-import { Button } from "@/components/Button";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CustomButton from "@/components/CustomButton";
+import { cn } from "@/utils/utils";
 
 const slides = [
   {
@@ -36,6 +37,8 @@ export default function OnboardingScreen() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
   const completeOnboarding = useOnboardingStore((s) => s.completeOnboarding);
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const handleFinish = () => {
     completeOnboarding(true);
@@ -46,15 +49,19 @@ export default function OnboardingScreen() {
   const Icon = slide.icon;
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
       {/* Top */}
       <View className="flex-row justify-end px-6 pt-2">
         <Pressable
           onPress={handleFinish}
-          android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+          android_ripple={{
+            color: isDark ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+          }}
           className="rounded-full px-4 py-2 overflow-hidden"
         >
-          <Text className="text-slate-500 font-medium">Skip</Text>
+          <Text className="text-primary-500 dark:text-primary-400 font-medium">
+            Skip
+          </Text>
         </Pressable>
       </View>
 
@@ -73,11 +80,11 @@ export default function OnboardingScreen() {
             <Icon size={56} color="white" />
           </View>
 
-          <Text className="text-2xl font-bold text-slate-900 text-center mb-4">
+          <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">
             {slide.title}
           </Text>
 
-          <Text className="text-base text-slate-500 text-center leading-6 max-w-[280px]">
+          <Text className="text-base text-primary-600 dark:text-primary-200 text-center leading-6 max-w-[280px]">
             {slide.description}
           </Text>
         </Animated.View>
@@ -91,27 +98,25 @@ export default function OnboardingScreen() {
             <Pressable
               key={index}
               onPress={() => setCurrentSlide(index)}
-              className={`h-2 rounded-full mx-1 ${
-                index === currentSlide ? "w-8 bg-blue-600" : "w-2 bg-slate-300"
-              }`}
+              className={cn(
+                "h-2 rounded-full mx-1",
+                index === currentSlide
+                  ? "w-8 bg-primary-600 dark:bg-primary-500"
+                  : "w-2 bg-primary-300 dark:bg-primary-700"
+              )}
             />
           ))}
         </View>
 
         {/* Button */}
-        <Button
+        <CustomButton
           onPress={() =>
             currentSlide === slides.length - 1
               ? handleFinish()
               : setCurrentSlide((p) => p + 1)
           }
-          android_ripple={{ color: "rgba(255,255,255,0.25)" }}
-          className="h-14 rounded-2xl bg-blue-600 items-center justify-center overflow-hidden"
-        >
-          <Text className="text-white text-base font-semibold">
-            {currentSlide === slides.length - 1 ? "Get Started" : "Next"}
-          </Text>
-        </Button>
+          title={currentSlide === slides.length - 1 ? "Get Started" : "Next"}
+        />
       </View>
     </SafeAreaView>
   );

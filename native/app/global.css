@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+ 
+
+:root {
+    --color-background: #F2F2F2;
+    --color-background-secondary: #E6E6E6;
+    --color-foreground: #1A1A1A;
+    --color-foreground-muted: #666666;
+    --color-border: #CCCCCC;
+}
+
+.dark {
+    --color-background: #121212;
+    --color-background-secondary: #1A1A1A;
+    --color-foreground: #F2F2F2;
+    --color-foreground-muted: #999999;
+    --color-border: #333333;
+}

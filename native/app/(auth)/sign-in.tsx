@@ -1,13 +1,12 @@
 import {
   View,
   Text,
-  TextInput,
   Keyboard,
   Pressable,
   TouchableOpacity,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { ArrowLeft, Phone, Lock, Eye, EyeOff, Mail } from "lucide-react-native";
+import { ArrowLeft, Phone, Lock, Mail } from "lucide-react-native";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
 import { Toast } from "toastify-react-native";
@@ -16,6 +15,7 @@ import { router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
+import CustomButton from "@/components/CustomButton";
 
 export default function LoginScreen() {
   const {
@@ -150,19 +150,11 @@ export default function LoginScreen() {
 
           {/* Login Button */}
           <Animated.View entering={FadeInDown.delay(300)}>
-            <Pressable
+            <CustomButton
+              title="Sign In"
               onPress={handleLogin}
-              disabled={loading}
-              android_ripple={{ color: "rgba(255,255,255,0.25)" }}
-              className={cn(
-                "h-14 rounded-2xl bg-primary items-center justify-center mt-8 overflow-hidden",
-                loading ? "opacity-60" : ""
-              )}
-            >
-              <Text className="text-white text-base font-semibold">
-                {loading ? "Signing in..." : "Sign In"}
-              </Text>
-            </Pressable>
+              isLoading={loading}
+            />
           </Animated.View>
         </View>
 

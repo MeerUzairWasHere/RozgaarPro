@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
-import { Button } from "@/components/Button";
 import { useAuthStore, useOnboardingStore } from "@/store";
+import CustomButton from "@/components/CustomButton";
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -17,10 +17,7 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is Home</Text>
-
-      <Button onPress={handleLogout}>
-        <Text>Logout</Text>
-      </Button>
+      <CustomButton title="Logout" onPress={handleLogout} />
     </View>
   );
 }
