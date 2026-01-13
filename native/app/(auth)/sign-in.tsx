@@ -4,6 +4,7 @@ import {
   Keyboard,
   Pressable,
   TouchableOpacity,
+  useColorScheme,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ArrowLeft, Phone, Lock, Mail } from "lucide-react-native";
@@ -11,13 +12,15 @@ import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
 import { Toast } from "toastify-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
+import BackButton from "@/components/BackButton";
 
 export default function LoginScreen() {
+  const colourScheme = useColorScheme();
   const {
     loginMethod,
     setLoginMethod,
@@ -40,26 +43,20 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-white">
+    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
       <View className="flex-1">
         {/* Header */}
         <View className="p-4">
-          <Pressable
-            onPress={() => router.back()}
-            android_ripple={{ color: "rgba(0,0,0,0.12)" }}
-            className="p-2 rounded-full overflow-hidden self-start"
-          >
-            <ArrowLeft size={24} color="#0f172a" />
-          </Pressable>
+          <BackButton />
         </View>
 
         {/* Content */}
         <View className="flex-1 px-6">
           <Animated.View entering={FadeInDown}>
-            <Text className="text-3xl font-bold text-slate-900 mb-1">
+            <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-1">
               Welcome back
             </Text>
-            <Text className="text-sm text-slate-500 mb-8">
+            <Text className="text-sm dark:text-primary-50 text-primary-950 mb-8">
               Login to your account to continue
             </Text>
           </Animated.View>
@@ -67,7 +64,7 @@ export default function LoginScreen() {
           {/* Toggle */}
           <Animated.View
             entering={FadeInDown.delay(100)}
-            className="flex-row bg-slate-100 rounded-xl p-1 mb-6"
+            className="flex-row bg-primary-100 rounded-xl p-1 mb-6"
           >
             {[LOGIN_METHOD.PHONE, LOGIN_METHOD.EMAIL].map((type) => (
               <Pressable
@@ -86,8 +83,8 @@ export default function LoginScreen() {
                   className={
                     (cn("text-sm"),
                     loginMethod === type
-                      ? "text-slate-900 font-semibold"
-                      : "text-slate-500 font-medium")
+                      ? "text-primary-900 font-semibold"
+                      : "text-primary-500 font-medium")
                   }
                 >
                   {type === "phone" ? "Phone Number" : "Email"}
@@ -102,9 +99,15 @@ export default function LoginScreen() {
             <CustomInput
               icon={
                 loginMethod === LOGIN_METHOD.EMAIL ? (
-                  <Mail size={15} color="#64748b" />
+                  <Mail
+                    size={15}
+                    color={colourScheme === "dark" ? "#fff" : "#000"}
+                  />
                 ) : (
-                  <Phone size={15} color="#64748b" />
+                  <Phone
+                    size={15}
+                    color={colourScheme === "dark" ? "#fff" : "#000"}
+                  />
                 )
               }
               placeholder={
@@ -126,7 +129,12 @@ export default function LoginScreen() {
 
             {/* Password */}
             <CustomInput
-              icon={<Lock size={15} color="#64748b" />}
+              icon={
+                <Lock
+                  size={15}
+                  color={colourScheme === "dark" ? "#fff" : "#000"}
+                />
+              }
               placeholder="Password"
               value={password}
               onChangeText={(text) => setField("password", text)}
@@ -135,7 +143,7 @@ export default function LoginScreen() {
             />
 
             {/* Forgot */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
               className="self-end"
               onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
             >
@@ -143,13 +151,18 @@ export default function LoginScreen() {
                 className="text-sm mt-4
                text-primary font-medium"
               >
+                
+              </Text>
+            </TouchableOpacity> */}
+            <Link href={ROUTES.FORGOT_PASSWORD} className="mb-4 self-end">
+              <Text className="text-sm text-primary-950 dark:text-primary-50 font-medium">
                 Forgot password?
               </Text>
-            </TouchableOpacity>
+            </Link>
           </Animated.View>
 
           {/* Login Button */}
-          <Animated.View entering={FadeInDown.delay(300)}>
+          <Animated.View entering={FadeInDown.delay(300)} className={"mt-2"}>
             <CustomButton
               title="Sign In"
               onPress={handleLogin}
@@ -160,10 +173,10 @@ export default function LoginScreen() {
 
         {/* Footer */}
         <View className="p-6 items-center">
-          <Text className="text-sm text-slate-500">
+          <Text className="text-sm text-primary-800 dark:text-primary-50">
             Don’t have an account?{" "}
             <Text
-              onPress={() => router.replace(ROUTES.SIGNUP)}
+              onPress={() => router.replace(ROUTES.SIGN_UP)}
               className="text-primary font-semibold"
             >
               Create account

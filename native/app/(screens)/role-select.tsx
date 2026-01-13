@@ -26,7 +26,7 @@ export default function RoleSelectScreen() {
 
   const handleSelectRole = (role: USER_ROLE) => {
     setUserRole(role);
-    router.push(ROUTES.LOGIN);
+    router.push(ROUTES.SIGN_IN);
   };
 
   const colourScheme = useColorScheme();
@@ -42,7 +42,6 @@ export default function RoleSelectScreen() {
             <Briefcase
               size={32}
               color={colourScheme === "dark" ? "#000" : "#fff"}
-              className="bg-primary-50 dark:bg-primary-950"
             />
           </Animated.View>
 
@@ -71,7 +70,10 @@ export default function RoleSelectScreen() {
               className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
             >
               <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary-50 items-center justify-center">
-                <Search size={28} color={colourScheme === "dark" ? "#000" : "#fff"} />
+                <Search
+                  size={28}
+                  color={colourScheme === "dark" ? "#000" : "#fff"}
+                />
               </View>
 
               <View className="flex-1">
@@ -93,7 +95,10 @@ export default function RoleSelectScreen() {
               className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
             >
               <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary-50 items-center justify-center">
-                <Wrench size={28} color={colourScheme === "dark" ? "#000" : "#fff"} />
+                <Wrench
+                  size={28}
+                  color={colourScheme === "dark" ? "#000" : "#fff"}
+                />
               </View>
 
               <View className="flex-1">
@@ -111,7 +116,7 @@ export default function RoleSelectScreen() {
         {/* Footer */}
         <Animated.Text
           entering={FadeIn.delay(600)}
-          className="text-center text-xs text-slate-500 dark:text-primary-400 py-6"
+          className="text-center text-xs text-primary-800 dark:text-primary-50 py-6"
         >
           By continuing, you agree to our{" "}
           <Text className="text-primary font-medium">Terms of Service</Text>

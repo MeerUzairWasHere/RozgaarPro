@@ -15,21 +15,18 @@ const slides = [
     title: "Find Skilled Workers",
     description:
       "Search and connect with trusted local professionals — plumbers, electricians, carpenters, and more.",
-    color: "#2563eb",
   },
   {
     icon: ShieldCheck,
     title: "Verified Professionals",
     description:
       "Every worker is phone-verified. Hire with confidence knowing you're getting quality help.",
-    color: "#16a34a",
   },
   {
     icon: Briefcase,
     title: "Work Opportunities",
     description:
       "Workers: Get discovered by customers in your area. No middlemen, direct connections.",
-    color: "#9333ea",
   },
 ];
 
@@ -73,11 +70,8 @@ export default function OnboardingScreen() {
           exiting={FadeOutLeft}
           className="items-center"
         >
-          <View
-            style={{ backgroundColor: slide.color }}
-            className="h-28 w-28 rounded-full items-center justify-center mb-10"
-          >
-            <Icon size={56} color="white" />
+          <View className="rounded-full items-center justify-center mb-10  ">
+            <Icon size={56} color={isDark ? "#fff" : "#000"} />
           </View>
 
           <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">

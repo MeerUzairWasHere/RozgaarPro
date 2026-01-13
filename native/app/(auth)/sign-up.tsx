@@ -129,7 +129,7 @@ export default function SignupScreen() {
               <Text className="text-muted-foreground">
                 Already have an account?{" "}
                 <Text
-                  onPress={() => router.replace(ROUTES.LOGIN)}
+                  onPress={() => router.replace(ROUTES.SIGN_IN)}
                   className="text-primary font-semibold"
                 >
                   Login

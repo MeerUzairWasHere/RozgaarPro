@@ -54,7 +54,7 @@ export const useAuthStore = create<AuthStore>()(
 
       setUserRole: (role) => set({ userRole: role }),
 
-      // ---------------- LOGIN ----------------
+      // ---------------- SIGN_IN ----------------
       login: async () => {
         const { phone, email, password, loginMethod } = get();
 
@@ -73,7 +73,7 @@ export const useAuthStore = create<AuthStore>()(
         return true;
       },
 
-      // ---------------- SIGNUP ----------------
+      // ---------------- SIGN_UP ----------------
       signup: async () => {
         const { name, phone, password } = get();
 
