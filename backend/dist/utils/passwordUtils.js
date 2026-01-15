@@ -42,8 +42,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.comparePassword = exports.hashPassword = void 0;
+exports.hashString = exports.comparePassword = exports.hashPassword = void 0;
 const argon2 = __importStar(require("argon2"));
+const crypto_1 = require("crypto");
 const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
     const hashedPassword = yield argon2.hash(password);
     return hashedPassword;
@@ -54,3 +55,7 @@ const comparePassword = (password, hashedPassword) => __awaiter(void 0, void 0, 
     return isMatch;
 });
 exports.comparePassword = comparePassword;
+const hashString = (string) => {
+    return (0, crypto_1.createHash)("md5").update(string).digest("hex");
+};
+exports.hashString = hashString;
