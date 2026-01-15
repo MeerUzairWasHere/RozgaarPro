@@ -22,7 +22,7 @@ const CustomButton = ({
   return (
     <TouchableOpacity
       className={cn(
-        "h-14 rounded-2xl bg-primary-900  dark:bg-primary-50 items-center justify-center overflow-hidden",
+        "h-14 rounded-2xl bg-primary-900  dark:bg-primary items-center justify-center overflow-hidden",
         className
       )}
       onPress={onPress}

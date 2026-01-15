@@ -10,6 +10,8 @@ import UserRoleBadge from "@/components/UserRoleBadge";
 import { Toast } from "toastify-react-native";
 import VerifyOTPScreen from "./verifyOtp";
 import CustomInput from "@/components/CustomInput";
+import BackButton from "@/components/BackButton";
+import CustomButton from "@/components/CustomButton";
 
 export default function SignupScreen() {
   const {
@@ -32,28 +34,23 @@ export default function SignupScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background">
+    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
       {signupStep === SIGN_UP_STEP.FORM ? (
         <>
           <View className="flex-1">
             {/* Header */}
             <View className="p-4">
-              <Pressable
-                onPress={() => router.back()}
-                className="p-2 -ml-2 rounded-full active:scale-95"
-              >
-                <ArrowLeft size={24} className="text-foreground" />
-              </Pressable>
+              <BackButton />
             </View>
 
             {/* Content */}
             <View className="flex-1 px-6 pt-4 ">
               {/* Title */}
               <Animated.View entering={FadeInDown.duration(400)}>
-                <Text className="text-3xl font-bold text-foreground mb-2">
+                <Text className="text-3xl font-bold primary-text  mb-2">
                   Create account
                 </Text>
-                <Text className="text-muted-foreground mb-8">
+                <Text className="primary-text mb-8">
                   {userRole === USER_ROLE.FREELANCER
                     ? "Join as a skilled worker and get discovered"
                     : "Sign up to find trusted workers near you"}
@@ -99,38 +96,31 @@ export default function SignupScreen() {
 
               {/* Signup Button */}
               <Animated.View entering={FadeInDown.delay(300)} className="mt-8">
-                <Pressable
+                <CustomButton
+                  title={loading ? "Signing up..." : "Sign Up"}
                   onPress={handleSignup}
-                  disabled={loading}
-                  android_ripple={{ color: "rgba(255,255,255,0.25)" }}
-                  className={`h-14 rounded-2xl bg-black items-center justify-center mt-8 overflow-hidden ${
-                    loading ? "opacity-60" : ""
-                  }`}
-                >
-                  <Text className="text-white text-base font-semibold">
-                    {loading ? "Signing in..." : "Sign Up"}
-                  </Text>
-                </Pressable>
+                  isLoading={loading}
+                />
               </Animated.View>
 
               {/* Terms */}
               <Animated.Text
                 entering={FadeInDown.delay(400)}
-                className="text-center text-sm text-muted-foreground mt-6"
+                className="text-center text-sm text-primary-950 dark:text-primary mt-6"
               >
                 By signing up, you agree to our{" "}
-                <Text className="text-primary font-medium">Terms</Text> and{" "}
-                <Text className="text-primary font-medium">Privacy Policy</Text>
+                <Text className="primary-text font-medium">Terms</Text> and{" "}
+                <Text className="primary-text font-medium">Privacy Policy</Text>
               </Animated.Text>
             </View>
 
             {/* Footer */}
-            <View className="p-6 items-center">
-              <Text className="text-muted-foreground">
+            <View className="p-6 items-center text-primary-theme">
+              <Text className="text-primary-theme">
                 Already have an account?{" "}
                 <Text
                   onPress={() => router.replace(ROUTES.SIGN_IN)}
-                  className="text-primary font-semibold"
+                  className="primary-text font-semibold"
                 >
                   Login
                 </Text>

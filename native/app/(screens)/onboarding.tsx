@@ -46,7 +46,7 @@ export default function OnboardingScreen() {
   const Icon = slide.icon;
 
   return (
-    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
+    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
       {/* Top */}
       <View className="flex-row justify-end px-6 pt-2">
         <Pressable

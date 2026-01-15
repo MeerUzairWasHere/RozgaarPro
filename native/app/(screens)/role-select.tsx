@@ -31,13 +31,13 @@ export default function RoleSelectScreen() {
 
   const colourScheme = useColorScheme();
   return (
-    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
+    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
       <View className="flex-1 px-6">
         {/* Header */}
         <View className="items-center pt-8 pb-10 mt-24">
           <Animated.View
             entering={FadeIn}
-            className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary-50 items-center justify-center mb-4"
+            className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center mb-4"
           >
             <Briefcase
               size={32}
@@ -69,7 +69,7 @@ export default function RoleSelectScreen() {
               onPress={() => handleSelectRole(USER_ROLE.USER)}
               className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
             >
-              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary-50 items-center justify-center">
+              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center">
                 <Search
                   size={28}
                   color={colourScheme === "dark" ? "#000" : "#fff"}
@@ -94,7 +94,7 @@ export default function RoleSelectScreen() {
               onPress={() => handleSelectRole(USER_ROLE.FREELANCER)}
               className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
             >
-              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary-50 items-center justify-center">
+              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center">
                 <Wrench
                   size={28}
                   color={colourScheme === "dark" ? "#000" : "#fff"}
@@ -116,10 +116,10 @@ export default function RoleSelectScreen() {
         {/* Footer */}
         <Animated.Text
           entering={FadeIn.delay(600)}
-          className="text-center text-xs text-primary-800 dark:text-primary-50 py-6"
+          className="text-center text-xs primary-text py-6"
         >
           By continuing, you agree to our{" "}
-          <Text className="text-primary font-medium">Terms of Service</Text>
+          <Text className="primary-text font-medium">Terms of Service</Text>
         </Animated.Text>
       </View>
     </SafeAreaView>

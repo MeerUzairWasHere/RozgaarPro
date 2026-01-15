@@ -43,7 +43,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
+    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
       <View className="flex-1">
         {/* Header */}
         <View className="p-4">

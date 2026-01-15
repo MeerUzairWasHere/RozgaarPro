@@ -19,3 +19,10 @@
     --color-foreground-muted: #999999;
     --color-border: #333333;
 }
+ 
+
+@layer components {
+.primary-text {
+        @apply text-black dark:text-white
+    }
+}
