@@ -4,7 +4,13 @@ import {
   useQueryClient,
   UseMutationResult,
 } from "@tanstack/react-query";
-import { RegisterInputDto, LoginInputDto, AuthResponse } from "@/types";
+import {
+  RegisterInputDto,
+  LoginInputDto,
+  AuthResponse,
+  RequestOtpInputDto,
+  VerifyOtpInputDto,
+} from "@/types";
 import { authApi } from "@/api/authApi";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
@@ -75,8 +81,45 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       await SecureStore.deleteItemAsync("refreshToken");
       setUser(null);
       setAuthenticated(false);
+      // clearAuth(); //TODO: add this later
       completeOnboarding(false); //TODO: remove this later
       router.replace(ROUTES.SELECT_ROLE);
+    },
+  });
+};
+
+export const useRequestOTP = (): UseMutationResult<
+  string,
+  Error,
+  RequestOtpInputDto
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: authApi.requestOtp,
+    onSuccess: async (data) => {
+      queryClient.clear();
+    },
+    onError: (error) => {
+      Toast.error(getErrorMessage(error));
+    },
+  });
+};
+
+export const useVerityOTP = (): UseMutationResult<
+  string,
+  Error,
+  VerifyOtpInputDto
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: authApi.verifyOtp,
+    onSuccess: async (data) => {
+      queryClient.clear();
+    },
+    onError: (error) => {
+      Toast.error(getErrorMessage(error));
     },
   });
 };

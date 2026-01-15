@@ -4,5 +4,6 @@ export const ROUTES = {
   SIGN_IN: "/(auth)/sign-in",
   SIGN_UP: "/(auth)/sign-up",
   FORGOT_PASSWORD: "/(auth)/forgot-password",
+  OTP_VERIFICATION: "/(auth)/otp-verification",
   HOME: "/(tabs)/home",
 } as const;

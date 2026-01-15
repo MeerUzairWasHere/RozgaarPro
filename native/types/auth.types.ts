@@ -8,6 +8,14 @@ export interface RegisterInputDto {
   role: USER_ROLE;
 }
 
+export interface RequestOtpInputDto {
+  phone: string;
+}
+
+export interface VerifyOtpInputDto extends RequestOtpInputDto {
+  code: string;
+}
+
 export interface LoginInputDto {
   email?: string;
   phone?: string;
@@ -15,7 +23,7 @@ export interface LoginInputDto {
 }
 
 export interface AuthResponse {
+  tokenUser: TokenUser;
   accessToken: string;
   refreshToken: string;
-  tokenUser: TokenUser;
 }

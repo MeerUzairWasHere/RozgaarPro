@@ -14,6 +14,7 @@ type AuthState = {
   phone: string;
   email: string;
   password: string;
+  setSignupStep: (step: SIGN_UP_STEP) => void;
 
   loading: boolean;
 
@@ -28,6 +29,8 @@ type AuthState = {
   setUserRole: (role: USER_ROLE) => void;
   setUser: (user: TokenUser | null) => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
+
+  clearAuth: () => void;
 };
 
 export const useAuthStore = create<AuthState>()(
@@ -59,6 +62,20 @@ export const useAuthStore = create<AuthState>()(
       setUser: (user) => set({ user }),
 
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
+
+      setSignupStep: (step: SIGN_UP_STEP) => set({ signupStep: step }),
+
+      clearAuth: () =>
+        set({
+          isAuthenticated: false,
+          user: null,
+          name: "",
+          phone: "",
+          email: "",
+          password: "",
+          signupStep: SIGN_UP_STEP.FORM,
+          loading: false,
+        }),
     }),
     {
       name: "auth-storage",
