@@ -18,11 +18,18 @@ export const useRegister = (): UseMutationResult<
   RegisterInputDto
 > => {
   const queryClient = useQueryClient();
+  const { setLoading } = useAuthStore();
 
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: () => {
       queryClient.clear();
+      router.replace(ROUTES.SIGN_IN);
+      setLoading(false);
+    },
+    onError: (error) => {
+      setLoading(false);
+      Toast.error(getErrorMessage(error));
     },
   });
 };
@@ -59,6 +66,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
 
   const { setUser, setAuthenticated } = useAuthStore();
   const { completeOnboarding } = useOnboardingStore();
+
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: async () => {
@@ -67,7 +75,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       await SecureStore.deleteItemAsync("refreshToken");
       setUser(null);
       setAuthenticated(false);
-      completeOnboarding(false);
+      completeOnboarding(false); //TODO: remove this later
       router.replace(ROUTES.SELECT_ROLE);
     },
   });

@@ -1,16 +1,16 @@
 export enum USER_ROLE {
-  SUPER_ADMIN = "super_admin",
-  ADMIN = "admin",
-  USER = "user",
-  FREELANCER = "freelancer",
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  USER = "USER",
+  FREELANCER = "FREELANCER",
 }
 
 export enum LOGIN_METHOD {
-  PHONE = "phone",
-  EMAIL = "email",
+  PHONE = "PHONE",
+  EMAIL = "EMAIL",
 }
 export enum SIGN_UP_STEP {
-  FORM = "form",
-  OTP = "otp",
-  DONE = "done",
+  FORM = "FORM",
+  OTP = "OTP",
+  DONE = "DONE",
 }

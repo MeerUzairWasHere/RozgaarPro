@@ -87,7 +87,9 @@ export default function LoginScreen() {
                       : "text-primary-500 font-medium")
                   }
                 >
-                  {type === "phone" ? "Phone Number" : "Email"}
+                  {type === LOGIN_METHOD.PHONE
+                    ? LOGIN_METHOD.PHONE
+                    : LOGIN_METHOD.EMAIL}
                 </Text>
               </Pressable>
             ))}
@@ -111,7 +113,9 @@ export default function LoginScreen() {
                 )
               }
               placeholder={
-                loginMethod === LOGIN_METHOD.EMAIL ? "Email" : "Phone Number"
+                loginMethod === LOGIN_METHOD.EMAIL
+                  ? LOGIN_METHOD.EMAIL
+                  : LOGIN_METHOD.PHONE
               }
               value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
               onChangeText={(text) =>
