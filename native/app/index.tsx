@@ -5,7 +5,6 @@ import { useOnboardingStore, useAuthStore } from "@/store";
 export default function Index() {
   const onboardingCompleted = useOnboardingStore((state) => state.completed);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-  console.log({ isAuthenticated });
   // 1️⃣ User already logged in
   if (isAuthenticated) {
     return <Redirect href={ROUTES.HOME} />;

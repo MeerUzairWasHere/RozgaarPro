@@ -17,5 +17,5 @@ export interface LoginInputDto {
 export interface AuthResponse {
   accessToken: string;
   refreshToken: string;
-  TokenUser: TokenUser;
+  tokenUser: TokenUser;
 }

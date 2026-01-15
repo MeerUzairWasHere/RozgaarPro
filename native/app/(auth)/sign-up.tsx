@@ -14,24 +14,10 @@ import BackButton from "@/components/BackButton";
 import CustomButton from "@/components/CustomButton";
 
 export default function SignupScreen() {
-  const {
-    name,
-    phone,
-    password,
-    userRole,
-    loading,
+  const { name, phone, password, userRole, loading, setField, signupStep } =
+    useAuthStore();
 
-    setField,
-    signup,
-    signupStep,
-  } = useAuthStore();
-
-  const handleSignup = async () => {
-    const success = await signup();
-    if (!success) {
-      Toast.error("Signup Failed. Please check your credentials.");
-    }
-  };
+  const handleSignup = async () => {};
 
   return (
     <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
@@ -115,8 +101,8 @@ export default function SignupScreen() {
             </View>
 
             {/* Footer */}
-            <View className="p-6 items-center text-primary-theme">
-              <Text className="text-primary-theme">
+            <View className="p-6 items-center">
+              <Text className="primary-text">
                 Already have an account?{" "}
                 <Text
                   onPress={() => router.replace(ROUTES.SIGN_IN)}

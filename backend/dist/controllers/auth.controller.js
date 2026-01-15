@@ -34,7 +34,7 @@ class AuthController {
                 refreshTokenHash,
             });
             res.status(http_status_codes_1.StatusCodes.OK).json({
-                user,
+                tokenUser: user,
                 accessToken,
                 refreshToken,
             });

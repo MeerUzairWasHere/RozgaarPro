@@ -12,12 +12,12 @@ export const authApi = {
   ): Promise<{
     accessToken: string;
     refreshToken: string;
-    TokenUser: TokenUser;
+    tokenUser: TokenUser;
   }> => {
     const { data } = await api.post<{
       accessToken: string;
       refreshToken: string;
-      TokenUser: TokenUser;
+      tokenUser: TokenUser;
     }>("/auth/sign-in", credentials);
     return data;
   },

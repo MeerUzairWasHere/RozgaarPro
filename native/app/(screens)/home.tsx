@@ -1,12 +1,11 @@
 import { View, Text, StyleSheet } from "react-native";
-import { ROUTES } from "@/constants";
-import { useAuthStore, useOnboardingStore } from "@/store";
+import { useAuthStore } from "@/store";
 import CustomButton from "@/components/CustomButton";
 import { useLogout } from "@/hooks/useAuth";
-import { router } from "expo-router";
 
 export default function HomeScreen() {
   const logoutMutation = useLogout();
+  const { user } = useAuthStore();
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -15,6 +14,9 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is Home</Text>
+      <Text style={styles.title}>User: {user?.name}</Text>
+      <Text style={styles.title}>Phone: {user?.phone}</Text>
+      <Text style={styles.title}>Role: {user?.role}</Text>
       <CustomButton title="Logout" onPress={handleLogout} />
     </View>
   );

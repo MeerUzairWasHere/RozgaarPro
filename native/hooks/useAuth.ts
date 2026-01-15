@@ -1,3 +1,4 @@
+import * as SecureStore from "expo-secure-store";
 import {
   useMutation,
   useQueryClient,
@@ -8,7 +9,6 @@ import { authApi } from "@/api/authApi";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
 import { useAuthStore } from "@/store";
-import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 
@@ -41,12 +41,10 @@ export const useLogin = (): UseMutationResult<
       await SecureStore.setItemAsync("accessToken", data.accessToken);
       await SecureStore.setItemAsync("refreshToken", data.refreshToken);
       setLoading(false);
-      setUser(data.TokenUser);
+      setUser(data.tokenUser);
       setAuthenticated(true);
 
       queryClient.clear();
-      Toast.success("Login Successful");
-
       router.replace(ROUTES.HOME);
     },
     onError: (error) => {

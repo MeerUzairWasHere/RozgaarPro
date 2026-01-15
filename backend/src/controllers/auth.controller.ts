@@ -32,7 +32,7 @@ export class AuthController {
   login = async (
     req: Request<{}, {}, LoginInputDto>,
     res: Response<{
-      user: TokenUserDto;
+      tokenUser: TokenUserDto;
       accessToken: string;
       refreshToken: string;
     }>
@@ -56,7 +56,7 @@ export class AuthController {
     });
 
     res.status(StatusCodes.OK).json({
-      user,
+      tokenUser: user,
       accessToken,
       refreshToken,
     });
