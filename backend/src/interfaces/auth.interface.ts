@@ -42,4 +42,8 @@ export interface IAuthService {
     user: TokenUserDto;
     refreshTokenHash: string;
   }>;
+
+  requestOtp(to: string, channel?: "sms" | "whatsapp"): Promise<void>;
+
+  verifyOtp(to: string, code: string): Promise<boolean>;
 }

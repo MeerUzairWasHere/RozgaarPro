@@ -18,12 +18,14 @@ import { BadRequestError, UnauthenticatedError } from "../errors";
 import { IAuthService, ICompanyService, IEmailService } from "../interfaces";
 import { UserRepository } from "../repositories";
 import { User } from "@prisma/client";
+import { VerifyProvider } from "../interfaces/verify-provider.interface";
 
 export class AuthService implements IAuthService {
   constructor(
     private emailService: IEmailService,
     private userRepository: UserRepository,
-    private companyService: ICompanyService
+    private companyService: ICompanyService,
+    private readonly verifyProvider: VerifyProvider
   ) {}
 
   async registerUser(data: RegisterInputDto, origin: string) {
@@ -192,5 +194,15 @@ export class AuthService implements IAuthService {
       user: payload.user,
       refreshTokenHash: payload.refreshTokenHash,
     };
+  }
+
+  async requestOtp(to: string, channel?: "sms" | "whatsapp") {
+    return await this.verifyProvider.sendOtp(to, channel);
+  }
+
+  async verifyOtp(to: string, code: string): Promise<boolean> {
+    const valid = await this.verifyProvider.checkOtp(to, code);
+    if (!valid) throw new Error("Invalid or expired OTP");
+    return true;
   }
 }

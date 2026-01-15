@@ -67,4 +67,22 @@ export const validateResetPasswordInput = z.object({
     .min(1, { message: "email is required" }),
 });
 
+export const validateRequestOtpInput = z.object({
+  phone: z
+    .string("Should be a valid phone number")
+    .min(10, { message: "phone must be at least 10 characters long" })
+    .max(15, { message: "phone must be at most 15 characters long" }),
+});
+
+export const validateVerifyOtpInput = z.object({
+  phone: z
+    .string("Should be a valid phone number")
+    .min(10, { message: "phone must be at least 10 characters long" })
+    .max(15, { message: "phone must be at most 15 characters long" }),
+  code: z
+    .string("code is required")
+    .min(6, { message: "code must be 6 digits" })
+    .max(6, { message: "code must be 6 digits" }),
+});
+
 //#endregion

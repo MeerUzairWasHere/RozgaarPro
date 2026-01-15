@@ -6,9 +6,11 @@ import {
   ForgotPasswordInputDto,
   LoginInputDto,
   RegisterInputDto,
+  RequestOtpInputDto,
   ResetPasswordInputDto,
   TokenUserDto,
   VerifyEmailInputDto,
+  VerifyOtpInputDto,
 } from "../dto";
 
 import { IAuthService } from "../interfaces";
@@ -117,5 +119,23 @@ export class AuthController {
     });
 
     res.status(StatusCodes.OK).json({ accessToken });
+  };
+
+  requestOtp = async (
+    req: Request<{}, {}, RequestOtpInputDto>,
+    res: Response
+  ): Promise<void> => {
+    const { phone } = req.body;
+    await this.authService.requestOtp(phone);
+    res.json({ message: "OTP sent" });
+  };
+
+  verifyOtp = async (
+    req: Request<{}, {}, VerifyOtpInputDto>,
+    res: Response
+  ): Promise<void> => {
+    const { phone, code } = req.body;
+    await this.authService.verifyOtp(phone, code);
+    res.json({ message: "OTP verified" });
   };
 }

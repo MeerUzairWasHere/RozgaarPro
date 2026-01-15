@@ -2,6 +2,7 @@ import { AuthController } from "./controllers/auth.controller";
 import { CompanyController } from "./controllers/company.controller";
 import { UserController } from "./controllers/user.controller";
 import { IStorageService } from "./interfaces";
+import { VerifyProvider } from "./interfaces/verify-provider.interface";
 import { CompanyRepository, UserRepository } from "./repositories";
 
 import {
@@ -12,6 +13,7 @@ import {
   PrismaService,
   UserService,
 } from "./services";
+import { TwilioVerifyService } from "./services/twilio-verify.service";
 
 // Container to hold all instances
 class Container {
@@ -25,6 +27,7 @@ class Container {
   // Services
   public emailService: EmailService;
   public storageService: IStorageService;
+  public verifyProvider: VerifyProvider;
 
   public authService: AuthService;
   public userService: UserService;
@@ -50,11 +53,15 @@ class Container {
       process.env.EMAIL_SERVICE_API_KEY!,
       this.companyService
     );
+    this.verifyProvider = new TwilioVerifyService();
+
     this.authService = new AuthService(
       this.emailService,
       this.userRepository,
-      this.companyService
+      this.companyService,
+      this.verifyProvider
     );
+
     this.userService = new UserService(this.userRepository);
 
     // Initialize Controllers
