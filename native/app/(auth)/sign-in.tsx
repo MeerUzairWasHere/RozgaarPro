@@ -143,19 +143,11 @@ export default function LoginScreen() {
             />
 
             {/* Forgot */}
-            {/* <TouchableOpacity
-              className="self-end"
-              onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
-            >
-              <Text
-                className="text-sm mt-4
-               text-primary font-medium"
-              >
-                
-              </Text>
-            </TouchableOpacity> */}
             <Link href={ROUTES.FORGOT_PASSWORD} className="mb-4 self-end">
-              <Text className="text-sm text-primary-950 dark:text-primary-50 font-medium">
+              <Text
+                className="text-sm 
+              primary-text font-medium"
+              >
                 Forgot password?
               </Text>
             </Link>
@@ -173,11 +165,11 @@ export default function LoginScreen() {
 
         {/* Footer */}
         <View className="p-6 items-center">
-          <Text className="text-sm text-primary-800 dark:text-primary-50">
+          <Text className="text-sm primary-text">
             Don’t have an account?{" "}
             <Text
               onPress={() => router.replace(ROUTES.SIGN_UP)}
-              className="text-primary font-semibold"
+              className=" font-semibold"
             >
               Create account
             </Text>
