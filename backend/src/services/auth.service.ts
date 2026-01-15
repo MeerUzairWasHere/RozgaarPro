@@ -14,7 +14,11 @@ import {
   TokenUserDto,
   VerifyEmailInputDto,
 } from "../dto";
-import { BadRequestError, UnauthenticatedError } from "../errors";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthenticatedError,
+} from "../errors";
 import { IAuthService, ICompanyService, IEmailService } from "../interfaces";
 import { UserRepository } from "../repositories";
 import { User } from "@prisma/client";
@@ -38,7 +42,6 @@ export class AuthService implements IAuthService {
       phone,
       password: hashedPassword,
       role,
-      isVerified: true,
     });
 
     await this.verifyProvider.sendOtp(phone);
@@ -200,7 +203,18 @@ export class AuthService implements IAuthService {
 
   async verifyOtp(to: string, code: string): Promise<boolean> {
     const valid = await this.verifyProvider.checkOtp(to, code);
-    if (!valid) throw new Error("Invalid or expired OTP");
+    const user = await this.userRepository.findUserByPhone(to);
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    await this.userRepository.update(user.id, {
+      isVerified: true,
+      verified: new Date(),
+    });
+
+    if (!valid) throw new BadRequestError("Invalid or expired OTP");
     return true;
   }
 }
