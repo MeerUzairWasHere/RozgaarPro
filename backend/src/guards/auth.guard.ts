@@ -9,8 +9,6 @@ export const authGuard = (
 ): void => {
   const authHeader = req.headers.authorization;
 
-  console.log({ authHeader });
-
   if (!authHeader?.startsWith("Bearer ")) {
     throw new UnauthenticatedError("Authentication Invalid");
   }
