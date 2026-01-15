@@ -8,7 +8,7 @@ import { RegisterInputDto, LoginInputDto, AuthResponse } from "@/types";
 import { authApi } from "@/api/authApi";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
-import { useAuthStore } from "@/store";
+import { useAuthStore, useOnboardingStore } from "@/store";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 
@@ -58,7 +58,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
   const queryClient = useQueryClient();
 
   const { setUser, setAuthenticated } = useAuthStore();
-
+  const { completeOnboarding } = useOnboardingStore();
   return useMutation({
     mutationFn: authApi.logout,
     onSuccess: async () => {
@@ -67,6 +67,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       await SecureStore.deleteItemAsync("refreshToken");
       setUser(null);
       setAuthenticated(false);
+      completeOnboarding(false);
       router.replace(ROUTES.SELECT_ROLE);
     },
   });

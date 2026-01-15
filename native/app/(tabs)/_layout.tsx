@@ -1,16 +1,9 @@
-import { Stack } from "expo-router";
-import { useColorScheme } from "react-native";
+import { Tabs } from "expo-router";
 
-export default function ScreensLayout() {
-  const colorScheme = useColorScheme();
+export default function TabsLayout() {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        headerStyle: {
-          backgroundColor: colorScheme === "dark" ? "#121212" : "#F2F2F2",
-        },
-      }}
-    />
+    <Tabs screenOptions={{ headerShown: false }}>
+      <Tabs.Screen name="home" />
+    </Tabs>
   );
 }
