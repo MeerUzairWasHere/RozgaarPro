@@ -12,7 +12,7 @@ export interface IAuthService {
     data: RegisterInputDto,
     origin: string
   ): Promise<{
-    msg: string;
+    user: TokenUserDto;
   }>;
 
   login(

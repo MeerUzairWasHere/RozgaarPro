@@ -33,20 +33,18 @@ export class AuthService implements IAuthService {
 
     const hashedPassword = await hashPassword(password);
 
-    const verificationToken = randomBytes(40).toString("hex");
-
-    await this.userRepository.createUser({
+    const user = await this.userRepository.createUser({
       name,
       phone,
       password: hashedPassword,
       role,
-      verificationToken,
       isVerified: true,
-      verified: new Date(),
     });
 
+    // await this.verifyProvider.sendOtp(phone, "whatsapp");
+
     return {
-      msg: "User created successfully",
+      user: createTokenUser(user),
     };
   }
 
@@ -68,7 +66,7 @@ export class AuthService implements IAuthService {
     }
 
     if (user.isVerified === false) {
-      throw new UnauthenticatedError("Please verify your email first");
+      throw new UnauthenticatedError("Please verify your account.");
     }
 
     const isPasswordCorrect = await comparePassword(password, user.password);
