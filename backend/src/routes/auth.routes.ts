@@ -14,12 +14,12 @@ import { authGuard } from "../guards";
 const router = Router();
 
 router.post(
-  "/register",
+  "/sign-up",
   validate(validateRegisterInput),
   authController.registerUser
 );
 
-router.post("/login", validate(validateLoginInput), authController.login);
+router.post("/sign-in", validate(validateLoginInput), authController.login);
 
 router.delete("/logout", authGuard, authController.logout);
 

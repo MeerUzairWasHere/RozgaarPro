@@ -20,9 +20,12 @@ export const validateRegisterInput = z.object({
 });
 
 export const validateLoginInput = z.object({
-  email: z
-    .email({ message: "Invalid email format" })
-    .min(1, { message: "email is required" }),
+  email: z.email({ message: "Invalid email format" }).optional(),
+  phone: z
+    .string("Should be a valid phone number")
+    .min(10, { message: "phone must be at least 10 characters long" })
+    .max(15, { message: "phone must be at most 15 characters long" })
+    .optional(),
   password: z
     .string("password is required")
     .min(1, { message: "password is required" }),

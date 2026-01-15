@@ -40,8 +40,17 @@ class AuthService {
     }
     login(data, userAgent, ip) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password } = data;
-            const user = yield this.userRepository.findUserByEmail(email);
+            const { email, phone, password } = data;
+            let user;
+            if (phone) {
+                user = yield this.userRepository.findUserByPhone(phone);
+            }
+            else if (email) {
+                user = yield this.userRepository.findUserByEmail(email);
+            }
+            else {
+                throw new errors_1.BadRequestError("Either email or phone is required");
+            }
             if (!user) {
                 throw new errors_1.UnauthenticatedError("Invalid Credentials");
             }

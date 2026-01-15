@@ -16,7 +16,7 @@ import {
 import { BadRequestError, UnauthenticatedError } from "../errors";
 import { IAuthService, ICompanyService, IEmailService } from "../interfaces";
 import { UserRepository } from "../repositories";
-import { Role } from "@prisma/client";
+import { User } from "@prisma/client";
 
 export class AuthService implements IAuthService {
   constructor(
@@ -48,9 +48,17 @@ export class AuthService implements IAuthService {
   }
 
   async login(data: LoginInputDto, userAgent: string, ip: string) {
-    const { email, password } = data;
+    const { email, phone, password } = data;
 
-    const user = await this.userRepository.findUserByEmail(email);
+    let user: User | null;
+
+    if (phone) {
+      user = await this.userRepository.findUserByPhone(phone);
+    } else if (email) {
+      user = await this.userRepository.findUserByEmail(email);
+    } else {
+      throw new BadRequestError("Either email or phone is required");
+    }
 
     if (!user) {
       throw new UnauthenticatedError("Invalid Credentials");

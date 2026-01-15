@@ -20,9 +20,12 @@ exports.validateRegisterInput = zod_1.z.object({
     role: zod_1.z.enum([client_1.Role.USER, client_1.Role.FREELANCER]),
 });
 exports.validateLoginInput = zod_1.z.object({
-    email: zod_1.z
-        .email({ message: "Invalid email format" })
-        .min(1, { message: "email is required" }),
+    email: zod_1.z.email({ message: "Invalid email format" }).optional(),
+    phone: zod_1.z
+        .string("Should be a valid phone number")
+        .min(10, { message: "phone must be at least 10 characters long" })
+        .max(15, { message: "phone must be at most 15 characters long" })
+        .optional(),
     password: zod_1.z
         .string("password is required")
         .min(1, { message: "password is required" }),

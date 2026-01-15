@@ -27,6 +27,13 @@ class UserRepository {
             });
         });
     }
+    findUserByPhone(phone) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.prismaService.user.findUnique({
+                where: { phone },
+            });
+        });
+    }
     findById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield this.prismaService.user.findUnique({
