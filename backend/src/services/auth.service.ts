@@ -4,6 +4,7 @@ import {
   createTokenUser,
   hashPassword,
   comparePassword,
+  isTokenValid,
 } from "../utils";
 import {
   ForgotPasswordInputDto,
@@ -95,7 +96,7 @@ export class AuthService implements IAuthService {
 
     return {
       user: tokenUser,
-      refreshToken,
+      refreshTokenHash: refreshToken,
     };
   }
 
@@ -122,7 +123,6 @@ export class AuthService implements IAuthService {
 
   async logout(tokenUser: TokenUserDto) {
     await this.userRepository.deleteUserTokens(tokenUser.id);
-
     return { msg: "User logged out!" };
   }
 
@@ -174,5 +174,23 @@ export class AuthService implements IAuthService {
     });
 
     return { msg: "Password reset successfully!" };
+  }
+
+  async validateRefreshToken(refreshToken: string) {
+    const payload = isTokenValid(refreshToken);
+
+    const existingToken = await this.userRepository.findValidRefreshToken(
+      payload.user.id,
+      payload.refreshTokenHash
+    );
+
+    if (!existingToken) {
+      throw new UnauthenticatedError("Invalid refresh token");
+    }
+
+    return {
+      user: payload.user,
+      refreshTokenHash: payload.refreshTokenHash,
+    };
   }
 }

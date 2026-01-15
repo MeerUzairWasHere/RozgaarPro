@@ -1,16 +1,8 @@
-import {
-  View,
-  Text,
-  Keyboard,
-  Pressable,
-  TouchableOpacity,
-  useColorScheme,
-} from "react-native";
+import { View, Text, Keyboard, Pressable, useColorScheme } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { ArrowLeft, Phone, Lock, Mail } from "lucide-react-native";
+import { Phone, Lock, Mail } from "lucide-react-native";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
-import { Toast } from "toastify-react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
 import { cn } from "@/utils/utils";
@@ -18,6 +10,7 @@ import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
 import CustomButton from "@/components/CustomButton";
 import BackButton from "@/components/BackButton";
+import { useLogin } from "@/hooks/useAuth";
 
 export default function LoginScreen() {
   const colourScheme = useColorScheme();
@@ -28,17 +21,24 @@ export default function LoginScreen() {
     phone,
     email,
     password,
-    login,
     loading,
+    setLoading,
   } = useAuthStore();
 
-  const handleLogin = async () => {
-    const success = await login();
-    if (success) {
-      Toast.success("Login Successful!");
-      router.replace(ROUTES.HOME);
+  const loginMutation = useLogin();
+
+  const handleLogin = () => {
+    setLoading(true);
+    if (loginMethod === LOGIN_METHOD.EMAIL) {
+      loginMutation.mutate({
+        email,
+        password,
+      });
     } else {
-      Toast.error("Login Failed. Please check your credentials.");
+      loginMutation.mutate({
+        phone,
+        password,
+      });
     }
   };
 

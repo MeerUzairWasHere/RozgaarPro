@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors";
-import { attachCookiesToResponse } from "../utils";
+import { getAccessTokens } from "../utils";
 import {
   ForgotPasswordInputDto,
   LoginInputDto,
@@ -31,7 +31,11 @@ export class AuthController {
 
   login = async (
     req: Request<{}, {}, LoginInputDto>,
-    res: Response<TokenUserDto>
+    res: Response<{
+      user: TokenUserDto;
+      accessToken: string;
+      refreshToken: string;
+    }>
   ): Promise<void> => {
     // TODO: create one decorator for this
     const userAgent = req.headers["user-agent"] || "unknown";
@@ -40,16 +44,22 @@ export class AuthController {
     if (!ip) {
       throw new BadRequestError("IP address is required");
     }
-
-    const { user, refreshToken } = await this.authService.login(
+    const { user, refreshTokenHash } = await this.authService.login(
       req.body,
       userAgent,
       ip
     );
 
-    attachCookiesToResponse({ res, user, refreshToken });
+    const { accessToken, refreshToken } = getAccessTokens({
+      user,
+      refreshTokenHash,
+    });
 
-    res.status(StatusCodes.OK).json(user);
+    res.status(StatusCodes.OK).json({
+      user,
+      accessToken,
+      refreshToken,
+    });
   };
 
   verifyEmail = async (
@@ -65,14 +75,6 @@ export class AuthController {
 
     const result = await this.authService.logout(loggedInUser);
 
-    res.cookie("accessToken", "logout", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
-    res.cookie("refreshToken", "logout", {
-      httpOnly: true,
-      expires: new Date(Date.now()),
-    });
     res.status(StatusCodes.OK).json(result);
   };
 
@@ -94,5 +96,26 @@ export class AuthController {
   ): Promise<void> => {
     const result = await this.authService.resetPassword(req.body);
     res.status(StatusCodes.OK).json(result);
+  };
+
+  refreshToken = async (
+    req: Request,
+    res: Response<{ accessToken: string }>
+  ): Promise<void> => {
+    const refreshToken = req.headers["x-refresh-token"] as string;
+
+    if (!refreshToken) {
+      throw new BadRequestError("Refresh token is required");
+    }
+
+    const { user, refreshTokenHash } =
+      await this.authService.validateRefreshToken(refreshToken);
+
+    const { accessToken } = getAccessTokens({
+      user,
+      refreshTokenHash,
+    });
+
+    res.status(StatusCodes.OK).json({ accessToken });
   };
 }

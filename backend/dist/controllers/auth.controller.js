@@ -28,9 +28,16 @@ class AuthController {
             if (!ip) {
                 throw new errors_1.BadRequestError("IP address is required");
             }
-            const { user, refreshToken } = yield this.authService.login(req.body, userAgent, ip);
-            (0, utils_1.attachCookiesToResponse)({ res, user, refreshToken });
-            res.status(http_status_codes_1.StatusCodes.OK).json(user);
+            const { user, refreshTokenHash } = yield this.authService.login(req.body, userAgent, ip);
+            const { accessToken, refreshToken } = (0, utils_1.getAccessTokens)({
+                user,
+                refreshTokenHash,
+            });
+            res.status(http_status_codes_1.StatusCodes.OK).json({
+                user,
+                accessToken,
+                refreshToken,
+            });
         });
         this.verifyEmail = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const result = yield this.authService.verifyEmail(req.body);
@@ -39,14 +46,6 @@ class AuthController {
         this.logout = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const loggedInUser = (0, decorators_1.currentUser)(req);
             const result = yield this.authService.logout(loggedInUser);
-            res.cookie("accessToken", "logout", {
-                httpOnly: true,
-                expires: new Date(Date.now()),
-            });
-            res.cookie("refreshToken", "logout", {
-                httpOnly: true,
-                expires: new Date(Date.now()),
-            });
             res.status(http_status_codes_1.StatusCodes.OK).json(result);
         });
         this.forgotPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -56,6 +55,18 @@ class AuthController {
         this.resetPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const result = yield this.authService.resetPassword(req.body);
             res.status(http_status_codes_1.StatusCodes.OK).json(result);
+        });
+        this.refreshToken = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const refreshToken = req.headers["x-refresh-token"];
+            if (!refreshToken) {
+                throw new errors_1.BadRequestError("Refresh token is required");
+            }
+            const { user, refreshTokenHash } = yield this.authService.validateRefreshToken(refreshToken);
+            const { accessToken } = (0, utils_1.getAccessTokens)({
+                user,
+                refreshTokenHash,
+            });
+            res.status(http_status_codes_1.StatusCodes.OK).json({ accessToken });
         });
     }
 }

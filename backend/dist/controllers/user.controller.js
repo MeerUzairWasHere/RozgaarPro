@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const http_status_codes_1 = require("http-status-codes");
-const utils_1 = require("../utils");
 const decorators_1 = require("../decorators");
 class UserController {
     constructor(userService) {
@@ -24,7 +23,6 @@ class UserController {
         this.updateUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const { id } = (0, decorators_1.currentUser)(req);
             const tokenUser = yield this.userService.updateUser(id, req.body);
-            (0, utils_1.attachCookiesToResponse)({ res, user: tokenUser, refreshToken: "" });
             res.status(http_status_codes_1.StatusCodes.OK).json({ user: tokenUser });
         });
         this.updateUserPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {

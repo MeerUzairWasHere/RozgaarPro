@@ -21,7 +21,7 @@ export interface IAuthService {
     ip: string
   ): Promise<{
     user: TokenUserDto;
-    refreshToken: string;
+    refreshTokenHash: string;
   }>;
 
   verifyEmail(data: VerifyEmailInputDto): Promise<{ msg: string }>;
@@ -37,4 +37,9 @@ export interface IAuthService {
   >;
 
   resetPassword(data: ResetPasswordInputDto): Promise<{ msg: string }>;
+
+  validateRefreshToken(refreshToken: string): Promise<{
+    user: TokenUserDto;
+    refreshTokenHash: string;
+  }>;
 }

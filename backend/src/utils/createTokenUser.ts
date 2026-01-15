@@ -10,3 +10,4 @@ export const createTokenUser = (user: User): TokenUserDto => {
     isVerified: user.isVerified,
   };
 };
+

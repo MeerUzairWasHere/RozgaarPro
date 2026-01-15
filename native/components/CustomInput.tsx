@@ -35,7 +35,7 @@ const CustomInput = ({
         keyboardType={keyboardType}
         placeholder={placeholder}
         placeholderTextColor="#888"
-        className={cn("flex-1 text-base ml-2 mb-1", className)}
+        className={cn("flex-1 text-base ml-2 mb-1 primary-text", className)}
       />
     </View>
   );

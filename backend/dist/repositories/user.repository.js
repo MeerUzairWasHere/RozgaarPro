@@ -153,5 +153,19 @@ class UserRepository {
             });
         });
     }
+    findValidRefreshToken(userId, refreshTokenHash) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this.prismaService.token.findFirst({
+                where: {
+                    userId,
+                    refreshToken: refreshTokenHash,
+                    isValid: true,
+                },
+                include: {
+                    user: true,
+                },
+            });
+        });
+    }
 }
 exports.UserRepository = UserRepository;

@@ -11,9 +11,8 @@ const httpExceptionFilter = (err, req, res, next) => {
     // Default error response
     const statusCode = err.statusCode || http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR;
     const message = err.message || "Something went wrong, try again later";
-    return res.status(statusCode).json(Object.assign({ msg: message }, (process.env.NODE_ENV === "development" && {
-        stack: err.stack,
-        details: err,
-    })));
+    return res.status(statusCode).json({
+        msg: message,
+    });
 };
 exports.httpExceptionFilter = httpExceptionFilter;

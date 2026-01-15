@@ -151,4 +151,20 @@ export class UserRepository {
       },
     });
   }
+
+  async findValidRefreshToken(
+    userId: string,
+    refreshTokenHash: string
+  ): Promise<(Token & { user: User }) | null> {
+    return await this.prismaService.token.findFirst({
+      where: {
+        userId,
+        refreshToken: refreshTokenHash,
+        isValid: true,
+      },
+      include: {
+        user: true,
+      },
+    });
+  }
 }

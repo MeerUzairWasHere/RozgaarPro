@@ -1,46 +1,27 @@
 import { NextFunction, Request, Response } from "express";
 import { UnauthenticatedError } from "../errors";
-import { attachCookiesToResponse, isTokenValid } from "../utils";
-import { prismaService } from "../container";
+import { isTokenValid } from "../utils";
 
-export const authGuard = async (
+export const authGuard = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
-): Promise<void> => {
-  const { refreshToken, accessToken } = req.signedCookies;
+): void => {
+  const authHeader = req.headers.authorization;
+
+  console.log({ authHeader });
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    throw new UnauthenticatedError("Authentication Invalid");
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
-    if (accessToken) {
-      const payload = isTokenValid(accessToken);
-      req.user = payload.user;
-      return next();
-    }
-
-    const payload = isTokenValid(refreshToken);
-
-    const existingToken = await prismaService.token.findFirst({
-      where: {
-        userId: payload.user.userId,
-        refreshToken: payload.refreshToken,
-        isValid: true,
-      },
-    });
-
-    if (!existingToken) {
-      // Use next(error) instead of throw
-      return next(new UnauthenticatedError("Authentication Invalid"));
-    }
-
-    attachCookiesToResponse({
-      res,
-      user: payload.user,
-      refreshToken: existingToken.refreshToken,
-    });
+    const payload = isTokenValid(token);
     req.user = payload.user;
     next();
   } catch (error) {
-    // Pass error to next() instead of throwing
-    next(new UnauthenticatedError("Authentication Invalid"));
+    throw new UnauthenticatedError("Access token expired");
   }
 };

@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  useColorScheme,
+} from "react-native";
 import React from "react";
 import cn from "clsx";
 
@@ -19,6 +25,8 @@ const CustomButton = ({
   leftIcon,
   isLoading = false,
 }: CustomButtonProps) => {
+  const colourScheme = useColorScheme();
+
   return (
     <TouchableOpacity
       className={cn(
@@ -31,7 +39,10 @@ const CustomButton = ({
 
       <View className="flex-center flex-row">
         {isLoading ? (
-          <ActivityIndicator size="small" color="white" />
+          <ActivityIndicator
+            size="small"
+            color={colourScheme === "dark" ? "#000" : "#fff"}
+          />
         ) : (
           <Text
             className={cn(

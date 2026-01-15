@@ -1,17 +1,15 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useRouter } from "expo-router";
 import { ROUTES } from "@/constants";
 import { useAuthStore, useOnboardingStore } from "@/store";
 import CustomButton from "@/components/CustomButton";
+import { useLogout } from "@/hooks/useAuth";
+import { router } from "expo-router";
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const logout = useAuthStore((state) => state.logout);
-  const toggleOnboarding = useOnboardingStore((s) => s.completeOnboarding);
+  const logoutMutation = useLogout();
+
   const handleLogout = () => {
-    logout(); // clear auth state
-    toggleOnboarding(false); // reset onboarding state
-    router.replace(ROUTES.ONBOARDING); // go back to role select
+    logoutMutation.mutate();
   };
 
   return (

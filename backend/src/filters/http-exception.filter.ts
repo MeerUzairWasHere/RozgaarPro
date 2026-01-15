@@ -19,9 +19,5 @@ export const httpExceptionFilter = (
 
   return res.status(statusCode).json({
     msg: message,
-    ...(process.env.NODE_ENV === "development" && {
-      stack: err.stack,
-      details: err,
-    }),
   });
 };

@@ -81,7 +81,7 @@ class AuthService {
             }
             return {
                 user: tokenUser,
-                refreshToken,
+                refreshTokenHash: refreshToken,
             };
         });
     }
@@ -146,6 +146,19 @@ class AuthService {
                 passwordTokenExpirationDate: null,
             });
             return { msg: "Password reset successfully!" };
+        });
+    }
+    validateRefreshToken(refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const payload = (0, utils_1.isTokenValid)(refreshToken);
+            const existingToken = yield this.userRepository.findValidRefreshToken(payload.user.id, payload.refreshTokenHash);
+            if (!existingToken) {
+                throw new errors_1.UnauthenticatedError("Invalid refresh token");
+            }
+            return {
+                user: payload.user,
+                refreshTokenHash: payload.refreshTokenHash,
+            };
         });
     }
 }

@@ -21,7 +21,9 @@ router.post(
 
 router.post("/sign-in", validate(validateLoginInput), authController.login);
 
-router.delete("/logout", authGuard, authController.logout);
+router.post("/refresh-token", authController.refreshToken);
+
+router.post("/sign-out", authGuard, authController.logout);
 
 router.post(
   "/verify-email",

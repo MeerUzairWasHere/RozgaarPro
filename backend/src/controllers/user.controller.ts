@@ -1,6 +1,5 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { attachCookiesToResponse } from "../utils";
 import {
   TokenUserDto,
   UpdatePasswordInputDto,
@@ -31,7 +30,6 @@ export class UserController {
 
     const tokenUser = await this.userService.updateUser(id, req.body);
 
-    attachCookiesToResponse({ res, user: tokenUser, refreshToken: "" });
 
     res.status(StatusCodes.OK).json({ user: tokenUser });
   };
