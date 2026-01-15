@@ -28,6 +28,7 @@ export default function RootLayout() {
         <ToastManager position="bottom" toastOptions={{ duration: 1000 }} />
         <Stack
           screenOptions={{
+            gestureEnabled: false,
             headerShown: false,
             headerStyle: {
               backgroundColor: colorScheme === "dark" ? "#121212" : "#F2F2F2",
