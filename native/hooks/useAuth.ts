@@ -65,7 +65,7 @@ export const useLogin = (): UseMutationResult<
 export const useLogout = (): UseMutationResult<void, Error, void> => {
   const queryClient = useQueryClient();
 
-  const { setUser, setAuthenticated } = useAuthStore();
+  const { setUser, setAuthenticated, clearAuth } = useAuthStore();
   const { completeOnboarding } = useOnboardingStore();
 
   return useMutation({
@@ -112,6 +112,7 @@ export const useVerityOTP = (): UseMutationResult<
     onSuccess: async (data) => {
       queryClient.clear();
       router.replace(ROUTES.SIGN_IN);
+      Toast.success("OTP verified");
     },
     onError: (error) => {
       Toast.error(getErrorMessage(error));
