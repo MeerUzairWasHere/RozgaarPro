@@ -14,21 +14,12 @@ import { useLogin } from "@/hooks/useAuth";
 
 export default function LoginScreen() {
   const colourScheme = useColorScheme();
-  const {
-    loginMethod,
-    setLoginMethod,
-    setField,
-    phone,
-    email,
-    password,
-    loading,
-    setLoading,
-  } = useAuthStore();
+  const { loginMethod, setLoginMethod, setField, phone, email, password } =
+    useAuthStore();
 
   const loginMutation = useLogin();
 
   const handleLogin = () => {
-    setLoading(true);
     if (loginMethod === LOGIN_METHOD.EMAIL) {
       loginMutation.mutate({
         email,
@@ -162,7 +153,7 @@ export default function LoginScreen() {
             <CustomButton
               title="Sign In"
               onPress={handleLogin}
-              isLoading={loading}
+              isLoading={loginMutation.isPending}
             />
           </Animated.View>
         </View>

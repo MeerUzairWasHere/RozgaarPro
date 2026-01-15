@@ -13,13 +13,11 @@ import BackButton from "@/components/BackButton";
 import CustomButton from "@/components/CustomButton";
 
 export default function SignupScreen() {
-  const { name, phone, password, userRole, loading, setField, setLoading } =
-    useAuthStore();
+  const { name, phone, password, userRole, setField } = useAuthStore();
 
   const registerMutation = useRegister();
 
   const handleSignup = async () => {
-    setLoading(true);
     registerMutation.mutate({
       name,
       password,
@@ -91,9 +89,9 @@ export default function SignupScreen() {
             {/* Signup Button */}
             <Animated.View entering={FadeInDown.delay(300)} className="mt-8">
               <CustomButton
-                title={loading ? "Signing up..." : "Sign Up"}
+                title={registerMutation.isPending ? "Signing up..." : "Sign Up"}
                 onPress={handleSignup}
-                isLoading={loading}
+                isLoading={registerMutation.isPending}
               />
             </Animated.View>
 

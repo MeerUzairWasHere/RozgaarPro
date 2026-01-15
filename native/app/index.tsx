@@ -11,7 +11,7 @@ export default function Index() {
   }
 
   if (!isAuthenticated) {
-    return <Redirect href={ROUTES.SIGN_IN} />;
+    return <Redirect href={ROUTES.SELECT_ROLE} />;
   }
 
   return <Redirect href={ROUTES.HOME} />;

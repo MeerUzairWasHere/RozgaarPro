@@ -24,17 +24,14 @@ export const useRegister = (): UseMutationResult<
   RegisterInputDto
 > => {
   const queryClient = useQueryClient();
-  const { setLoading } = useAuthStore();
 
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: () => {
       queryClient.clear();
-      router.replace(ROUTES.SIGN_IN);
-      setLoading(false);
+      router.replace(ROUTES.OTP_VERIFICATION);
     },
     onError: (error) => {
-      setLoading(false);
       Toast.error(getErrorMessage(error));
     },
   });
@@ -46,14 +43,13 @@ export const useLogin = (): UseMutationResult<
   LoginInputDto
 > => {
   const queryClient = useQueryClient();
-  const { setUser, setAuthenticated, setLoading } = useAuthStore();
+  const { setUser, setAuthenticated } = useAuthStore();
 
   return useMutation({
     mutationFn: authApi.login,
     onSuccess: async (data) => {
       await SecureStore.setItemAsync("accessToken", data.accessToken);
       await SecureStore.setItemAsync("refreshToken", data.refreshToken);
-      setLoading(false);
       setUser(data.tokenUser);
       setAuthenticated(true);
 
@@ -61,7 +57,6 @@ export const useLogin = (): UseMutationResult<
       router.replace(ROUTES.HOME);
     },
     onError: (error) => {
-      setLoading(false);
       Toast.error(getErrorMessage(error));
     },
   });
@@ -112,11 +107,11 @@ export const useVerityOTP = (): UseMutationResult<
   VerifyOtpInputDto
 > => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: authApi.verifyOtp,
     onSuccess: async (data) => {
       queryClient.clear();
+      router.replace(ROUTES.SIGN_IN);
     },
     onError: (error) => {
       Toast.error(getErrorMessage(error));

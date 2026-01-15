@@ -41,7 +41,7 @@ export class AuthService implements IAuthService {
       isVerified: true,
     });
 
-    // await this.verifyProvider.sendOtp(phone, "whatsapp");
+    await this.verifyProvider.sendOtp(phone);
 
     return {
       user: createTokenUser(user),

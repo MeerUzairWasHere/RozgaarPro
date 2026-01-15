@@ -21,7 +21,7 @@ export default function RoleSelectScreen() {
   useEffect(() => {
     if (isAuthenticated) {
       router.replace(isAuthenticated ? ROUTES.HOME : ROUTES.SELECT_ROLE);
-    }
+  }
   }, [isAuthenticated]);
 
   const handleSelectRole = (role: USER_ROLE) => {
