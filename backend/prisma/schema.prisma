@@ -30,10 +30,10 @@ enum FreelancerStatus {
 
 model User {
   id                          String    @id @default(uuid())
-  username                    String    @unique
+  username                    String?   @unique
   phone                       String    @unique @db.VarChar(15)
   name                        String
-  email                       String    @unique
+  email                       String?   @unique
   role                        Role      @default(USER)
   password                    String
   passwordToken               String?   @db.VarChar(255)

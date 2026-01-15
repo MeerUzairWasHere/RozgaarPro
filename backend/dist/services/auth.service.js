@@ -13,7 +13,6 @@ exports.AuthService = void 0;
 const crypto_1 = require("crypto");
 const utils_1 = require("../utils");
 const errors_1 = require("../errors");
-const client_1 = require("@prisma/client");
 class AuthService {
     constructor(emailService, userRepository, companyService) {
         this.emailService = emailService;
@@ -22,30 +21,18 @@ class AuthService {
     }
     registerUser(data, origin) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, name, password, username } = data;
-            const userCount = yield this.userRepository.getUserCount();
-            const role = userCount === 0 ? client_1.Role.SUPER_ADMIN : client_1.Role.USER;
+            const { name, password, phone, role } = data;
             const hashedPassword = yield (0, utils_1.hashPassword)(password);
             const verificationToken = (0, crypto_1.randomBytes)(40).toString("hex");
             yield this.userRepository.createUser({
                 name,
-                email,
-                username,
+                phone,
                 password: hashedPassword,
                 role,
-                verificationToken: role === client_1.Role.USER ? verificationToken : null,
-                isVerified: role === client_1.Role.SUPER_ADMIN ? true : false,
-                verified: role === client_1.Role.SUPER_ADMIN ? new Date() : null,
+                verificationToken,
+                isVerified: true,
+                verified: new Date(),
             });
-            const hasCompany = yield this.companyService.getCompany();
-            if (hasCompany === null || hasCompany === void 0 ? void 0 : hasCompany.verified_resend_domain) {
-                yield this.emailService.sendVerificationEmail({
-                    name,
-                    email,
-                    verificationToken,
-                    origin,
-                });
-            }
             return {
                 msg: "User created successfully",
             };
@@ -104,10 +91,6 @@ class AuthService {
                 verified: new Date(),
                 verificationToken: "",
             });
-            yield this.emailService.sendWelcomeEmail({
-                name: user.name,
-                email: user.email,
-            });
             return { msg: "Email Verified" };
         });
     }
@@ -130,12 +113,6 @@ class AuthService {
             yield this.userRepository.updateUserPasswordToken(email, {
                 passwordToken: (0, utils_1.hashString)(passwordToken),
                 passwordTokenExpirationDate,
-            });
-            yield this.emailService.sendResetPasswordEmail({
-                name: user.name,
-                email: user.email,
-                token: passwordToken,
-                origin,
             });
             return { msg: "Password reset email sent" };
         });

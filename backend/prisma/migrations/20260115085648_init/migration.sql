@@ -7,9 +7,10 @@ CREATE TYPE "public"."FreelancerStatus" AS ENUM ('PENDING', 'APPROVED', 'REJECTE
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
+    "username" TEXT,
+    "phone" VARCHAR(15) NOT NULL,
     "name" TEXT NOT NULL,
-    "email" TEXT NOT NULL,
+    "email" TEXT,
     "role" "public"."Role" NOT NULL DEFAULT 'USER',
     "password" TEXT NOT NULL,
     "passwordToken" VARCHAR(255),
@@ -86,6 +87,9 @@ CREATE TABLE "public"."Company" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "public"."User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_phone_key" ON "public"."User"("phone");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");

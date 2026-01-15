@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.validateResetPasswordInput = exports.validateForgotPasswordInput = exports.validateVerifyEmailInput = exports.validateUpdatePasswordInput = exports.validateLoginInput = exports.validateRegisterInput = void 0;
+const client_1 = require("@prisma/client");
 const zod_1 = require("zod");
 //#region Auth
 exports.validateRegisterInput = zod_1.z.object({
@@ -8,17 +9,15 @@ exports.validateRegisterInput = zod_1.z.object({
         .string("name is required")
         .min(2, { message: "Name must be at least 2 characters long" })
         .max(255, { message: "Name must be at most 255 characters long" }),
-    username: zod_1.z
-        .string("username is required")
-        .min(4, { message: "username must be at least 4 characters long" })
-        .max(20, { message: "username must be at most 20 characters long" }),
-    email: zod_1.z
-        .email({ message: "Invalid email format" })
-        .min(1, { message: "email is required" }),
+    phone: zod_1.z
+        .string("phone is required")
+        .min(10, { message: "phone must be at least 10 characters long" })
+        .max(15, { message: "phone must be at most 15 characters long" }),
     password: zod_1.z
         .string("password is required")
         .min(8, { message: "password must be at least 8 characters long" })
         .max(20, { message: "password must be at most 20 characters long" }),
+    role: zod_1.z.enum([client_1.Role.USER, client_1.Role.FREELANCER]),
 });
 exports.validateLoginInput = zod_1.z.object({
     email: zod_1.z

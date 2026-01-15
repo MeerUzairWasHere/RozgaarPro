@@ -26,35 +26,21 @@ export class AuthService implements IAuthService {
   ) {}
 
   async registerUser(data: RegisterInputDto, origin: string) {
-    const { email, name, password, username } = data;
-
-    const userCount = await this.userRepository.getUserCount();
-    const role = userCount === 0 ? Role.SUPER_ADMIN : Role.USER;
+    const { name, password, phone, role } = data;
 
     const hashedPassword = await hashPassword(password);
+
     const verificationToken = randomBytes(40).toString("hex");
 
     await this.userRepository.createUser({
       name,
-      email,
-      username,
+      phone,
       password: hashedPassword,
       role,
-      verificationToken: role === Role.USER ? verificationToken : null,
-      isVerified: role === Role.SUPER_ADMIN ? true : false,
-      verified: role === Role.SUPER_ADMIN ? new Date() : null,
+      verificationToken,
+      isVerified: true,
+      verified: new Date(),
     });
-
-    const hasCompany = await this.companyService.getCompany();
-
-    if (hasCompany?.verified_resend_domain) {
-      await this.emailService.sendVerificationEmail({
-        name,
-        email,
-        verificationToken,
-        origin,
-      });
-    }
 
     return {
       msg: "User created successfully",
@@ -123,11 +109,6 @@ export class AuthService implements IAuthService {
       verificationToken: "",
     });
 
-    await this.emailService.sendWelcomeEmail({
-      name: user.name,
-      email: user.email,
-    });
-
     return { msg: "Email Verified" };
   }
 
@@ -154,13 +135,6 @@ export class AuthService implements IAuthService {
     await this.userRepository.updateUserPasswordToken(email, {
       passwordToken: hashString(passwordToken),
       passwordTokenExpirationDate,
-    });
-
-    await this.emailService.sendResetPasswordEmail({
-      name: user.name,
-      email: user.email,
-      token: passwordToken,
-      origin,
     });
 
     return { msg: "Password reset email sent" };

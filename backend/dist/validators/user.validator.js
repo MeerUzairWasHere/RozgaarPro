@@ -8,14 +8,17 @@ exports.validateUserCreateInput = zod_1.z.object({
     username: zod_1.z
         .string("username is required")
         .min(4, { message: "username must be at least 4 characters long" })
-        .max(20, { message: "username must be at most 20 characters long" }),
+        .max(20, { message: "username must be at most 20 characters long" })
+        .optional(),
     name: zod_1.z
         .string("name is required")
         .min(2, { message: "name must be at least 2 characters long" })
         .max(255, { message: "name must be at most 255 characters long" }),
-    email: zod_1.z
-        .email({ message: "Invalid email format" })
-        .min(1, { message: "email is required" }),
+    email: zod_1.z.email({ message: "Invalid email format" }).optional(),
+    phone: zod_1.z
+        .string("phone is required")
+        .min(10, { message: "phone must be at least 10 characters long" })
+        .max(15, { message: "phone must be at most 15 characters long" }),
     password: zod_1.z
         .string("password is required")
         .min(8, { message: "password must be at least 8 characters long" })

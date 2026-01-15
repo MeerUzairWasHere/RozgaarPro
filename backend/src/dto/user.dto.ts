@@ -8,7 +8,7 @@ export interface TokenUserDto {
   id: string;
   name: string;
   role: string;
-  email: string;
+  phone: string;
   isVerified: boolean;
 }
 
