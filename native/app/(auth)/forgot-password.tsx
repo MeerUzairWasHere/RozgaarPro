@@ -11,6 +11,7 @@ export default function ForgotPasswordScreen() {
       <CustomTouchableOpacityButton
         title="Back"
         onPress={() => router.replace(ROUTES.SIGN_IN)}
+        className="w-96"
       />
     </View>
   );
