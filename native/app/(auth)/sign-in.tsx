@@ -4,7 +4,7 @@ import { Phone, Lock, Mail } from "lucide-react-native";
 import { ROUTES } from "@/constants";
 import { useAuthStore } from "@/store";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
