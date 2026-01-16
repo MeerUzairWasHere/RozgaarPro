@@ -11,6 +11,7 @@ import CustomInput from "@/components/CustomInput";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import BackButton from "@/components/BackButton";
 import { useLogin } from "@/hooks/useAuth";
+import CustomPressableButton from "@/components/CustomPressableButton";
 
 export default function LoginScreen() {
   const colourScheme = useColorScheme();
@@ -138,14 +139,11 @@ export default function LoginScreen() {
             />
 
             {/* Forgot */}
-            <Link href={ROUTES.FORGOT_PASSWORD} className="mb-4 self-end">
-              <Text
-                className="text-sm 
-              primary-text font-medium"
-              >
-                Forgot password?
-              </Text>
-            </Link>
+            <CustomPressableButton
+              title="Forgot password?"
+              className="mb-4 self-end"
+              onPress={() => router.push(ROUTES.FORGOT_PASSWORD)}
+            />
           </Animated.View>
 
           {/* Login Button */}
@@ -159,16 +157,12 @@ export default function LoginScreen() {
         </View>
 
         {/* Footer */}
-        <View className="p-6 items-center">
-          <Text className="text-sm primary-text">
-            Don’t have an account?{" "}
-            <Text
-              onPress={() => router.replace(ROUTES.SIGN_UP)}
-              className=" font-semibold"
-            >
-              Create account
-            </Text>
-          </Text>
+        <View className="flex flex-row items-baseline justify-center mb-4">
+          <Text className="text-sm primary-text">Don’t have an account? </Text>
+          <CustomPressableButton
+            title="Create account"
+            onPress={() => router.replace(ROUTES.SIGN_UP)}
+          />
         </View>
       </View>
     </SafeAreaView>

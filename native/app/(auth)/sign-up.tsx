@@ -11,6 +11,7 @@ import UserRoleBadge from "@/components/UserRoleBadge";
 import CustomInput from "@/components/CustomInput";
 import BackButton from "@/components/BackButton";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import CustomPressableButton from "@/components/CustomPressableButton";
 
 export default function SignupScreen() {
   const { name, phone, password, userRole, setField, signupStep } =
@@ -112,16 +113,14 @@ export default function SignupScreen() {
           </View>
 
           {/* Footer */}
-          <View className="p-6 items-center">
-            <Text className="primary-text">
+          <View className="flex flex-row items-baseline justify-center mb-4">
+            <Text className="text-sm primary-text">
               Already have an account?{" "}
-              <Text
-                onPress={() => router.replace(ROUTES.SIGN_IN)}
-                className="primary-text font-semibold"
-              >
-                Login
-              </Text>
             </Text>
+            <CustomPressableButton
+              title="Login"
+              onPress={() => router.replace(ROUTES.SIGN_IN)}
+            />
           </View>
         </View>
       </>
