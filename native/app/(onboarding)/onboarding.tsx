@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "@/components/CustomButton";
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import { cn } from "@/utils/utils";
 
 const slides = [
@@ -103,7 +103,7 @@ export default function OnboardingScreen() {
         </View>
 
         {/* Button */}
-        <CustomButton
+        <CustomTouchableOpacityButton
           onPress={() =>
             currentSlide === slides.length - 1
               ? handleFinish()

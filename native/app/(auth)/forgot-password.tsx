@@ -1,4 +1,4 @@
-import CustomButton from "@/components/CustomButton";
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import { ROUTES } from "@/constants";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
@@ -8,7 +8,7 @@ export default function ForgotPasswordScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>This is Forgot Password Screen</Text>
-      <CustomButton
+      <CustomTouchableOpacityButton
         title="Back"
         onPress={() => router.replace(ROUTES.SIGN_IN)}
       />

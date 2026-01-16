@@ -15,15 +15,17 @@ interface CustomButtonProps {
   leftIcon?: React.ReactNode;
   textClassName?: string;
   isLoading?: boolean;
+  disabled?: boolean;
 }
 
-const CustomButton = ({
+const CustomTouchableOpacityButton = ({
   onPress,
   title = "Click Me",
   className,
   textClassName,
   leftIcon,
   isLoading = false,
+  disabled = false,
 }: CustomButtonProps) => {
   const colourScheme = useColorScheme();
 
@@ -34,6 +36,7 @@ const CustomButton = ({
         className
       )}
       onPress={onPress}
+      disabled={disabled || isLoading}
     >
       {leftIcon}
 
@@ -57,4 +60,4 @@ const CustomButton = ({
     </TouchableOpacity>
   );
 };
-export default CustomButton;
+export default CustomTouchableOpacityButton;

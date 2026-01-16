@@ -8,7 +8,7 @@ import { Link, router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
-import CustomButton from "@/components/CustomButton";
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import BackButton from "@/components/BackButton";
 import { useLogin } from "@/hooks/useAuth";
 
@@ -150,7 +150,7 @@ export default function LoginScreen() {
 
           {/* Login Button */}
           <Animated.View entering={FadeInDown.delay(300)} className={"mt-2"}>
-            <CustomButton
+            <CustomTouchableOpacityButton
               title="Sign In"
               onPress={handleLogin}
               isLoading={loginMutation.isPending}

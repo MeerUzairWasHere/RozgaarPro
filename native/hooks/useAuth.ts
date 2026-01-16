@@ -10,6 +10,7 @@ import {
   AuthResponse,
   RequestOtpInputDto,
   VerifyOtpInputDto,
+  SIGN_UP_STEP,
 } from "@/types";
 import { authApi } from "@/api/authApi";
 import { Toast } from "toastify-react-native";
@@ -24,11 +25,12 @@ export const useRegister = (): UseMutationResult<
   RegisterInputDto
 > => {
   const queryClient = useQueryClient();
-
+  const { setSignupStep } = useAuthStore();
   return useMutation({
     mutationFn: authApi.register,
     onSuccess: () => {
       queryClient.clear();
+      setSignupStep(SIGN_UP_STEP.OTP);
       router.replace(ROUTES.OTP_VERIFICATION);
     },
     onError: (error) => {
@@ -107,10 +109,13 @@ export const useVerityOTP = (): UseMutationResult<
   VerifyOtpInputDto
 > => {
   const queryClient = useQueryClient();
+  const { setSignupStep } = useAuthStore();
+
   return useMutation({
     mutationFn: authApi.verifyOtp,
     onSuccess: async (data) => {
       queryClient.clear();
+      setSignupStep(SIGN_UP_STEP.DONE);
       router.replace(ROUTES.SIGN_IN);
       Toast.success("OTP verified");
     },

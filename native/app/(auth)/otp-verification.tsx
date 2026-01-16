@@ -10,6 +10,7 @@ import { ROUTES } from "@/constants/routes";
 import { router } from "expo-router";
 import { useRequestOTP, useVerityOTP } from "@/hooks/useAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 
 export default function VerifyOTPScreen() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -160,25 +161,11 @@ export default function VerifyOTPScreen() {
 
         {/* Verify Button */}
         <Animated.View entering={FadeInUp.delay(300).duration(400)}>
-          <Pressable
+          <CustomTouchableOpacityButton
             onPress={handleVerify}
-            disabled={!isOtpComplete || mutationVerifyOTP.isPending}
-            className={`h-14 rounded-2xl items-center justify-center ${
-              isOtpComplete && !mutationVerifyOTP.isPending
-                ? "bg-blue-500 dark:bg-blue-600"
-                : "bg-gray-300 dark:bg-gray-800"
-            }`}
-          >
-            <Text
-              className={`text-base font-semibold ${
-                isOtpComplete && !mutationVerifyOTP.isPending
-                  ? "text-white"
-                  : "text-gray-500 dark:text-gray-600"
-              }`}
-            >
-              {mutationVerifyOTP.isPending ? "Verifying..." : "Verify"}
-            </Text>
-          </Pressable>
+            disabled={!isOtpComplete}
+            title={mutationVerifyOTP.isPending ? "Verifying..." : "Verify"}
+          />
         </Animated.View>
 
         {/* Error Message */}

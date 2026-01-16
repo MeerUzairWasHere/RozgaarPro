@@ -1,19 +1,20 @@
 import { View, Text } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { User, Phone, Lock } from "lucide-react-native";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
 import { useAuthStore } from "@/store";
-import { USER_ROLE } from "@/types";
+import { SIGN_UP_STEP, USER_ROLE } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "@/constants";
 import { useRegister } from "@/hooks/useAuth";
 import UserRoleBadge from "@/components/UserRoleBadge";
 import CustomInput from "@/components/CustomInput";
 import BackButton from "@/components/BackButton";
-import CustomButton from "@/components/CustomButton";
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 
 export default function SignupScreen() {
-  const { name, phone, password, userRole, setField } = useAuthStore();
+  const { name, phone, password, userRole, setField, signupStep } =
+    useAuthStore();
 
   const registerMutation = useRegister();
 
@@ -25,6 +26,10 @@ export default function SignupScreen() {
       role: userRole,
     });
   };
+
+  if (signupStep === SIGN_UP_STEP.OTP) {
+    return <Redirect href={ROUTES.OTP_VERIFICATION} />;
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
@@ -88,7 +93,7 @@ export default function SignupScreen() {
 
             {/* Signup Button */}
             <Animated.View entering={FadeInDown.delay(300)} className="mt-8">
-              <CustomButton
+              <CustomTouchableOpacityButton
                 title={registerMutation.isPending ? "Signing up..." : "Sign Up"}
                 onPress={handleSignup}
                 isLoading={registerMutation.isPending}
