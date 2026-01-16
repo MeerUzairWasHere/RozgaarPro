@@ -1,4 +1,12 @@
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { User, Phone, Lock } from "lucide-react-native";
 import { Redirect, router } from "expo-router";
@@ -12,14 +20,18 @@ import CustomInput from "@/components/CustomInput";
 import BackButton from "@/components/BackButton";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import CustomPressableButton from "@/components/CustomPressableButton";
+import { useRef } from "react";
 
 export default function SignupScreen() {
   const { name, phone, password, userRole, setField, signupStep } =
     useAuthStore();
 
   const registerMutation = useRegister();
+  const phoneInputRef = useRef<any>(null);
+  const passwordInputRef = useRef<any>(null);
 
   const handleSignup = async () => {
+    Keyboard.dismiss();
     registerMutation.mutate({
       name,
       password,
@@ -34,96 +46,142 @@ export default function SignupScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
-      <>
-        <View className="flex-1">
-          {/* Header */}
-          <View className="p-4">
-            <BackButton />
-          </View>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View className="flex-1">
+            {/* Header */}
+            <View className="p-4">
+              <BackButton />
+            </View>
 
-          {/* Content */}
-          <View className="flex-1 px-6 pt-4 ">
-            {/* Title */}
-            <Animated.View entering={FadeInDown.duration(400)}>
-              <Text className="text-3xl font-bold primary-text  mb-2">
-                Create account
-              </Text>
-              <Text className="primary-text mb-8">
-                {userRole === USER_ROLE.FREELANCER
-                  ? "Join as a skilled worker and get discovered"
-                  : "Sign up to find trusted workers near you"}
-              </Text>
-            </Animated.View>
-
-            {/* Role Badge */}
-            <Animated.View entering={FadeInDown.delay(100)} className="mb-6">
-              <UserRoleBadge />
-            </Animated.View>
-
-            {/* Form */}
-            <Animated.View
-              entering={FadeInDown.delay(200)}
-              className="flex gap-4"
+            <ScrollView
+              contentContainerClassName="flex-grow"
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled"
+              bounces={false}
             >
-              {/* Name */}
-              <CustomInput
-                icon={<User size={15} color="#64748b" />}
-                placeholder="Full Name"
-                value={name}
-                onChangeText={(text) => setField("name", text)}
-              />
+              {/* Content */}
+              <View className="flex-1 px-6 pt-4 justify-between">
+                <View>
+                  {/* Title */}
+                  <Animated.View entering={FadeInDown.duration(400)}>
+                    <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-2">
+                      Create account
+                    </Text>
+                    <Text className="dark:text-primary-300 text-primary-700 mb-8">
+                      {userRole === USER_ROLE.FREELANCER
+                        ? "Join as a skilled worker and get discovered"
+                        : "Sign up to find trusted workers near you"}
+                    </Text>
+                  </Animated.View>
 
-              {/* Email */}
-              <CustomInput
-                icon={<Phone size={15} color="#64748b" />}
-                placeholder="Phone Number"
-                value={phone}
-                onChangeText={(text) => setField("phone", text)}
-              />
+                  {/* Role Badge */}
+                  <Animated.View
+                    entering={FadeInDown.delay(100)}
+                    className="mb-6"
+                  >
+                    <UserRoleBadge />
+                  </Animated.View>
 
-              {/* Password */}
-              <CustomInput
-                icon={<Lock size={15} color="#64748b" />}
-                placeholder="Password"
-                value={password}
-                onChangeText={(text) => setField("password", text)}
-                secureTextEntry={true}
-                keyboardType={"default"}
-              />
-            </Animated.View>
+                  {/* Form */}
+                  <Animated.View
+                    entering={FadeInDown.delay(200)}
+                    className="gap-4"
+                  >
+                    {/* Name */}
+                    <CustomInput
+                      icon={<User size={15} color="#64748b" />}
+                      placeholder="Full Name"
+                      value={name}
+                      onChangeText={(text) => setField("name", text)}
+                      autoCapitalize="words"
+                      returnKeyType="next"
+                      onSubmitEditing={() => phoneInputRef.current?.focus()}
+                    />
 
-            {/* Signup Button */}
-            <Animated.View entering={FadeInDown.delay(300)} className="mt-8">
-              <CustomTouchableOpacityButton
-                title={registerMutation.isPending ? "Signing up..." : "Sign Up"}
-                onPress={handleSignup}
-                isLoading={registerMutation.isPending}
-              />
-            </Animated.View>
+                    {/* Phone */}
+                    <CustomInput
+                      ref={phoneInputRef}
+                      icon={<Phone size={15} color="#64748b" />}
+                      placeholder="Phone Number"
+                      value={phone}
+                      onChangeText={(text) => setField("phone", text)}
+                      keyboardType="phone-pad"
+                      returnKeyType="next"
+                      onSubmitEditing={() => passwordInputRef.current?.focus()}
+                    />
 
-            {/* Terms */}
-            <Animated.Text
-              entering={FadeInDown.delay(400)}
-              className="text-center text-sm text-primary-950 dark:text-primary mt-6"
-            >
-              By signing up, you agree to our{" "}
-              <Text className="primary-text font-medium">Terms</Text> and{" "}
-              <Text className="primary-text font-medium">Privacy Policy</Text>
-            </Animated.Text>
+                    {/* Password */}
+                    <CustomInput
+                      ref={passwordInputRef}
+                      icon={<Lock size={15} color="#64748b" />}
+                      placeholder="Password"
+                      value={password}
+                      onChangeText={(text) => setField("password", text)}
+                      secureTextEntry={true}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      returnKeyType="done"
+                      onSubmitEditing={handleSignup}
+                    />
+                  </Animated.View>
+
+                  {/* Signup Button */}
+                  <Animated.View
+                    entering={FadeInDown.delay(300)}
+                    className="mt-8"
+                  >
+                    <CustomTouchableOpacityButton
+                      title={
+                        registerMutation.isPending ? "Signing up..." : "Sign Up"
+                      }
+                      onPress={handleSignup}
+                      isLoading={registerMutation.isPending}
+                      disabled={registerMutation.isPending}
+                    />
+                  </Animated.View>
+
+                  {/* Terms */}
+                  <Animated.Text
+                    entering={FadeInDown.delay(400)}
+                    className="text-center text-sm dark:text-primary-300 text-primary-700 mt-6 px-4"
+                  >
+                    By signing up, you agree to our{" "}
+                    <Text
+                      className="text-primary-600 dark:text-primary-400 font-medium"
+                      // onPress={() => router.push(ROUTES.TERMS)}
+                    >
+                      Terms
+                    </Text>{" "}
+                    and{" "}
+                    <Text
+                      className="text-primary-600 dark:text-primary-400 font-medium"
+                      // onPress={() => router.push(ROUTES.PRIVACY_POLICY)}
+                    >
+                      Privacy Policy
+                    </Text>
+                  </Animated.Text>
+                </View>
+
+                {/* Footer */}
+                <View className="flex flex-row items-baseline justify-center pb-6 pt-8">
+                  <Text className="text-sm dark:text-primary-300 text-primary-700">
+                    Already have an account?{" "}
+                  </Text>
+                  <CustomPressableButton
+                    title="Login"
+                    onPress={() => router.replace(ROUTES.SIGN_IN)}
+                  />
+                </View>
+              </View>
+            </ScrollView>
           </View>
-
-          {/* Footer */}
-          <View className="flex flex-row items-baseline justify-center mb-4">
-            <Text className="text-sm primary-text">
-              Already have an account?{" "}
-            </Text>
-            <CustomPressableButton
-              title="Login"
-              onPress={() => router.replace(ROUTES.SIGN_IN)}
-            />
-          </View>
-        </View>
-      </>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
