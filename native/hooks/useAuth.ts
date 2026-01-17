@@ -11,6 +11,7 @@ import {
   RequestOtpInputDto,
   VerifyOtpInputDto,
   SIGN_UP_STEP,
+  USER_ROLE,
 } from "@/types";
 import { authApi } from "@/api/authApi";
 import { Toast } from "toastify-react-native";
@@ -49,17 +50,14 @@ export const useLogin = (): UseMutationResult<
 
   return useMutation({
     mutationFn: authApi.login,
-    onSuccess: async (data) => {
-      await SecureStore.setItemAsync("accessToken", data.accessToken);
-      await SecureStore.setItemAsync("refreshToken", data.refreshToken);
-      setUser(data.tokenUser);
+    onSuccess: async ({ accessToken, refreshToken, tokenUser }) => {
+      await SecureStore.setItemAsync("accessToken", accessToken);
+      await SecureStore.setItemAsync("refreshToken", refreshToken);
+      setUser(tokenUser);
       setAuthenticated(true);
-
       queryClient.clear();
-      router.replace(ROUTES.HOME);
     },
     onError: (error) => {
-      console.log(error)
       Toast.error(getErrorMessage(error));
     },
   });
@@ -69,7 +67,6 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
   const queryClient = useQueryClient();
 
   const { setUser, setAuthenticated, clearAuth } = useAuthStore();
-  const { completeOnboarding } = useOnboardingStore();
 
   return useMutation({
     mutationFn: authApi.logout,
@@ -80,7 +77,6 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       setUser(null);
       setAuthenticated(false);
       // clearAuth(); //TODO: add this later
-      completeOnboarding(false); //TODO: remove this later
       router.replace(ROUTES.SELECT_ROLE);
     },
   });
