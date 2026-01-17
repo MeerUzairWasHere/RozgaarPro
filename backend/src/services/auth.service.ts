@@ -21,7 +21,7 @@ import {
 } from "../errors";
 import { IAuthService, ICompanyService, IEmailService } from "../interfaces";
 import { UserRepository } from "../repositories";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { VerifyProvider } from "../interfaces/verify-provider.interface";
 
 export class AuthService implements IAuthService {
@@ -29,7 +29,7 @@ export class AuthService implements IAuthService {
     private emailService: IEmailService,
     private userRepository: UserRepository,
     private companyService: ICompanyService,
-    private readonly verifyProvider: VerifyProvider
+    private readonly verifyProvider: VerifyProvider,
   ) {}
 
   async registerUser(data: RegisterInputDto, origin: string) {
@@ -184,7 +184,7 @@ export class AuthService implements IAuthService {
 
     const existingToken = await this.userRepository.findValidRefreshToken(
       payload.user.id,
-      payload.refreshTokenHash
+      payload.refreshTokenHash,
     );
 
     if (!existingToken) {
@@ -209,9 +209,11 @@ export class AuthService implements IAuthService {
       throw new NotFoundError("User not found");
     }
 
+    // TODO: create function and user same on email verification - P4
     await this.userRepository.update(user.id, {
       isVerified: true,
       verified: new Date(),
+      profileCompleted: user.role === Role.USER ? true : false,
     });
 
     if (!valid) throw new BadRequestError("Invalid or expired OTP");

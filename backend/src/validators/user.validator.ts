@@ -48,6 +48,7 @@ export const validateUserUpdateInput = z.object({
     .max(255, { message: "password must be at most 255 characters long" })
     .optional(),
   role: z.enum(Role).optional(),
+  profileCompleted: z.boolean().optional(),
   isVerified: z.boolean().optional(),
   verificationToken: z.string().max(255).optional().nullable(),
   passwordToken: z.string().max(255).optional().nullable(),

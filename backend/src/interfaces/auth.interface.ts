@@ -10,7 +10,7 @@ import {
 export interface IAuthService {
   registerUser(
     data: RegisterInputDto,
-    origin: string
+    origin: string,
   ): Promise<{
     user: TokenUserDto;
   }>;
@@ -18,7 +18,7 @@ export interface IAuthService {
   login(
     data: LoginInputDto,
     userAgent: string,
-    ip: string
+    ip: string,
   ): Promise<{
     user: TokenUserDto;
     refreshTokenHash: string;
@@ -30,7 +30,7 @@ export interface IAuthService {
 
   forgotPassword(
     data: ForgotPasswordInputDto,
-    origin: string
+    origin: string,
   ): Promise<
     | { msg: string }
     | { name: string; email: string; token: string; origin: string }
