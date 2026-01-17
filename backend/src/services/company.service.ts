@@ -1,6 +1,6 @@
+import { CompanyCreateInputDto, CompanyUpdateInputDto } from "../dto";
 import { Company } from "@prisma/client";
 import { ConflictError } from "../errors";
-import { CompanyCreateInputDto, CompanyUpdateInputDto } from "../dto";
 import { ICompanyService } from "../interfaces";
 import { CompanyRepository } from "../repositories";
 

@@ -10,8 +10,9 @@ import cors from "cors";
 
 // Routers
 import authRoutes from "./routes/auth.routes";
-import userRouter from "./routes/user.routes";
-import companyRouter from "./routes/company.routes";
+import userRoutes from "./routes/user.routes";
+import companyRoutes from "./routes/company.routes";
+import skillRoutes from "./routes/skill.routes";
 
 // Middleware
 import { prismaService } from "./container";
@@ -56,7 +57,7 @@ app.use(
       (err as any).retryAfter = options.windowMs / 1000 / 60 + " minutes";
       next(err);
     },
-  })
+  }),
 );
 
 app.use(helmet());
@@ -64,8 +65,9 @@ app.use(cors());
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/company", companyRouter);
-app.use("/api/v1/users", userRouter);
+app.use("/api/v1/company", companyRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/skills", skillRoutes);
 
 // app.get("*", (req, res) => {
 //   // res.redirect("/documentation"); // comment out this route when starting

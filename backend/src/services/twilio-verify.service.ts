@@ -1,5 +1,5 @@
 import twilio from "twilio";
-import { VerifyProvider } from "../interfaces/verify-provider.interface";
+import { VerifyProvider } from "../interfaces";
 
 export class TwilioVerifyService implements VerifyProvider {
   private client;
@@ -7,13 +7,13 @@ export class TwilioVerifyService implements VerifyProvider {
   constructor() {
     this.client = twilio(
       process.env.TWILIO_ACCOUNT_SID!,
-      process.env.TWILIO_AUTH_TOKEN!
+      process.env.TWILIO_AUTH_TOKEN!,
     );
   }
 
   async sendOtp(
     to: string,
-    channel: "sms" | "whatsapp" = "sms"
+    channel: "sms" | "whatsapp" = "sms",
   ): Promise<void> {
     const formattedTo = this.normalizePhoneNumber(to);
     await this.client.verify.v2

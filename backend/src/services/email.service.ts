@@ -11,7 +11,10 @@ import { NotFoundError } from "../errors";
 export class EmailService implements IEmailService {
   private resend: Resend;
 
-  constructor(apiKey: string, private companyService: ICompanyService) {
+  constructor(
+    apiKey: string,
+    private companyService: ICompanyService,
+  ) {
     this.resend = new Resend(apiKey);
   }
 
@@ -73,8 +76,8 @@ export class EmailService implements IEmailService {
       
       <div style="margin-top: 32px; color: #4b5563; font-size: 14px;">
         <p>This link will expire in ${expirationHours} hour${
-      expirationHours !== 1 ? "s" : ""
-    } for security reasons.</p>
+          expirationHours !== 1 ? "s" : ""
+        } for security reasons.</p>
         <p style="margin-top: 16px;">If you didn't request a password reset, please ignore this email or contact support.</p>
       </div>
     </div>
@@ -225,8 +228,8 @@ export class EmailService implements IEmailService {
         </p>
         <p style="margin-bottom: 16px;">
           &copy; ${new Date().getFullYear()} ${
-      company.name
-    }. All rights reserved.<br>
+            company.name
+          }. All rights reserved.<br>
           ${address}
         </p>
       </div>

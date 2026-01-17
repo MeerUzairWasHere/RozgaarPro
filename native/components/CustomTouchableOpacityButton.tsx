@@ -33,7 +33,8 @@ const CustomTouchableOpacityButton = ({
     <TouchableOpacity
       className={cn(
         "h-14 rounded-2xl bg-primary-900  dark:bg-primary items-center justify-center overflow-hidden",
-        className
+        disabled && "bg-primary-300 dark:bg-primary-700",
+        className,
       )}
       onPress={onPress}
       disabled={disabled || isLoading}
@@ -50,7 +51,7 @@ const CustomTouchableOpacityButton = ({
           <Text
             className={cn(
               "text-primary-50 dark:text-primary-950  text-base font-semibold",
-              textClassName
+              textClassName,
             )}
           >
             {title}

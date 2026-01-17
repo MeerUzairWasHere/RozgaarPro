@@ -3,13 +3,16 @@ import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityBut
 import { useLogout } from "@/hooks/useAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "@/store";
+import { Redirect } from "expo-router";
+import { ROUTES } from "@/constants";
+import { USER_ROLE } from "@/types";
 
 export default function HomeScreen() {
-  const logoutMutation = useLogout();
   const { user } = useAuthStore();
-  const handleLogout = () => {
-    logoutMutation.mutate();
-  };
+
+  if (!user?.profileCompleted && user?.role === USER_ROLE.FREELANCER) {
+    return <Redirect href={ROUTES.FREELANCER_ONBOARDING} />;
+  }
 
   return (
     <SafeAreaView className="bg-primary dark:bg-primary-950">
@@ -20,12 +23,6 @@ export default function HomeScreen() {
         <Text className="primary-text mb-4">
           Profile Completed: {user?.profileCompleted ? "yes" : "no"}
         </Text>
-        <CustomTouchableOpacityButton
-          title="Logout"
-          onPress={handleLogout}
-          isLoading={logoutMutation.isPending}
-          className="w-96"
-        />
       </View>
     </SafeAreaView>
   );

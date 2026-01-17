@@ -1,3 +1,5 @@
+import { useAuthStore } from "@/store";
+import { USER_ROLE } from "@/types";
 import { Tabs } from "expo-router";
 import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
 import { useColorScheme } from "react-native";
@@ -5,6 +7,7 @@ import { useColorScheme } from "react-native";
 export default function TabsLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
+  const { user } = useAuthStore();
 
   // Colors based on your Tailwind config
   const colors = {
@@ -33,6 +36,10 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
+          display:
+            user?.profileCompleted && user?.role === USER_ROLE.FREELANCER
+              ? "flex"
+              : "none",
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           borderBottomLeftRadius: 50,
@@ -102,6 +109,12 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, focused }) => (
             <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name="freelancer-onboarding" // 👈 CRITICAL
+        options={{
+          href: null,
         }}
       />
     </Tabs>

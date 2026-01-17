@@ -19,10 +19,14 @@ import {
   NotFoundError,
   UnauthenticatedError,
 } from "../errors";
-import { IAuthService, ICompanyService, IEmailService } from "../interfaces";
+import {
+  IAuthService,
+  ICompanyService,
+  IEmailService,
+  VerifyProvider,
+} from "../interfaces";
 import { UserRepository } from "../repositories";
 import { Role, User } from "@prisma/client";
-import { VerifyProvider } from "../interfaces/verify-provider.interface";
 
 export class AuthService implements IAuthService {
   constructor(

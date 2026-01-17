@@ -22,7 +22,7 @@ type AuthState = {
 
   setField: (
     field: "name" | "phone" | "email" | "password",
-    value: string
+    value: string,
   ) => void;
 
   setLoginMethod: (method: LOGIN_METHOD) => void;
@@ -88,6 +88,6 @@ export const useAuthStore = create<AuthState>()(
           AsyncStorage.setItem(key, JSON.stringify(value)),
         removeItem: async (key) => AsyncStorage.removeItem(key),
       },
-    }
-  )
+    },
+  ),
 );
