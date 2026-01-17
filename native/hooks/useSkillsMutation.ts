@@ -1,6 +1,6 @@
-import { skillsApiClient } from "@/api-client";
-import { QUERY_KEYS } from "@/constants/query-keys";
+import { QUERY_KEYS } from "@/constants";
 import { Skill } from "@/types";
+import { skillsApiClient } from "@/api-client";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export const useGetSkills = (): UseQueryResult<Skill[]> => {

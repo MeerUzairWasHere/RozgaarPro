@@ -1,3 +1,4 @@
+import * as Location from "expo-location";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
@@ -13,7 +14,7 @@ export default function CompleteProfile() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [locationGranted, setLocationGranted] = useState(false);
   const [formData, setFormData] = useState({
     skills: [] as string[],
     experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
@@ -37,6 +38,13 @@ export default function CompleteProfile() {
     } else {
       setLoading(true);
       try {
+        const locationGranted = await requestLocationPermission();
+
+        if (!locationGranted) {
+          setLoading(false);
+          return;
+        }
+
         // Update profile via API/Store
         // await updateUser({
         //   skills: formData.skills,
@@ -54,6 +62,32 @@ export default function CompleteProfile() {
       } finally {
         setLoading(false);
       }
+    }
+  };
+
+  const requestLocationPermission = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+
+      if (status !== "granted") {
+        Toast.error("Location permission is required");
+        setLocationGranted(false);
+        return false;
+      }
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
+      console.log(JSON.stringify(location.coords, null, 2));
+
+      setLocationGranted(true);
+      return true;
+    } catch (error) {
+      console.error("Location error:", error);
+      Toast.error("Failed to get location");
+      setLocationGranted(false);
+      return false;
     }
   };
 
@@ -222,22 +256,52 @@ export default function CompleteProfile() {
                     Aadhaar, PAN, or Voter ID
                   </Text>
                 </TouchableOpacity>
-
-                <View className="bg-green-50 dark:bg-green-900/30 rounded-2xl p-4 border border-green-200 dark:border-green-800">
+                <TouchableOpacity
+                  onPress={requestLocationPermission}
+                  activeOpacity={0.7}
+                  className={`rounded-2xl p-4 border ${
+                    locationGranted
+                      ? "bg-green-500 border-green-500"
+                      : " border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-900 "
+                  }`}
+                >
                   <View className="flex-row gap-3">
-                    <View className="w-8 h-8 bg-green-500 rounded-full items-center justify-center mt-0.5">
-                      <MapPin size={16} color="#FFFFFF" />
+                    <View
+                      className={`w-8 h-8 rounded-full items-center justify-center mt-0.5 ${
+                        locationGranted ? "bg-white" : "bg-green-500"
+                      }`}
+                    >
+                      <MapPin
+                        size={16}
+                        color={locationGranted ? "#16a34a" : "#FFFFFF"}
+                      />
                     </View>
+
                     <View className="flex-1">
-                      <Text className="font-medium text-primary-900 dark:text-primary-50 mb-1">
+                      <Text
+                        className={`font-medium mb-1 ${
+                          locationGranted
+                            ? "text-white"
+                            : "text-primary-900 dark:text-primary-50"
+                        }`}
+                      >
                         Location Access
                       </Text>
-                      <Text className="text-sm text-primary-600 dark:text-primary-400">
-                        Allow location access so customers can find you nearby
+
+                      <Text
+                        className={`text-sm ${
+                          locationGranted
+                            ? "text-green-100"
+                            : "text-primary-600 dark:text-primary-400"
+                        }`}
+                      >
+                        {locationGranted
+                          ? "Location access granted"
+                          : "Allow location access so customers can find you nearby"}
                       </Text>
                     </View>
                   </View>
-                </View>
+                </TouchableOpacity>
               </View>
             </Animated.View>
           )}

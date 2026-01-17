@@ -36,10 +36,7 @@ export default function TabsLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          display:
-            user?.profileCompleted && user?.role === USER_ROLE.FREELANCER
-              ? "flex"
-              : "none",
+          display: user?.profileCompleted ? "flex" : "none",
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           borderBottomLeftRadius: 50,
