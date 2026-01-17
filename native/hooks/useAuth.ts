@@ -59,6 +59,7 @@ export const useLogin = (): UseMutationResult<
       router.replace(ROUTES.HOME);
     },
     onError: (error) => {
+      console.log(error)
       Toast.error(getErrorMessage(error));
     },
   });

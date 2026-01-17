@@ -29,8 +29,8 @@ export default function LoginScreen() {
   const colourScheme = useColorScheme();
   const { loginMethod, setLoginMethod, setField, phone, email, password } =
     useAuthStore();
+
   const passwordRef = useRef<TextInput | null>(null);
-  console.log(passwordRef);
 
   const loginMutation = useLogin();
 

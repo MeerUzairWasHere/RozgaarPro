@@ -6,4 +6,7 @@ export const ROUTES = {
   FORGOT_PASSWORD: "/(auth)/forgot-password",
   OTP_VERIFICATION: "/(auth)/otp-verification",
   HOME: "/(tabs)/home",
+  JOBS: "/(tabs)/jobs",
+  MESSAGES: "/(tabs)/messages",
+  PROFILE: "/(tabs)/profile",
 } as const;
