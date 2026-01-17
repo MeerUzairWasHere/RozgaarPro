@@ -1,6 +1,4 @@
 import { View, Text } from "react-native";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import { useLogout } from "@/hooks/useAuth";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "@/store";
 import { Redirect } from "expo-router";
@@ -8,9 +6,13 @@ import { ROUTES } from "@/constants";
 import { USER_ROLE } from "@/types";
 
 export default function HomeScreen() {
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
 
-  if (!user?.profileCompleted && user?.role === USER_ROLE.FREELANCER) {
+  if (
+    isAuthenticated &&
+    !user?.profileCompleted &&
+    user?.role === USER_ROLE.FREELANCER
+  ) {
     return <Redirect href={ROUTES.FREELANCER_ONBOARDING} />;
   }
 

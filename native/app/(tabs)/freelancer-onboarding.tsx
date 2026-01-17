@@ -28,7 +28,6 @@ const experienceLevels = [
 
 export default function CompleteProfile() {
   const router = useRouter();
-  // const { updateUser } = useAuthStore();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +35,6 @@ export default function CompleteProfile() {
     experience: "",
     idDocument: null,
   });
-  const { setUser } = useAuthStore();
 
   const handleSkillToggle = (skillId: string) => {
     setFormData((prev) => ({
