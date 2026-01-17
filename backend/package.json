@@ -4,7 +4,7 @@
   "description": "RozgaarPro backend.",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node ./src/seed/seed-defaults.ts && node ./dist/index.js",
+    "start": "tsc && node ./dist/seed/seed-defaults.js && node ./dist/index.js",
     "build": "tsc",
     "dev": "npx prisma generate && npm run start",
     "migrate": "npx prisma migrate dev",
