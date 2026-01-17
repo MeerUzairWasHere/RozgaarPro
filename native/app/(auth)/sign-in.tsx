@@ -183,7 +183,7 @@ export default function LoginScreen() {
                     <View className="flex flex-row self-end mb-6">
                       <CustomPressableButton
                         title="Forgot password?"
-                        onPress={() => router.push(ROUTES.FORGOT_PASSWORD)}
+                        onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
                       />
                     </View>
                   </Animated.View>
