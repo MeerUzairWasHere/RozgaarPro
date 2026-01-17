@@ -30,6 +30,8 @@ type AuthState = {
   setUser: (user: TokenUser | null) => void;
   setAuthenticated: (isAuthenticated: boolean) => void;
 
+  setProfileCompleted: (profileCompleted: boolean) => void;
+
   clearAuth: () => void;
 };
 
@@ -64,6 +66,18 @@ export const useAuthStore = create<AuthState>()(
       setAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
 
       setSignupStep: (step: SIGN_UP_STEP) => set({ signupStep: step }),
+
+      setProfileCompleted: (profileCompleted) =>
+        set((state) => {
+          if (!state.user) return state;
+
+          return {
+            user: {
+              ...state.user,
+              profileCompleted,
+            },
+          };
+        }),
 
       clearAuth: () =>
         set({

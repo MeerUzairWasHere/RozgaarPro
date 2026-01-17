@@ -35,7 +35,7 @@ type CompleteProfileState = {
 
 export const useCompleteProfileStore = create<CompleteProfileState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       step: 1,
       loading: false,
       formData: {
@@ -80,14 +80,15 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
           formData: { ...state.formData, experience },
         })),
 
-      resetProfile: () => ({
-        step: 1,
-        loading: false,
-        formData: {
-          skills: [],
-          experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
-        },
-      }),
+      resetProfile: () =>
+        set({
+          step: 1,
+          loading: false,
+          formData: {
+            skills: [],
+            experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
+          },
+        }),
     }),
     {
       name: "complete-profile-storage",

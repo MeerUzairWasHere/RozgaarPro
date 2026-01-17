@@ -3,18 +3,20 @@ import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityBut
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
-import { Toast } from "toastify-react-native";
 import { useGetSkills } from "@/hooks/useSkillsMutation";
-import { experienceLevels } from "@/constants";
-import { usePermissionStore } from "@/store";
+import { experienceLevels, ROUTES } from "@/constants";
+import { useAuthStore, usePermissionStore } from "@/store";
 import { cn } from "@/utils/utils";
 import { useCompleteProfileStore } from "@/store/useCompleteProfileStore";
 import { requestLocationPermission } from "@/lib/locationPermission";
+import { useCompleteFreelancerProfile } from "@/hooks/useFreelancersMutation";
+import { router } from "expo-router";
 
 export default function CompleteProfile() {
-  const { locationStatus, setLocationStatus, resetLocationStatus } =
-    usePermissionStore();
+  const { locationStatus } = usePermissionStore();
 
+  const mutationCompleteProfile = useCompleteFreelancerProfile();
+  const { setProfileCompleted } = useAuthStore();
   const {
     step,
     loading,
@@ -27,8 +29,6 @@ export default function CompleteProfile() {
     setLocation,
     resetProfile,
   } = useCompleteProfileStore();
-
-  console.log(JSON.stringify(formData, null, 2));
 
   const { data: skills } = useGetSkills();
 
@@ -55,12 +55,21 @@ export default function CompleteProfile() {
         accuracy: coords.accuracy,
       });
 
-      Toast.success("Profile completed successfully!");
+      await mutationCompleteProfile.mutateAsync({
+        skills: formData.skills,
+        experience: formData.experience,
+        location: {
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+          accuracy: coords.accuracy,
+        },
+      });
 
+      setProfileCompleted(true);
       resetProfile();
+
+      router.replace(ROUTES.HOME);
     } catch (error) {
-      console.error("Profile completion error:", error);
-      Toast.error("Failed to complete profile");
     } finally {
       setLoading(false);
     }

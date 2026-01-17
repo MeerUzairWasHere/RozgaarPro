@@ -11,7 +11,6 @@ import {
   RequestOtpInputDto,
   VerifyOtpInputDto,
   SIGN_UP_STEP,
-  USER_ROLE,
 } from "@/types";
 import { authApiClient } from "@/api-client";
 import { Toast } from "toastify-react-native";
@@ -25,12 +24,10 @@ export const useRegister = (): UseMutationResult<
   Error,
   RegisterInputDto
 > => {
-  const queryClient = useQueryClient();
   const { setSignupStep } = useAuthStore();
   return useMutation({
     mutationFn: authApiClient.register,
     onSuccess: () => {
-      queryClient.clear();
       setSignupStep(SIGN_UP_STEP.OTP);
       router.replace(ROUTES.OTP_VERIFICATION);
     },
@@ -45,7 +42,6 @@ export const useLogin = (): UseMutationResult<
   Error,
   LoginInputDto
 > => {
-  const queryClient = useQueryClient();
   const { setUser, setAuthenticated } = useAuthStore();
 
   return useMutation({
@@ -55,7 +51,6 @@ export const useLogin = (): UseMutationResult<
       await SecureStore.setItemAsync("refreshToken", refreshToken);
       setUser(tokenUser);
       setAuthenticated(true);
-      queryClient.clear();
     },
     onError: (error) => {
       Toast.error(getErrorMessage(error));
@@ -76,7 +71,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       await SecureStore.deleteItemAsync("refreshToken");
       setUser(null);
       setAuthenticated(false);
-      // clearAuth(); //TODO: add this later
+      clearAuth();
       router.replace(ROUTES.SELECT_ROLE);
     },
   });
@@ -87,13 +82,8 @@ export const useRequestOTP = (): UseMutationResult<
   Error,
   RequestOtpInputDto
 > => {
-  const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: authApiClient.requestOtp,
-    onSuccess: async (data) => {
-      queryClient.clear();
-    },
     onError: (error) => {
       Toast.error(getErrorMessage(error));
     },
@@ -105,16 +95,13 @@ export const useVerityOTP = (): UseMutationResult<
   Error,
   VerifyOtpInputDto
 > => {
-  const queryClient = useQueryClient();
   const { setSignupStep } = useAuthStore();
 
   return useMutation({
     mutationFn: authApiClient.verifyOtp,
     onSuccess: async (data) => {
-      queryClient.clear();
       setSignupStep(SIGN_UP_STEP.DONE);
       router.replace(ROUTES.SIGN_IN);
-      Toast.success("OTP verified");
     },
     onError: (error) => {
       Toast.error(getErrorMessage(error));

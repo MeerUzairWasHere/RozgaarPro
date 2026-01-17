@@ -6,6 +6,6 @@ const router = Router();
 
 router
   .route("/complete-profile")
-  .get(authGuard, freelancerController.completeFreelancerProfile);
+  .post(authGuard, freelancerController.completeFreelancerProfile);
 
 export default router;

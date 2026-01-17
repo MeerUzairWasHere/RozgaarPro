@@ -109,7 +109,7 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="freelancer-onboarding" // 👈 CRITICAL
+        name="complete-profile" 
         options={{
           href: null,
         }}
