@@ -1,40 +1,26 @@
+import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useRouter } from "expo-router";
-import { Camera, MapPin, Clock, ChevronRight } from "lucide-react-native";
+import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { Toast } from "toastify-react-native";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import { useAuthStore } from "@/store";
-import { TokenUser } from "@/types";
-import { ROUTES } from "@/constants";
-
-const categories = [
-  { id: "plumbing", name: "Plumbing" },
-  { id: "electrical", name: "Electrical" },
-  { id: "carpentry", name: "Carpentry" },
-  { id: "painting", name: "Painting" },
-  { id: "cleaning", name: "Cleaning" },
-  { id: "gardening", name: "Gardening" },
-];
-
-const experienceLevels = [
-  "Less than 1 year",
-  "1-3 years",
-  "3-5 years",
-  "5-10 years",
-  "More than 10 years",
-];
+import { useGetSkills } from "@/hooks/useSkillsMutation";
+import { EXPERIENCE_LEVEL } from "@/types";
+import { experienceLevels } from "@/constants";
 
 export default function CompleteProfile() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     skills: [] as string[],
-    experience: "",
+    experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
     idDocument: null,
   });
+
+  const { data: skills } = useGetSkills();
 
   const handleSkillToggle = (skillId: string) => {
     setFormData((prev) => ({
@@ -88,24 +74,6 @@ export default function CompleteProfile() {
           </Text>
         </View>
         {/* Progress */}
-        {/* <View className="px-4 py-4">
-          <View className="flex-row gap-2">
-            {[1, 2, 3].map((s) => (
-              <View
-                key={s}
-                className={`flex-1 h-1.5 rounded-full ${
-                  s <= step
-                    ? "bg-primary-900 dark:bg-primary-50"
-                    : "bg-primary-200 dark:bg-primary-800"
-                }`}
-              />
-            ))}
-          </View>
-          <Text className="text-sm text-primary-600 dark:text-primary-400 mt-2">
-            Step {step} of 3
-          </Text>
-        </View> */}
-
         <View className="px-4 py-4">
           <View className="flex-row gap-2">
             {[1, 2, 3].map((s) => (
@@ -135,6 +103,7 @@ export default function CompleteProfile() {
             Step {step} of 3
           </Text>
         </View>
+
         <View className="px-4 pb-32">
           {/* Step 1: Skills */}
           {step === 1 && (
@@ -147,7 +116,7 @@ export default function CompleteProfile() {
               </Text>
 
               <View className="flex-row flex-wrap gap-3">
-                {categories.map((category) => {
+                {skills?.map((category) => {
                   const isSelected = formData.skills.includes(category.id);
                   return (
                     <TouchableOpacity
@@ -191,12 +160,12 @@ export default function CompleteProfile() {
 
               <View className="gap-3">
                 {experienceLevels.map((exp) => {
-                  const isSelected = formData.experience === exp;
+                  const isSelected = formData.experience === exp.value;
                   return (
                     <TouchableOpacity
-                      key={exp}
+                      key={exp.title}
                       onPress={() =>
-                        setFormData({ ...formData, experience: exp })
+                        setFormData({ ...formData, experience: exp.value })
                       }
                       className={`p-4 rounded-2xl border-2 flex-row items-center justify-between ${
                         isSelected
@@ -211,12 +180,14 @@ export default function CompleteProfile() {
                           color={isSelected ? "#1A1A1A" : "#666666"}
                         />
                         <Text className="font-medium text-primary-900 dark:text-primary-50">
-                          {exp}
+                          {exp.title}
                         </Text>
                       </View>
                       {isSelected && (
-                        <View className="w-5 h-5 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                          <ChevronRight size={14} color="#F2F2F2" />
+                        <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
+                          <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                            ✓
+                          </Text>
                         </View>
                       )}
                     </TouchableOpacity>

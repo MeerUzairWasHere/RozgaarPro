@@ -4,11 +4,10 @@ import {
   LoginInputDto,
   RegisterInputDto,
   RequestOtpInputDto,
-  TokenUser,
   VerifyOtpInputDto,
 } from "@/types";
 
-export const authApi = {
+export const authApiClient = {
   register: async (userData: RegisterInputDto): Promise<string> => {
     const { data } = await api.post<string>("/auth/sign-up", userData);
     return data;

@@ -1,5 +1,5 @@
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import { useLogout } from "@/hooks/useAuth";
+import { useLogout } from "@/hooks/useAuthMutation";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 

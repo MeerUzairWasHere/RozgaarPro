@@ -21,7 +21,7 @@ import { LOGIN_METHOD } from "@/types";
 import CustomInput from "@/components/CustomInput";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import BackButton from "@/components/BackButton";
-import { useLogin } from "@/hooks/useAuth";
+import { useLogin } from "@/hooks/useAuthMutation";
 import CustomPressableButton from "@/components/CustomPressableButton";
 import { useRef } from "react";
 

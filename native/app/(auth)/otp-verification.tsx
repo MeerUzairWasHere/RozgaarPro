@@ -6,9 +6,9 @@ import Animated, {
   FadeInUp,
 } from "react-native-reanimated";
 import { useAuthStore } from "@/store";
-import { ROUTES } from "@/constants/routes";
+import { ROUTES } from "@/constants/file-routes";
 import { router } from "expo-router";
-import { useRequestOTP, useVerityOTP } from "@/hooks/useAuth";
+import { useRequestOTP, useVerityOTP } from "@/hooks/useAuthMutation";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 

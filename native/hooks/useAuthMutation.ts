@@ -13,10 +13,10 @@ import {
   SIGN_UP_STEP,
   USER_ROLE,
 } from "@/types";
-import { authApi } from "@/api/authApi";
+import { authApiClient } from "@/api-client";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
-import { useAuthStore, useOnboardingStore } from "@/store";
+import { useAuthStore } from "@/store";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 
@@ -28,7 +28,7 @@ export const useRegister = (): UseMutationResult<
   const queryClient = useQueryClient();
   const { setSignupStep } = useAuthStore();
   return useMutation({
-    mutationFn: authApi.register,
+    mutationFn: authApiClient.register,
     onSuccess: () => {
       queryClient.clear();
       setSignupStep(SIGN_UP_STEP.OTP);
@@ -49,7 +49,7 @@ export const useLogin = (): UseMutationResult<
   const { setUser, setAuthenticated } = useAuthStore();
 
   return useMutation({
-    mutationFn: authApi.login,
+    mutationFn: authApiClient.login,
     onSuccess: async ({ accessToken, refreshToken, tokenUser }) => {
       await SecureStore.setItemAsync("accessToken", accessToken);
       await SecureStore.setItemAsync("refreshToken", refreshToken);
@@ -69,7 +69,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
   const { setUser, setAuthenticated, clearAuth } = useAuthStore();
 
   return useMutation({
-    mutationFn: authApi.logout,
+    mutationFn: authApiClient.logout,
     onSuccess: async () => {
       queryClient.clear();
       await SecureStore.deleteItemAsync("accessToken");
@@ -90,7 +90,7 @@ export const useRequestOTP = (): UseMutationResult<
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: authApi.requestOtp,
+    mutationFn: authApiClient.requestOtp,
     onSuccess: async (data) => {
       queryClient.clear();
     },
@@ -109,7 +109,7 @@ export const useVerityOTP = (): UseMutationResult<
   const { setSignupStep } = useAuthStore();
 
   return useMutation({
-    mutationFn: authApi.verifyOtp,
+    mutationFn: authApiClient.verifyOtp,
     onSuccess: async (data) => {
       queryClient.clear();
       setSignupStep(SIGN_UP_STEP.DONE);
