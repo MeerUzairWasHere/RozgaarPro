@@ -99,6 +99,7 @@ model FreelancerLocation {
   longitude  Decimal  @db.Decimal(9, 6)
   accuracy   Int?
   recordedAt DateTime @default(now())
+  
 
   // Relations
   freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)

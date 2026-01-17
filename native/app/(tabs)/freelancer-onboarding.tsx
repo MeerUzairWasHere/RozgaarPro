@@ -1,93 +1,68 @@
 import * as Location from "expo-location";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { useRouter } from "expo-router";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { Toast } from "toastify-react-native";
 import { useGetSkills } from "@/hooks/useSkillsMutation";
-import { EXPERIENCE_LEVEL } from "@/types";
 import { experienceLevels } from "@/constants";
+import { usePermissionStore } from "@/store";
+import { cn } from "@/utils/utils";
+import { useCompleteProfileStore } from "@/store/useCompleteProfileStore";
+import { requestLocationPermission } from "@/lib/locationPermission";
 
 export default function CompleteProfile() {
-  const router = useRouter();
-  const [step, setStep] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [locationGranted, setLocationGranted] = useState(false);
-  const [formData, setFormData] = useState({
-    skills: [] as string[],
-    experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
-    idDocument: null,
-  });
+  const { locationStatus, setLocationStatus, resetLocationStatus } =
+    usePermissionStore();
+
+  const {
+    step,
+    loading,
+    formData,
+    setStep,
+    nextStep,
+    setLoading,
+    toggleSkill,
+    setExperience,
+    setLocation,
+    resetProfile,
+  } = useCompleteProfileStore();
+
+  console.log(JSON.stringify(formData, null, 2));
 
   const { data: skills } = useGetSkills();
 
   const handleSkillToggle = (skillId: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      skills: prev.skills.includes(skillId)
-        ? prev.skills.filter((s) => s !== skillId)
-        : [...prev.skills, skillId],
-    }));
+    toggleSkill(skillId);
   };
 
   const handleNext = async () => {
     if (step < 3) {
-      setStep(step + 1);
-    } else {
-      setLoading(true);
-      try {
-        const locationGranted = await requestLocationPermission();
-
-        if (!locationGranted) {
-          setLoading(false);
-          return;
-        }
-
-        // Update profile via API/Store
-        // await updateUser({
-        //   skills: formData.skills,
-        //   experience: formData.experience,
-        //   profileCompleted: true,
-        // });
-
-        Toast.success("Profile completed successfully!");
-
-        // Navigation will happen automatically via _layout.tsx
-        // No need to manually navigate
-      } catch (error) {
-        console.error("Profile completion error:", error);
-        Toast.error("Failed to complete profile");
-      } finally {
-        setLoading(false);
-      }
+      nextStep();
+      return;
     }
-  };
 
-  const requestLocationPermission = async () => {
+    setLoading(true);
+
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
+      const coords = await requestLocationPermission();
 
-      if (status !== "granted") {
-        Toast.error("Location permission is required");
-        setLocationGranted(false);
-        return false;
-      }
+      if (!coords) return;
 
-      const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
+      setLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        accuracy: coords.accuracy,
       });
 
-      console.log(JSON.stringify(location.coords, null, 2));
+      Toast.success("Profile completed successfully!");
 
-      setLocationGranted(true);
-      return true;
+      resetProfile();
     } catch (error) {
-      console.error("Location error:", error);
-      Toast.error("Failed to get location");
-      setLocationGranted(false);
-      return false;
+      console.error("Profile completion error:", error);
+      Toast.error("Failed to complete profile");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -114,7 +89,6 @@ export default function CompleteProfile() {
               <TouchableOpacity
                 key={s}
                 onPress={() => {
-                  // Only allow going back to previous steps, not forward
                   if (s < step) {
                     setStep(s);
                   }
@@ -198,14 +172,13 @@ export default function CompleteProfile() {
                   return (
                     <TouchableOpacity
                       key={exp.title}
-                      onPress={() =>
-                        setFormData({ ...formData, experience: exp.value })
-                      }
-                      className={`p-4 rounded-2xl border-2 flex-row items-center justify-between ${
+                      onPress={() => setExperience(exp.value)}
+                      className={cn(
+                        `p-4 rounded-2xl border-2 flex-row items-center justify-between`,
                         isSelected
                           ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
-                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
-                      }`}
+                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900",
+                      )}
                       activeOpacity={0.7}
                     >
                       <View className="flex-row items-center gap-3">
@@ -256,46 +229,56 @@ export default function CompleteProfile() {
                     Aadhaar, PAN, or Voter ID
                   </Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity
                   onPress={requestLocationPermission}
                   activeOpacity={0.7}
-                  className={`rounded-2xl p-4 border ${
-                    locationGranted
+                  className={cn(
+                    "rounded-2xl p-4 border",
+                    locationStatus === Location.PermissionStatus.GRANTED
                       ? "bg-green-500 border-green-500"
-                      : " border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-900 "
-                  }`}
+                      : "bg-primary-50 border-primary-300 dark:bg-primary-900 dark:border-primary-700",
+                  )}
                 >
                   <View className="flex-row gap-3">
                     <View
-                      className={`w-8 h-8 rounded-full items-center justify-center mt-0.5 ${
-                        locationGranted ? "bg-white" : "bg-green-500"
-                      }`}
+                      className={cn(
+                        "w-8 h-8 rounded-full items-center justify-center mt-0.5",
+                        locationStatus === Location.PermissionStatus.GRANTED
+                          ? "bg-white"
+                          : "bg-green-500",
+                      )}
                     >
                       <MapPin
                         size={16}
-                        color={locationGranted ? "#16a34a" : "#FFFFFF"}
+                        color={
+                          locationStatus === Location.PermissionStatus.GRANTED
+                            ? "#16a34a"
+                            : "#FFFFFF"
+                        }
                       />
                     </View>
 
                     <View className="flex-1">
                       <Text
-                        className={`font-medium mb-1 ${
-                          locationGranted
+                        className={cn(
+                          "font-medium mb-1",
+                          locationStatus === Location.PermissionStatus.GRANTED
                             ? "text-white"
-                            : "text-primary-900 dark:text-primary-50"
-                        }`}
+                            : "text-primary-900 dark:text-primary-50",
+                        )}
                       >
                         Location Access
                       </Text>
-
                       <Text
-                        className={`text-sm ${
-                          locationGranted
+                        className={cn(
+                          "text-sm",
+                          locationStatus === Location.PermissionStatus.GRANTED
                             ? "text-green-100"
-                            : "text-primary-600 dark:text-primary-400"
-                        }`}
+                            : "text-primary-600 dark:text-primary-400",
+                        )}
                       >
-                        {locationGranted
+                        {locationStatus === Location.PermissionStatus.GRANTED
                           ? "Location access granted"
                           : "Allow location access so customers can find you nearby"}
                       </Text>
