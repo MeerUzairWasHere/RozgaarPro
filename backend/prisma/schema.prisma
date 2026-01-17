@@ -73,7 +73,6 @@ model Freelancer {
   id         String           @id @default(uuid())
   userId     String           @unique
   experience Int
-  location   String
   phone      String
   status     FreelancerStatus @default(PENDING)
   rating     Float            @default(0)

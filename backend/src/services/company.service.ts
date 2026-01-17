@@ -1,46 +1,33 @@
-import { CompanyCreateInputDto, CompanyUpdateInputDto } from "../dto";
 import { Company } from "@prisma/client";
+import { CompanyCreateInputDto } from "../dto";
 import { ConflictError } from "../errors";
-import { ICompanyService } from "../interfaces";
-import { CompanyRepository } from "../repositories";
+import { ICompanyService, IPrismaService } from "../interfaces";
 
 export class CompanyService implements ICompanyService {
-  constructor(private companyRepository: CompanyRepository) {}
+  constructor(private prismaService: IPrismaService) {}
 
   async createCompany(data: CompanyCreateInputDto) {
-    const companyAlreadyExists = await this.companyRepository.findFirst();
+    const companyAlreadyExists = await this.prismaService.company.findFirst();
 
     if (companyAlreadyExists) {
       throw new ConflictError("Company already exists");
     }
 
-    const company = await this.companyRepository.create(data);
+    const company = await this.prismaService.company.create({
+      data,
+    });
 
     return company;
   }
 
   async getCompany(): Promise<Company | null> {
-    const company = await this.companyRepository.findFirst();
-
-    return company;
-  }
-
-  async updateComany({
-    companyId,
-    data,
-  }: {
-    companyId: string;
-    data: CompanyUpdateInputDto;
-  }) {
-    await this.getCompany();
-
-    const company = await this.companyRepository.update(companyId, data);
+    const company = await this.prismaService.company.findFirst();
 
     return company;
   }
 
   async deleteCompany() {
-    await this.companyRepository.deleteAll();
+    await this.prismaService.company.deleteMany();
     return;
   }
 }

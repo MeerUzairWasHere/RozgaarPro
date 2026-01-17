@@ -23,15 +23,15 @@ import {
   IAuthService,
   ICompanyService,
   IEmailService,
+  IPrismaService,
   VerifyProvider,
 } from "../interfaces";
-import { UserRepository } from "../repositories";
 import { Role, User } from "@prisma/client";
 
 export class AuthService implements IAuthService {
   constructor(
     private emailService: IEmailService,
-    private userRepository: UserRepository,
+    private prismaService: IPrismaService,
     private companyService: ICompanyService,
     private readonly verifyProvider: VerifyProvider,
   ) {}
@@ -41,11 +41,13 @@ export class AuthService implements IAuthService {
 
     const hashedPassword = await hashPassword(password);
 
-    const user = await this.userRepository.createUser({
-      name,
-      phone,
-      password: hashedPassword,
-      role,
+    const user = await this.prismaService.user.create({
+      data: {
+        name,
+        phone,
+        password: hashedPassword,
+        role,
+      },
     });
 
     await this.verifyProvider.sendOtp(phone);
@@ -61,9 +63,13 @@ export class AuthService implements IAuthService {
     let user: User | null;
 
     if (phone) {
-      user = await this.userRepository.findUserByPhone(phone);
+      user = await this.prismaService.user.findUnique({
+        where: { phone },
+      });
     } else if (email) {
-      user = await this.userRepository.findUserByEmail(email);
+      user = await this.prismaService.user.findUnique({
+        where: { email },
+      });
     } else {
       throw new BadRequestError("Either email or phone is required");
     }
@@ -84,7 +90,9 @@ export class AuthService implements IAuthService {
     const tokenUser = createTokenUser(user);
 
     let refreshToken: string;
-    const existingToken = await this.userRepository.findTokenByUserId(user.id);
+    const existingToken = await this.prismaService.token.findFirst({
+      where: { user: { id: user.id } },
+    });
 
     if (existingToken) {
       if (!existingToken.isValid) {
@@ -93,11 +101,13 @@ export class AuthService implements IAuthService {
       refreshToken = existingToken.refreshToken;
     } else {
       refreshToken = randomBytes(40).toString("hex");
-      await this.userRepository.createToken({
-        refreshToken,
-        ip,
-        userAgent,
-        userId: user.id,
+      await this.prismaService.token.create({
+        data: {
+          refreshToken,
+          ip,
+          userAgent,
+          userId: user.id,
+        },
       });
     }
 
@@ -109,7 +119,9 @@ export class AuthService implements IAuthService {
 
   async verifyEmail(data: VerifyEmailInputDto) {
     const { verificationToken, email } = data;
-    const user = await this.userRepository.findUserByEmail(email);
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
 
     if (!user) {
       throw new UnauthenticatedError("Verification Failed");
@@ -119,24 +131,33 @@ export class AuthService implements IAuthService {
       throw new UnauthenticatedError("Verification Failed");
     }
 
-    await this.userRepository.updateUserVerification(email, {
-      isVerified: true,
-      verified: new Date(),
-      verificationToken: "",
+    await this.prismaService.user.update({
+      where: { email },
+      data: {
+        isVerified: true,
+        verified: new Date(),
+        verificationToken: "",
+      },
     });
 
     return { msg: "Email Verified" };
   }
 
   async logout(tokenUser: TokenUserDto) {
-    await this.userRepository.deleteUserTokens(tokenUser.id);
+    await this.prismaService.token.deleteMany({
+      where: {
+        userId: tokenUser.id,
+      },
+    });
     return { msg: "User logged out!" };
   }
 
   async forgotPassword(data: ForgotPasswordInputDto, origin: string) {
     const { email } = data;
 
-    const user = await this.userRepository.findUserByEmail(email);
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
 
     if (!user) {
       return { msg: "User not found!" };
@@ -147,9 +168,12 @@ export class AuthService implements IAuthService {
     const tenMinutes = 1000 * 60 * 10;
     const passwordTokenExpirationDate = new Date(Date.now() + tenMinutes);
 
-    await this.userRepository.updateUserPasswordToken(email, {
-      passwordToken: hashString(passwordToken),
-      passwordTokenExpirationDate,
+    await this.prismaService.user.update({
+      where: { email },
+      data: {
+        passwordToken: hashString(passwordToken),
+        passwordTokenExpirationDate,
+      },
     });
 
     return { msg: "Password reset email sent" };
@@ -158,7 +182,10 @@ export class AuthService implements IAuthService {
   async resetPassword(data: ResetPasswordInputDto) {
     const { token, email, newPassword } = data;
 
-    const user = await this.userRepository.findUserByEmail(email);
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
+
     if (!user) {
       throw new BadRequestError("Invalid or expired token");
     }
@@ -174,10 +201,13 @@ export class AuthService implements IAuthService {
 
     const hashedPassword = await hashPassword(newPassword);
 
-    await this.userRepository.updateUserPassword(email, {
-      password: hashedPassword,
-      passwordToken: null,
-      passwordTokenExpirationDate: null,
+    await this.prismaService.user.update({
+      where: { email },
+      data: {
+        password: hashedPassword,
+        passwordToken: null,
+        passwordTokenExpirationDate: null,
+      },
     });
 
     return { msg: "Password reset successfully!" };
@@ -186,10 +216,16 @@ export class AuthService implements IAuthService {
   async validateRefreshToken(refreshToken: string) {
     const payload = isTokenValid(refreshToken);
 
-    const existingToken = await this.userRepository.findValidRefreshToken(
-      payload.user.id,
-      payload.refreshTokenHash,
-    );
+    const existingToken = await this.prismaService.token.findFirst({
+      where: {
+        userId: payload.user.id,
+        refreshToken: payload.refreshTokenHash,
+        isValid: true,
+      },
+      include: {
+        user: true,
+      },
+    });
 
     if (!existingToken) {
       throw new UnauthenticatedError("Invalid refresh token");
@@ -207,17 +243,22 @@ export class AuthService implements IAuthService {
 
   async verifyOtp(to: string, code: string): Promise<boolean> {
     const valid = await this.verifyProvider.checkOtp(to, code);
-    const user = await this.userRepository.findUserByPhone(to);
+    const user = await this.prismaService.user.findUnique({
+      where: { phone: to },
+    });
 
     if (!user) {
       throw new NotFoundError("User not found");
     }
 
     // TODO: create function and user same on email verification - P4
-    await this.userRepository.update(user.id, {
-      isVerified: true,
-      verified: new Date(),
-      profileCompleted: user.role === Role.USER ? true : false,
+    await this.prismaService.user.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        verified: new Date(),
+        profileCompleted: user.role === Role.USER ? true : false,
+      },
     });
 
     if (!valid) throw new BadRequestError("Invalid or expired OTP");

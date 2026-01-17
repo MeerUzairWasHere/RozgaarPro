@@ -13,6 +13,7 @@ import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import companyRoutes from "./routes/company.routes";
 import skillRoutes from "./routes/skill.routes";
+import freelancerRoutes from "./routes/freelancer.routes";
 
 // Middleware
 import { prismaService } from "./container";
@@ -68,6 +69,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/company", companyRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/skills", skillRoutes);
+app.use("/api/v1/freelancers", freelancerRoutes);
 
 // app.get("*", (req, res) => {
 //   // res.redirect("/documentation"); // comment out this route when starting

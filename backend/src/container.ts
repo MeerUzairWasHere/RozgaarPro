@@ -4,20 +4,16 @@ import {
   SkillController,
   UserController,
 } from "./controllers";
+import { FreelancerController } from "./controllers/freelancer.controller";
 
 import { IStorageService, VerifyProvider } from "./interfaces";
-
-import {
-  CompanyRepository,
-  SkillRepository,
-  UserRepository,
-} from "./repositories";
 
 import {
   AuthService,
   CompanyService,
   createStorageService,
   EmailService,
+  FreelancerService,
   PrismaService,
   SkillService,
   TwilioVerifyService,
@@ -29,60 +25,57 @@ class Container {
   // Database
   public prismaService: PrismaService;
 
-  // Repositories
-  public userRepository: UserRepository;
-  public companyRepository: CompanyRepository;
-  public skillRepository: SkillRepository;
-
   // Services
   public emailService: EmailService;
   public storageService: IStorageService;
   public verifyProvider: VerifyProvider;
-
   public authService: AuthService;
   public userService: UserService;
   public companyService: CompanyService;
   public skillService: SkillService;
+  public freelancerService: FreelancerService;
 
   // Controllers
   public authController: AuthController;
   public userController: UserController;
   public companyController: CompanyController;
   public skillController: SkillController;
+  public freelancerController: FreelancerController;
 
   constructor() {
     // Initialize Database
     this.prismaService = new PrismaService();
     this.storageService = createStorageService();
 
-    // Initialize Repositories
-    this.userRepository = new UserRepository(this.prismaService);
-    this.companyRepository = new CompanyRepository(this.prismaService);
-    this.skillRepository = new SkillRepository(this.prismaService);
-
     // Initialize Services
-    this.companyService = new CompanyService(this.companyRepository);
+    this.companyService = new CompanyService(this.prismaService);
     this.emailService = new EmailService(
       process.env.EMAIL_SERVICE_API_KEY!,
       this.companyService,
     );
     this.verifyProvider = new TwilioVerifyService();
-
     this.authService = new AuthService(
       this.emailService,
-      this.userRepository,
+      this.prismaService,
       this.companyService,
       this.verifyProvider,
     );
-
-    this.skillService = new SkillService(this.skillRepository);
-    this.userService = new UserService(this.userRepository);
+    this.userService = new UserService(this.prismaService);
+    this.skillService = new SkillService(this.prismaService);
+    this.freelancerService = new FreelancerService(
+      this.prismaService,
+      this.userService,
+    );
 
     // Initialize Controllers
     this.authController = new AuthController(this.authService);
     this.skillController = new SkillController(this.skillService);
     this.userController = new UserController(this.userService);
     this.companyController = new CompanyController(this.companyService);
+    this.freelancerController = new FreelancerController(
+      this.freelancerService,
+      this.userService,
+    );
   }
 }
 
@@ -92,8 +85,6 @@ export const container = new Container();
 // Export individual instances for convenience
 export const {
   prismaService,
-  userRepository,
-  companyRepository,
   emailService,
   authService,
   userService,
@@ -103,4 +94,5 @@ export const {
   companyController,
   storageService,
   skillController,
+  freelancerController,
 } = container;

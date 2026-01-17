@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import {
   TokenUserDto,
   UpdatePasswordInputDto,
@@ -9,7 +10,10 @@ export interface IUserService {
   updateUser(userId: string, data: UserUpdateInputDto): Promise<TokenUserDto>;
   updateUserPassword(
     userId: string,
-    data: UpdatePasswordInputDto
+    data: UpdatePasswordInputDto,
   ): Promise<{ msg: string }>;
   deleteUser(userId: string): Promise<{ msg: string }>;
+  getUsersCount(): Promise<number>;
+  findUserByIdOrThrowError({ id }: { id: string }): Promise<User>;
+  findUserByEmailOrThrowError({ email }: { email: string }): Promise<User>;
 }

@@ -28,5 +28,3 @@ export const validateCompanyCreateInput = z.object({
       message: "verified_resend_domain must be at most 55 characters long",
     }),
 });
-
-export const validateCompanyUpdateInput = validateCompanyCreateInput.partial();
