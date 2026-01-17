@@ -41,7 +41,7 @@ export default function RootLayout() {
           {isAuthenticated ? (
             <Stack.Screen name="(tabs)" />
           ) : (
-            <Stack.Screen name="(auth)" />
+            <Stack.Screen name="(auth)/sign-in" />
           )}
         </Stack>
       </SafeAreaProvider>
