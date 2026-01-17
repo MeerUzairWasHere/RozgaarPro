@@ -29,29 +29,29 @@ enum FreelancerStatus {
 ////////////////////
 
 model User {
-  id                          String    @id @default(uuid())
-  username                    String?   @unique
-  phone                       String    @unique @db.VarChar(15)
+  id                          String      @id @default(uuid())
+  username                    String?     @unique
+  phone                       String      @unique @db.VarChar(15)
   name                        String
-  email                       String?   @unique
-  role                        Role      @default(USER)
+  email                       String?     @unique
+  role                        Role        @default(USER)
   password                    String
-  passwordToken               String?   @db.VarChar(255)
+  passwordToken               String?     @db.VarChar(255)
   passwordTokenExpirationDate DateTime?
-  verificationToken           String?   @db.VarChar(255)
-  isVerified                  Boolean   @default(false)
+  verificationToken           String?     @db.VarChar(255)
+  isVerified                  Boolean     @default(false)
   verified                    DateTime?
-  createdAt                   DateTime  @default(now())
-  updatedAt                   DateTime  @updatedAt
-
+  createdAt                   DateTime    @default(now())
+  updatedAt                   DateTime    @updatedAt
+  profileCompleted            Boolean     @default(false)
   // Relations
-  refreshTokens Token[]
-  freelancer    Freelancer?
-  jobs          Job[]
+  refreshTokens               Token[]
+  freelancer                  Freelancer?
+  jobs                        Job[]
 }
 
 ////////////////////
-/// REFRESH TOKEN
+/// TOKEN
 ////////////////////
 model Token {
   id           String   @id @default(uuid())
@@ -72,8 +72,7 @@ model Token {
 model Freelancer {
   id         String           @id @default(uuid())
   userId     String           @unique
-  skill      String // mason, carpenter, electrician
-  experience Int // years
+  experience Int
   location   String
   phone      String
   status     FreelancerStatus @default(PENDING)
@@ -82,8 +81,42 @@ model Freelancer {
   updatedAt  DateTime         @updatedAt
 
   // Relations
-  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobs Job[]
+  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills    Skill[]
+  jobs      Job[]
+  locations FreelancerLocation[]
+}
+
+////////////////////
+/// FREELANCER LOCATION
+////////////////////
+
+model FreelancerLocation {
+  id           String @id @default(uuid())
+  freelancerId String
+
+  latitude   Decimal  @db.Decimal(9, 6)
+  longitude  Decimal  @db.Decimal(9, 6)
+  accuracy   Int?
+  recordedAt DateTime @default(now())
+
+  // Relations
+  freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+
+  @@index([latitude, longitude])
+  @@index([freelancerId, recordedAt])
+}
+
+////////////////////
+/// SKILL
+////////////////////
+
+model Skill {
+  id         String       @id @default(uuid())
+  name       String       @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  freelancer Freelancer[]
 }
 
 ////////////////////

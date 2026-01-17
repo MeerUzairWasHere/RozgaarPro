@@ -8,6 +8,6 @@ export const createTokenUser = (user: User): TokenUserDto => {
     role: user.role,
     phone: user.phone,
     isVerified: user.isVerified,
+    profileCompleted: user.profileCompleted,
   };
 };
-

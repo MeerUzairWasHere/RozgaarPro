@@ -20,6 +20,7 @@ CREATE TABLE "public"."User" (
     "verified" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "profileCompleted" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -42,7 +43,6 @@ CREATE TABLE "public"."Token" (
 CREATE TABLE "public"."Freelancer" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "skill" TEXT NOT NULL,
     "experience" INTEGER NOT NULL,
     "location" TEXT NOT NULL,
     "phone" TEXT NOT NULL,
@@ -52,6 +52,28 @@ CREATE TABLE "public"."Freelancer" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Freelancer_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."FreelancerLocation" (
+    "id" TEXT NOT NULL,
+    "freelancerId" TEXT NOT NULL,
+    "latitude" DECIMAL(9,6) NOT NULL,
+    "longitude" DECIMAL(9,6) NOT NULL,
+    "accuracy" INTEGER,
+    "recordedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "FreelancerLocation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "public"."Skill" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Skill_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -85,6 +107,14 @@ CREATE TABLE "public"."Company" (
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "public"."_FreelancerToSkill" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_FreelancerToSkill_AB_pkey" PRIMARY KEY ("A","B")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "public"."User"("username");
 
@@ -101,6 +131,15 @@ CREATE UNIQUE INDEX "Token_refreshToken_key" ON "public"."Token"("refreshToken")
 CREATE UNIQUE INDEX "Freelancer_userId_key" ON "public"."Freelancer"("userId");
 
 -- CreateIndex
+CREATE INDEX "FreelancerLocation_latitude_longitude_idx" ON "public"."FreelancerLocation"("latitude", "longitude");
+
+-- CreateIndex
+CREATE INDEX "FreelancerLocation_freelancerId_recordedAt_idx" ON "public"."FreelancerLocation"("freelancerId", "recordedAt");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Skill_name_key" ON "public"."Skill"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Company_name_key" ON "public"."Company"("name");
 
 -- CreateIndex
@@ -112,6 +151,9 @@ CREATE UNIQUE INDEX "Company_phone_key" ON "public"."Company"("phone");
 -- CreateIndex
 CREATE UNIQUE INDEX "Company_email_key" ON "public"."Company"("email");
 
+-- CreateIndex
+CREATE INDEX "_FreelancerToSkill_B_index" ON "public"."_FreelancerToSkill"("B");
+
 -- AddForeignKey
 ALTER TABLE "public"."Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -119,7 +161,16 @@ ALTER TABLE "public"."Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("us
 ALTER TABLE "public"."Freelancer" ADD CONSTRAINT "Freelancer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "public"."FreelancerLocation" ADD CONSTRAINT "FreelancerLocation_freelancerId_fkey" FOREIGN KEY ("freelancerId") REFERENCES "public"."Freelancer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_freelancerId_fkey" FOREIGN KEY ("freelancerId") REFERENCES "public"."Freelancer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."_FreelancerToSkill" ADD CONSTRAINT "_FreelancerToSkill_A_fkey" FOREIGN KEY ("A") REFERENCES "public"."Freelancer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "public"."_FreelancerToSkill" ADD CONSTRAINT "_FreelancerToSkill_B_fkey" FOREIGN KEY ("B") REFERENCES "public"."Skill"("id") ON DELETE CASCADE ON UPDATE CASCADE;

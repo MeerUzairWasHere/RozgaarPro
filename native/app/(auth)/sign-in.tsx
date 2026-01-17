@@ -99,7 +99,7 @@ export default function LoginScreen() {
                           "flex-1 py-2 rounded-lg overflow-hidden items-center",
                           loginMethod === type
                             ? "bg-white dark:bg-primary-700"
-                            : ""
+                            : "",
                         )}
                       >
                         <Text
@@ -107,7 +107,7 @@ export default function LoginScreen() {
                             "text-sm",
                             loginMethod === type
                               ? "text-primary-900 dark:text-primary-50 font-semibold"
-                              : "text-primary-500 dark:text-primary-400 font-medium"
+                              : "text-primary-500 dark:text-primary-400 font-medium",
                           )}
                         >
                           {type === LOGIN_METHOD.PHONE
@@ -139,9 +139,7 @@ export default function LoginScreen() {
                         )
                       }
                       placeholder={
-                        loginMethod === LOGIN_METHOD.EMAIL
-                          ? LOGIN_METHOD.EMAIL
-                          : LOGIN_METHOD.PHONE
+                        loginMethod === LOGIN_METHOD.EMAIL ? "Email" : "Phone"
                       }
                       value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
                       onChangeText={(text) =>
@@ -149,7 +147,7 @@ export default function LoginScreen() {
                           loginMethod === LOGIN_METHOD.EMAIL
                             ? "email"
                             : "phone",
-                          text
+                          text,
                         )
                       }
                       keyboardType={

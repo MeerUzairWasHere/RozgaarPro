@@ -21,11 +21,11 @@ export class AuthController {
 
   registerUser = async (
     req: Request<{}, {}, RegisterInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const result = await this.authService.registerUser(
       req.body,
-      req.get("origin") || process.env.BASE_URL!
+      req.get("origin") || process.env.BASE_URL!,
     );
 
     res.status(StatusCodes.CREATED).json(result);
@@ -37,7 +37,7 @@ export class AuthController {
       tokenUser: TokenUserDto;
       accessToken: string;
       refreshToken: string;
-    }>
+    }>,
   ): Promise<void> => {
     // TODO: create one decorator for this
     const userAgent = req.headers["user-agent"] || "unknown";
@@ -49,7 +49,7 @@ export class AuthController {
     const { user, refreshTokenHash } = await this.authService.login(
       req.body,
       userAgent,
-      ip
+      ip,
     );
 
     const { accessToken, refreshToken } = getAccessTokens({
@@ -66,7 +66,7 @@ export class AuthController {
 
   verifyEmail = async (
     req: Request<{}, {}, VerifyEmailInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const result = await this.authService.verifyEmail(req.body);
     res.status(StatusCodes.OK).json(result);
@@ -82,11 +82,11 @@ export class AuthController {
 
   forgotPassword = async (
     req: Request<{}, {}, ForgotPasswordInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const result = await this.authService.forgotPassword(
       req.body,
-      req.get("origin") || process.env.BASE_URL!
+      req.get("origin") || process.env.BASE_URL!,
     );
 
     res.status(StatusCodes.OK).json(result);
@@ -94,7 +94,7 @@ export class AuthController {
 
   resetPassword = async (
     req: Request<{}, {}, ResetPasswordInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const result = await this.authService.resetPassword(req.body);
     res.status(StatusCodes.OK).json(result);
@@ -102,7 +102,7 @@ export class AuthController {
 
   refreshToken = async (
     req: Request,
-    res: Response<{ accessToken: string }>
+    res: Response<{ accessToken: string }>,
   ): Promise<void> => {
     const refreshToken = req.headers["x-refresh-token"] as string;
 
@@ -123,7 +123,7 @@ export class AuthController {
 
   requestOtp = async (
     req: Request<{}, {}, RequestOtpInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { phone } = req.body;
     await this.authService.requestOtp(phone);
@@ -132,7 +132,7 @@ export class AuthController {
 
   verifyOtp = async (
     req: Request<{}, {}, VerifyOtpInputDto>,
-    res: Response
+    res: Response,
   ): Promise<void> => {
     const { phone, code } = req.body;
     await this.authService.verifyOtp(phone, code);
