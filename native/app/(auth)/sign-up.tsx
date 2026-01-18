@@ -6,6 +6,7 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
+  Pressable,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { User, Phone, Lock } from "lucide-react-native";
@@ -15,15 +16,15 @@ import { SIGN_UP_STEP, USER_ROLE } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "@/constants";
 import { useRegister } from "@/hooks/useAuthMutation";
-import UserRoleBadge from "@/components/UserRoleBadge";
 import CustomInput from "@/components/CustomInput";
 import BackButton from "@/components/BackButton";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import CustomPressableButton from "@/components/CustomPressableButton";
 import { useRef } from "react";
+import { cn } from "@/utils/utils";
 
 export default function SignupScreen() {
-  const { name, phone, password, userRole, setField, signupStep } =
+  const { name, phone, password, userRole, setField, signupStep, setUserRole } =
     useAuthStore();
 
   const registerMutation = useRegister();
@@ -77,14 +78,40 @@ export default function SignupScreen() {
                         ? "Join as a skilled worker and get discovered"
                         : "Sign up to find trusted workers near you"}
                     </Text>
-                  </Animated.View>
-
-                  {/* Role Badge */}
-                  <Animated.View
-                    entering={FadeInDown.delay(100)}
-                    className="mb-6"
-                  >
-                    <UserRoleBadge />
+                    <Animated.View
+                      entering={FadeInDown.delay(100)}
+                      className="flex-row bg-primary-100 dark:bg-primary-800 rounded-xl p-1 mb-6"
+                    >
+                      {[USER_ROLE.USER, USER_ROLE.FREELANCER].map((type) => (
+                        <Pressable
+                          key={type}
+                          onPress={() => {
+                            Keyboard.dismiss();
+                            setUserRole(type);
+                          }}
+                          android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+                          className={cn(
+                            "flex-1 py-2 rounded-lg overflow-hidden items-center",
+                            userRole === type
+                              ? "bg-white dark:bg-primary-700"
+                              : "",
+                          )}
+                        >
+                          <Text
+                            className={cn(
+                              "text-sm",
+                              userRole === type
+                                ? "text-primary-900 dark:text-primary-50 font-semibold"
+                                : "text-primary-500 dark:text-primary-400 font-medium",
+                            )}
+                          >
+                            {type === USER_ROLE.USER
+                              ? "User Account"
+                              : "Freelancer Account"}
+                          </Text>
+                        </Pressable>
+                      ))}
+                    </Animated.View>
                   </Animated.View>
 
                   {/* Form */}
