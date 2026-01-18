@@ -2,8 +2,9 @@ import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
 import { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
+
 const LocationHeader = () => {
-  const { location, getCurrentLocation } = useLocationStore();
+  const { location, getCurrentLocation, loading } = useLocationStore();
 
   useEffect(() => {
     getCurrentLocation();
@@ -22,8 +23,8 @@ const LocationHeader = () => {
         <Text className="text-sm text-primary-500 dark:text-primary-200">
           Your Location
         </Text>
-        <Text className="text-md font-semibold text-primary-900 dark:text-primary-100   ">
-          {location || "Enable location"}
+        <Text className="text-sm font-semibold text-primary-900 dark:text-primary-100   ">
+          {loading ? "Loading..." : location || "Enable location"}
         </Text>
       </View>
     </TouchableOpacity>

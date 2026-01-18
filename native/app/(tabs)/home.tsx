@@ -17,8 +17,8 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView className="bg-primary dark:bg-primary-950 h-screen">
-      <View className="flex justify-center items-center ">
+    <SafeAreaView className="bg-primary dark:bg-primary-950 h-screen ">
+      <View className="flex justify-center items-center  ">
         <Text className="primary-text mb-4">This is Home</Text>
         <Text className="primary-text mb-4">Name: {user?.name}</Text>
         <Text className="primary-text mb-4">Role: {user?.role}</Text>
