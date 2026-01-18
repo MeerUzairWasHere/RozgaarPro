@@ -4,8 +4,6 @@ import { useAuthStore } from "@/store";
 import { Redirect } from "expo-router";
 import { ROUTES } from "@/constants";
 import { USER_ROLE } from "@/types";
-import { useLocationStore } from "@/store/useLocationStore";
-import { Header } from "@/components/Header";
 
 export default function HomeScreen() {
   const { user, isAuthenticated } = useAuthStore();
@@ -19,8 +17,8 @@ export default function HomeScreen() {
   }
 
   return (
-    <SafeAreaView className="bg-primary dark:bg-primary-950">
-      <View className="flex justify-center items-center h-screen">
+    <SafeAreaView className="bg-primary dark:bg-primary-950 h-screen">
+      <View className="flex justify-center items-center ">
         <Text className="primary-text mb-4">This is Home</Text>
         <Text className="primary-text mb-4">Name: {user?.name}</Text>
         <Text className="primary-text mb-4">Role: {user?.role}</Text>

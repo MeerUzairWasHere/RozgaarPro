@@ -1,8 +1,14 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
+import { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 const LocationHeader = () => {
   const { location, getCurrentLocation } = useLocationStore();
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, [location]);
+
   return (
     <TouchableOpacity
       className="flex-row items-center gap-2"

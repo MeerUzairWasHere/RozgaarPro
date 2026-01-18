@@ -10,8 +10,8 @@ export default function ProfileScreen() {
     logoutMutation.mutate();
   };
   return (
-    <SafeAreaView className="bg-primary dark:bg-primary-950">
-      <View className="flex justify-center items-center h-screen">
+    <SafeAreaView className="bg-primary dark:bg-primary-950 h-screen">
+      <View className="flex justify-center items-center ">
         <CustomTouchableOpacityButton
           title="Logout"
           onPress={handleLogout}
