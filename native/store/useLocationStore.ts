@@ -22,7 +22,6 @@ type LocationState = {
   getCurrentLocation: () => Promise<void>;
   setLocation: (coords: LocationCoords) => Promise<void>;
   setLocationText: (text: string) => void;
-  clearLocation: () => void;
   resetLocation: () => void;
 };
 
@@ -109,7 +108,7 @@ export const useLocationStore = create<LocationState>()(
       setLocationText: (text: string) => set({ location: text }),
 
       // Clear location data
-      clearLocation: () =>
+      resetLocation: () =>
         set({
           location: null,
           coordinates: {
@@ -120,11 +119,6 @@ export const useLocationStore = create<LocationState>()(
           error: null,
           permissionGranted: false,
         }),
-
-      // Reset location (alias for clearLocation)
-      resetLocation: () => {
-        get().clearLocation();
-      },
     }),
     {
       name: "location-storage",
