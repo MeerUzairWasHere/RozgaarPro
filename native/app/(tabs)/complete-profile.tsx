@@ -11,6 +11,7 @@ import { useCompleteProfileStore } from "@/store/useCompleteProfileStore";
 import { requestLocationPermission } from "@/lib/locationPermission";
 import { useCompleteFreelancerProfile } from "@/hooks/useFreelancersMutation";
 import { router } from "expo-router";
+import { useLocationStore } from "@/store/useLocationStore";
 
 export default function CompleteProfile() {
   const { locationStatus } = usePermissionStore();
@@ -26,9 +27,10 @@ export default function CompleteProfile() {
     setLoading,
     toggleSkill,
     setExperience,
-    setLocation,
     resetProfile,
   } = useCompleteProfileStore();
+
+  const { setLocation } = useLocationStore();
 
   const { data: skills } = useGetSkills();
 
@@ -78,7 +80,7 @@ export default function CompleteProfile() {
   const isNextDisabled =
     (step === 1 && formData.skills.length === 0) ||
     (step === 2 && !formData.experience) ||
-    (step === 3 && locationStatus === Location.PermissionStatus.DENIED);
+    (step === 3 && locationStatus === null);
 
   return (
     <View className="flex-1 bg-white dark:bg-primary-950">
@@ -307,7 +309,13 @@ export default function CompleteProfile() {
           onPress={handleNext}
           disabled={isNextDisabled || loading}
           title={
-            loading ? "Saving..." : step === 3 ? "Complete Profile" : "Continue"
+            loading
+              ? "Saving..."
+              : step === 3 && locationStatus === null
+                ? "Enable Location to Continue"
+                : step === 3
+                  ? "Complete Profile"
+                  : "Continue"
           }
         />
       </View>

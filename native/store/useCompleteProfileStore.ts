@@ -12,14 +12,12 @@ type LocationCoords = {
 type ProfileFormData = {
   skills: string[];
   experience: EXPERIENCE_LEVEL;
-  location?: LocationCoords;
 };
 
 type CompleteProfileState = {
   step: number;
   loading: boolean;
   formData: ProfileFormData;
-  setLocation: (coords: LocationCoords) => void;
 
   setStep: (step: number) => void;
   nextStep: () => void;
@@ -42,14 +40,6 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
         skills: [],
         experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
       },
-
-      setLocation: (coords) =>
-        set((state) => ({
-          formData: {
-            ...state.formData,
-            location: coords,
-          },
-        })),
 
       setStep: (step) => set({ step }),
 

@@ -4,6 +4,7 @@ import { useAuthStore } from "@/store";
 import { Redirect } from "expo-router";
 import { ROUTES } from "@/constants";
 import { USER_ROLE } from "@/types";
+import { useLocationStore } from "@/store/useLocationStore";
 
 export default function HomeScreen() {
   const { user, isAuthenticated } = useAuthStore();
