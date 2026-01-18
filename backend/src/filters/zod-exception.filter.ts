@@ -3,19 +3,18 @@ import { StatusCodes } from "http-status-codes";
 import { ZodError } from "zod";
 
 export const zodExceptionFilter = (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  // Handle Zod validation errors
   if (err instanceof ZodError) {
-    const errors = err.issues.map((error) => ({
-      field: error.path.join("."),
-      message: error.message,
+    const errors = err.issues.map((issue) => ({
+      field: issue.path.join("."),
+      message: issue.message,
     }));
 
-    res.status(StatusCodes.BAD_REQUEST).json({
+    return res.status(StatusCodes.BAD_REQUEST).json({
       msg: "Validation failed",
       errors,
     });

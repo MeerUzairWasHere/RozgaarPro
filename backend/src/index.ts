@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
+import "./instrument";
+import * as Sentry from "@sentry/node";
 import "express-async-errors";
 import express from "express";
 import morgan from "morgan";
@@ -81,12 +83,15 @@ app.use("/api/v1/freelancers", freelancerRoutes);
 //     res.sendFile(resolve(__dirname, "./client/dist", "index.html"));
 // });
 
+// The error handler must be registered before any other error middleware and after all controllers
+Sentry.setupExpressErrorHandler(app);
 app.use(notFoundFilter); // 404 errors
 app.use(zodExceptionFilter); // Zod validation errors
 app.use(jwtExceptionFilter); // JWT token errors
-app.use(prismaExceptionFilter); // Prisma database errors
 app.use(rateLimitExceptionFilter); // Rate limiting errors
+app.use(prismaExceptionFilter); // Prisma database errors
 app.use(httpExceptionFilter); // HTTP errors
+
 // Port
 const port = process.env.PORT || 3000;
 

@@ -3,25 +3,22 @@ import { StatusCodes } from "http-status-codes";
 import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 
 export const jwtExceptionFilter = (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  // Handle JWT token expired
   if (err instanceof TokenExpiredError) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      msg: "Token has expired. Please login again.",
+      msg: "Token expired. Please login again.",
     });
   }
 
-  // Handle invalid JWT token
   if (err instanceof JsonWebTokenError) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       msg: "Invalid token. Please login again.",
     });
   }
 
-  // Pass to next error handler
   next(err);
 };
