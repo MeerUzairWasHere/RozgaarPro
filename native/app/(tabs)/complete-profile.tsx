@@ -1,21 +1,19 @@
-import * as Location from "expo-location";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { useGetSkills } from "@/hooks/useSkillsMutation";
 import { experienceLevels, ROUTES } from "@/constants";
-import { useAuthStore, usePermissionStore } from "@/store";
+import {
+  useAuthStore,
+  useCompleteProfileStore,
+  useLocationStore,
+} from "@/store";
 import { cn } from "@/utils/utils";
-import { useCompleteProfileStore } from "@/store/useCompleteProfileStore";
-import { requestLocationPermission } from "@/lib/locationPermission";
 import { useCompleteFreelancerProfile } from "@/hooks/useFreelancersMutation";
 import { router } from "expo-router";
-import { useLocationStore } from "@/store/useLocationStore";
 
 export default function CompleteProfile() {
-  const { locationStatus } = usePermissionStore();
-
   const mutationCompleteProfile = useCompleteFreelancerProfile();
   const { setProfileCompleted } = useAuthStore();
   const {
@@ -30,8 +28,8 @@ export default function CompleteProfile() {
     resetProfile,
   } = useCompleteProfileStore();
 
-  const { setLocation } = useLocationStore();
-
+  const { getCurrentLocation, coordinates, permissionGranted } =
+    useLocationStore();
   const { data: skills } = useGetSkills();
 
   const handleSkillToggle = (skillId: string) => {
@@ -47,23 +45,15 @@ export default function CompleteProfile() {
     setLoading(true);
 
     try {
-      const coords = await requestLocationPermission();
-
-      if (!coords) return;
-
-      setLocation({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        accuracy: coords.accuracy,
-      });
+      await getCurrentLocation();
 
       await mutationCompleteProfile.mutateAsync({
         skills: formData.skills,
         experience: formData.experience,
         location: {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          accuracy: coords.accuracy,
+          latitude: coordinates.latitude,
+          longitude: coordinates.longitude,
+          accuracy: coordinates.accuracy,
         },
       });
 
@@ -80,7 +70,7 @@ export default function CompleteProfile() {
   const isNextDisabled =
     (step === 1 && formData.skills.length === 0) ||
     (step === 2 && !formData.experience) ||
-    (step === 3 && locationStatus === null);
+    (step === 3 && !permissionGranted);
 
   return (
     <View className="flex-1 bg-white dark:bg-primary-950">
@@ -243,11 +233,11 @@ export default function CompleteProfile() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={requestLocationPermission}
+                  onPress={getCurrentLocation}
                   activeOpacity={0.7}
                   className={cn(
                     "rounded-2xl p-4 border",
-                    locationStatus === Location.PermissionStatus.GRANTED
+                    permissionGranted
                       ? "bg-green-500 border-green-500"
                       : "bg-primary-50 border-primary-300 dark:bg-primary-900 dark:border-primary-700",
                   )}
@@ -256,18 +246,12 @@ export default function CompleteProfile() {
                     <View
                       className={cn(
                         "w-8 h-8 rounded-full items-center justify-center mt-0.5",
-                        locationStatus === Location.PermissionStatus.GRANTED
-                          ? "bg-white"
-                          : "bg-green-500",
+                        permissionGranted ? "bg-white" : "bg-green-500",
                       )}
                     >
                       <MapPin
                         size={16}
-                        color={
-                          locationStatus === Location.PermissionStatus.GRANTED
-                            ? "#16a34a"
-                            : "#FFFFFF"
-                        }
+                        color={permissionGranted ? "#16a34a" : "#FFFFFF"}
                       />
                     </View>
 
@@ -275,7 +259,7 @@ export default function CompleteProfile() {
                       <Text
                         className={cn(
                           "font-medium mb-1",
-                          locationStatus === Location.PermissionStatus.GRANTED
+                          permissionGranted
                             ? "text-white"
                             : "text-primary-900 dark:text-primary-50",
                         )}
@@ -285,12 +269,12 @@ export default function CompleteProfile() {
                       <Text
                         className={cn(
                           "text-sm",
-                          locationStatus === Location.PermissionStatus.GRANTED
+                          permissionGranted
                             ? "text-green-100"
                             : "text-primary-600 dark:text-primary-400",
                         )}
                       >
-                        {locationStatus === Location.PermissionStatus.GRANTED
+                        {permissionGranted
                           ? "Location access granted"
                           : "Allow location access so customers can find you nearby"}
                       </Text>
@@ -311,7 +295,7 @@ export default function CompleteProfile() {
           title={
             loading
               ? "Saving..."
-              : step === 3 && locationStatus === null
+              : step === 3 && !permissionGranted
                 ? "Enable Location to Continue"
                 : step === 3
                   ? "Complete Profile"

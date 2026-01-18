@@ -12,6 +12,7 @@ import { useAuthStore } from "@/store";
 import { ROUTES } from "@/constants";
 import { useRequestOTP, useVerityOTP } from "@/hooks/useAuthMutation";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import { cn } from "@/utils/utils";
 
 export default function VerifyOTPScreen() {
   const { phone } = useAuthStore();
@@ -94,11 +95,12 @@ export default function VerifyOTPScreen() {
               <Pressable
                 key={index}
                 onPress={() => inputRef.current?.focus()}
-                className={`w-14 h-16 border-2 rounded-2xl items-center justify-center ${
+                className={cn(
+                  "w-14 h-16  border-2 rounded-2xl  items-center justify-center ",
                   digit
-                    ? "border-blue-500 bg-blue-50 dark:bg-blue-950/30"
-                    : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900"
-                }`}
+                    ? "border-gray-500 bg-gray-50 dark:bg-gray-950/30"
+                    : "border-primary-300 dark:border-primary-700 bg-white dark:bg-primary-800",
+                )}
               >
                 <Text className="text-2xl font-bold text-gray-900 dark:text-white">
                   {digit || ""}
@@ -115,7 +117,7 @@ export default function VerifyOTPScreen() {
           value={otp}
           onChangeText={handleOTPChange}
           keyboardType="number-pad"
-          textContentType="oneTimeCode" // 🔥 iOS OTP autofill
+          textContentType="oneTimeCode"
           maxLength={6}
           className="absolute opacity-0"
         />
@@ -127,10 +129,8 @@ export default function VerifyOTPScreen() {
         >
           {countdown > 0 ? (
             <View className="flex-row">
-              <Text className="text-sm text-gray-600 dark:text-gray-400">
-                Resend code in{" "}
-              </Text>
-              <Text className="text-sm font-bold text-blue-500">
+              <Text className="text-sm primary-text">Resend code in </Text>
+              <Text className="text-sm font-bold primary-text">
                 {countdown}s
               </Text>
             </View>
@@ -139,7 +139,7 @@ export default function VerifyOTPScreen() {
               onPress={handleResend}
               disabled={mutationRequestOTP.isPending}
             >
-              <Text className="text-sm font-semibold text-blue-500">
+              <Text className="text-sm font-semibold text-gray-500">
                 {mutationRequestOTP.isPending ? "Sending..." : "Resend Code"}
               </Text>
             </Pressable>
@@ -151,8 +151,8 @@ export default function VerifyOTPScreen() {
           entering={FadeIn.delay(250).duration(400)}
           className="mb-8"
         >
-          <View className="bg-gray-100 dark:bg-gray-900 rounded-2xl p-4">
-            <Text className="text-sm text-gray-600 dark:text-gray-400 text-center">
+          <View className="bg-primary-100 dark:bg-primary-900 rounded-2xl p-4">
+            <Text className="text-sm primary-text text-center">
               Please check your SMS for the verification code.
             </Text>
           </View>

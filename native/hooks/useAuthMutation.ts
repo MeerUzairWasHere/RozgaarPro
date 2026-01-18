@@ -15,7 +15,7 @@ import {
 import { authApiClient } from "@/api-client";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
-import { useAuthStore } from "@/store";
+import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 
@@ -56,7 +56,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
   const queryClient = useQueryClient();
 
   const { setUser, setAuthenticated, clearAuth } = useAuthStore();
-
+  const { resetLocation } = useLocationStore();
   return useMutation({
     mutationFn: authApiClient.logout,
     onSuccess: async () => {
@@ -65,7 +65,9 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       await SecureStore.deleteItemAsync("refreshToken");
       setUser(null);
       setAuthenticated(false);
+      resetLocation();
       clearAuth();
+
       router.replace(ROUTES.SELECT_ROLE);
     },
   });

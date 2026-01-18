@@ -1,5 +1,5 @@
+import { Header } from "@/components/Header";
 import { useAuthStore } from "@/store";
-import { USER_ROLE } from "@/types";
 import { Tabs } from "expo-router";
 import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
 import { useColorScheme } from "react-native";
@@ -34,7 +34,10 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        // Enable header for all tabs
+        headerShown: true,
+        // Default header component
+        header: () => <Header showLocation={true} showNotification={true} />,
         tabBarStyle: {
           display: user?.profileCompleted ? "flex" : "none",
           borderTopLeftRadius: 50,
@@ -71,6 +74,7 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, focused }) => (
             <Home size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
+          // This screen uses the default header (showLocation + showNotification)
         }}
       />
       <Tabs.Screen
@@ -84,6 +88,8 @@ export default function TabsLayout() {
               strokeWidth={focused ? 2.5 : 2}
             />
           ),
+          // Custom header for Jobs tab
+          header: () => <Header title="Find Jobs" showNotification={true} />,
         }}
       />
       <Tabs.Screen
@@ -97,6 +103,8 @@ export default function TabsLayout() {
               strokeWidth={focused ? 2.5 : 2}
             />
           ),
+          // Custom header for Messages tab
+          header: () => <Header title="Messages" showNotification={true} />,
         }}
       />
       <Tabs.Screen
@@ -106,12 +114,16 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, focused }) => (
             <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
+          // Custom header for Profile tab
+          header: () => <Header title="Profile" showNotification={true} />,
         }}
       />
       <Tabs.Screen
-        name="complete-profile" 
+        name="complete-profile"
         options={{
           href: null,
+          // Hide header for this screen
+          headerShown: false,
         }}
       />
     </Tabs>
