@@ -118,6 +118,7 @@ export const useLocationStore = create<LocationState>()(
             accuracy: null,
           },
           error: null,
+          permissionGranted: false,
         }),
 
       // Reset location (alias for clearLocation)
