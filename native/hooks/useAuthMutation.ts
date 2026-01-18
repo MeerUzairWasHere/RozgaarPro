@@ -31,9 +31,6 @@ export const useRegister = (): UseMutationResult<
       setSignupStep(SIGN_UP_STEP.OTP);
       router.replace(ROUTES.OTP_VERIFICATION);
     },
-    onError: (error) => {
-      Toast.error(getErrorMessage(error));
-    },
   });
 };
 
@@ -51,9 +48,6 @@ export const useLogin = (): UseMutationResult<
       await SecureStore.setItemAsync("refreshToken", refreshToken);
       setUser(tokenUser);
       setAuthenticated(true);
-    },
-    onError: (error) => {
-      Toast.error(getErrorMessage(error));
     },
   });
 };

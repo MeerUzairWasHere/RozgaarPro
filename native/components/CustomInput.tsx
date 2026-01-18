@@ -38,6 +38,7 @@ const CustomInput = ({
       {icon}
       {label && <Text className="label">{label}</Text>}
       <TextInput
+      
         autoCapitalize={autoCapitalize}
         value={value}
         onChangeText={onChangeText}

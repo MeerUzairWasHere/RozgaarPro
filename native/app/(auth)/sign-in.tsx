@@ -173,7 +173,6 @@ export default function LoginScreen() {
                       onChangeText={(text) => setField("password", text)}
                       secureTextEntry={true}
                       returnKeyType="done"
-                      onSubmitEditing={handleLogin}
                       ref={passwordRef}
                     />
 
@@ -195,7 +194,11 @@ export default function LoginScreen() {
                       title="Sign In"
                       onPress={handleLogin}
                       isLoading={loginMutation.isPending}
-                      disabled={loginMutation.isPending}
+                      disabled={
+                        loginMethod === LOGIN_METHOD.EMAIL
+                          ? email.length === 0 || password.length === 0
+                          : phone.length === 0 || password.length === 0
+                      }
                     />
                   </Animated.View>
                 </View>

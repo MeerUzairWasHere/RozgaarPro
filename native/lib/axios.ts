@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import * as Sentry from "@sentry/react-native";
 
 import * as SecureStore from "expo-secure-store";
 
@@ -23,37 +24,56 @@ api.interceptors.request.use(async (config) => {
 
 api.interceptors.response.use(
   (response) => response,
+
   async (error) => {
     const originalRequest = error.config;
 
+    // ---- AUTH TOKEN EXPIRED FLOW ----
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const refreshToken = await SecureStore.getItemAsync("refreshToken");
+      try {
+        const refreshToken = await SecureStore.getItemAsync("refreshToken");
 
-      if (!refreshToken) {
-        return Promise.reject(error);
-      }
-
-      const response = await axios.post(
-        `${EXPO_PUBLIC_API_URL}/auth/refresh-token`,
-        {},
-        {
-          headers: {
-            "x-refresh-token": refreshToken,
-          },
+        if (!refreshToken) {
+          // ❌ Expected state → user logged out
+          return Promise.reject(error);
         }
-      );
 
-      const newAccessToken = response.data.accessToken;
+        const response = await axios.post(
+          `${EXPO_PUBLIC_API_URL}/auth/refresh-token`,
+          {},
+          {
+            headers: {
+              "x-refresh-token": refreshToken,
+            },
+          },
+        );
 
-      await SecureStore.setItemAsync("accessToken", newAccessToken);
+        const newAccessToken = response.data.accessToken;
 
-      originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        await SecureStore.setItemAsync("accessToken", newAccessToken);
 
-      return api(originalRequest);
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        // 🔥 THIS is where Sentry belongs
+        Sentry.captureException(refreshError, {
+          tags: {
+            layer: "axios",
+            type: "refresh-token-failed",
+          },
+          extra: {
+            url: originalRequest?.url,
+          },
+        });
+
+        return Promise.reject(refreshError);
+      }
     }
 
+    // ❌ Do NOT log other errors here
     return Promise.reject(error);
-  }
+  },
 );
