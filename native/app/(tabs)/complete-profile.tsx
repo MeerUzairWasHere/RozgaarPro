@@ -77,7 +77,8 @@ export default function CompleteProfile() {
 
   const isNextDisabled =
     (step === 1 && formData.skills.length === 0) ||
-    (step === 2 && !formData.experience);
+    (step === 2 && !formData.experience) ||
+    (step === 3 && locationStatus === Location.PermissionStatus.DENIED);
 
   return (
     <View className="flex-1 bg-white dark:bg-primary-950">
