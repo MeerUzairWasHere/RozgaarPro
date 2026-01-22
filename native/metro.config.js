@@ -1,6 +1,6 @@
 const { withNativeWind } = require("nativewind/metro");
-const { getSentryExpoConfig } = require("@sentry/react-native/metro");
+const { getDefaultConfig } = require("tailwind-merge");
 
-const config = getSentryExpoConfig(__dirname);
+const config = getDefaultConfig(__dirname);
 
 module.exports = withNativeWind(config, { input: "./app/global.css" });

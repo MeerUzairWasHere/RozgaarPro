@@ -1,5 +1,4 @@
 import axios, { AxiosInstance } from "axios";
-import * as Sentry from "@sentry/react-native";
 
 import * as SecureStore from "expo-secure-store";
 
@@ -58,17 +57,6 @@ api.interceptors.response.use(
 
         return api(originalRequest);
       } catch (refreshError) {
-        // 🔥 THIS is where Sentry belongs
-        Sentry.captureException(refreshError, {
-          tags: {
-            layer: "axios",
-            type: "refresh-token-failed",
-          },
-          extra: {
-            url: originalRequest?.url,
-          },
-        });
-
         return Promise.reject(refreshError);
       }
     }
