@@ -28,8 +28,7 @@ export default function CompleteProfile() {
     resetProfile,
   } = useCompleteProfileStore();
 
-  const { getCurrentLocation, coordinates, permissionGranted } =
-    useLocationStore();
+  const { coordinates, permissionGranted } = useLocationStore();
   const { data: skills } = useGetSkills();
 
   const handleSkillToggle = (skillId: string) => {
@@ -45,8 +44,6 @@ export default function CompleteProfile() {
     setLoading(true);
 
     try {
-      await getCurrentLocation();
-
       await mutationCompleteProfile.mutateAsync({
         skills: formData.skills,
         experience: formData.experience,
@@ -232,9 +229,7 @@ export default function CompleteProfile() {
                   </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  onPress={getCurrentLocation}
-                  activeOpacity={0.7}
+                <View
                   className={cn(
                     "rounded-2xl p-4 border",
                     permissionGranted
@@ -280,7 +275,7 @@ export default function CompleteProfile() {
                       </Text>
                     </View>
                   </View>
-                </TouchableOpacity>
+                </View>
               </View>
             </Animated.View>
           )}
