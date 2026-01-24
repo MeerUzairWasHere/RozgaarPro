@@ -1,9 +1,14 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
+import { useEffect } from "react";
 import { View, Text } from "react-native";
 
 const LocationHeader = () => {
-  const { location, loading } = useLocationStore();
+  const { location, loading, getCurrentLocation } = useLocationStore();
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, [location]);
 
   return (
     <View className="flex-row items-center gap-2">
@@ -15,7 +20,7 @@ const LocationHeader = () => {
           Your Location
         </Text>
         <Text className="text-sm font-semibold text-primary-900 dark:text-primary-100   ">
-          {loading ? "Loading..." : location || "PleasEnable location"}
+          {loading ? "Loading..." : location || "Please Enable location"}
         </Text>
       </View>
     </View>

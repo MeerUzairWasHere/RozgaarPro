@@ -22,10 +22,7 @@ export function Header({
   const isDark = colorScheme === "dark";
 
   return (
-    <SafeAreaView
-      className={isDark ? "bg-primary-950" : "bg-white"}
-      edges={["top"]}
-    >
+    <SafeAreaView className="bg-primary dark:bg-primary-950" edges={["top"]}>
       <View className="flex-row items-center justify-between px-4 py-3 border-b border-primary-200 dark:border-primary-800">
         <View className="flex-row items-center gap-3">
           {showBack && <BackButton />}

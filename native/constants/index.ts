@@ -12,6 +12,9 @@ export const ROUTES = {
   JOBS: "/jobs",
   MESSAGES: "/messages",
   PROFILE: "/profile",
+  EDIT_PROFILE: "/(screens)/edit-profile",
+  HELP_SUPPORT: "/(screens)/help-support",
+  SETTINGS: "/(screens)/settings",
 } as const;
 
 export const experienceLevels = [

@@ -1,24 +1,24 @@
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import FreelancerProfileStats from "@/components/FreelancerProfileStats";
+import LogoutButton from "@/components/LogoutButton";
+import ProfileCard from "@/components/ProfileCard";
+import ProfileMenu from "@/components/ProfileMenu";
 import { useLogout } from "@/hooks/useAuthMutation";
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ScrollView } from "react-native";
 
 export default function ProfileScreen() {
-  const logoutMutation = useLogout();
-
-  const handleLogout = () => {
-    logoutMutation.mutate();
-  };
   return (
-    <SafeAreaView className="bg-primary dark:bg-primary-950 h-screen">
-      <View className="flex justify-center items-center ">
-        <CustomTouchableOpacityButton
-          title="Logout"
-          onPress={handleLogout}
-          isLoading={logoutMutation.isPending}
-          className="w-96"
-        />
-      </View>
-    </SafeAreaView>
+    <ScrollView
+      contentContainerClassName="flex-grow"
+      showsVerticalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
+      bounces={true}
+      className="dark:bg-primary-950"
+    >
+      <ProfileCard />
+      <FreelancerProfileStats />
+      <ProfileMenu />
+      <LogoutButton />
+    </ScrollView>
   );
 }
