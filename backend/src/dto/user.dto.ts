@@ -11,7 +11,6 @@ export interface TokenUserDto {
   phone: string;
   isVerified: boolean;
   profileCompleted: boolean;
-  profileApproved: boolean;
 }
 
 export type UserCreateInputDto = z.infer<typeof validateUserCreateInput>;

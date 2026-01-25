@@ -108,6 +108,7 @@ export class UserService implements IUserService {
 
     return user;
   }
+  
   async findUserByEmailOrThrowError({
     email,
   }: {

@@ -24,4 +24,24 @@ export class FreelancerController {
       msg: "Profile completed successfully!",
     });
   };
+
+  public getAllVisibleFreelancers = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const freelancers = await this.freelancerService.getAllVisibleFreelancers();
+    res.status(StatusCodes.OK).json(freelancers);
+  };
+
+  public getFreelancerStatus = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const id = currentUser(req).id;
+
+
+    const status = await this.freelancerService.getFreelancerStatus(id);
+
+    res.status(StatusCodes.OK).json(status);
+  };
 }

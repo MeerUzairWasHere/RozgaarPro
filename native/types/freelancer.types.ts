@@ -7,3 +7,9 @@ export interface FreelancerProfileCompletedInput {
     accuracy: number | null;
   };
 }
+
+export enum FREELANCER_STATUS {
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
+}

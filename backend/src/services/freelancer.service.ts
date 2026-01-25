@@ -1,11 +1,11 @@
-import { Role } from "@prisma/client";
+import { Freelancer, FreelancerStatus, Role } from "@prisma/client";
 import { FreelancerProfileCompletedInput } from "../dto";
 import {
   IFreelancerService,
   IPrismaService,
   IUserService,
 } from "../interfaces";
-import { ForbiddenError } from "../errors";
+import { ForbiddenError, NotFoundError } from "../errors";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -52,5 +52,37 @@ export class FreelancerService implements IFreelancerService {
         },
       });
     });
+  }
+
+  async getFreelancerStatus(id: string): Promise<FreelancerStatus> {
+    const freelancer = await this.findFreelancerByIdOrThrowError({ id });
+    return freelancer.status;
+  }
+
+  async getAllVisibleFreelancers(): Promise<Freelancer[]> {
+    return this.prismaService.freelancer.findMany({
+      where: {
+        status: FreelancerStatus.APPROVED,
+        user: {
+          profileCompleted: true,
+        },
+      },
+    });
+  }
+
+  async findFreelancerByIdOrThrowError({
+    id,
+  }: {
+    id: string;
+  }): Promise<Freelancer> {
+    const freelancer = await this.prismaService.freelancer.findUnique({
+      where: { userId: id },
+    });
+
+    if (!freelancer) {
+      throw new NotFoundError(`Freelancer with id ${id} not found`);
+    }
+
+    return freelancer;
   }
 }

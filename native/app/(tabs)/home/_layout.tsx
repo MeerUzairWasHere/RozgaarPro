@@ -15,9 +15,6 @@ export default function HomeLayout() {
         <Text className="primary-text mb-4">
           Profile Completed: {user?.profileCompleted ? "yes" : "no"}
         </Text>
-        <Text className="primary-text mb-4">
-          Profile Approved: {user?.profileApproved ? "yes" : "no"}
-        </Text>
       </View>
     </ScrollView>
   );

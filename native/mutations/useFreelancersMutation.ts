@@ -1,6 +1,12 @@
 import { freelancerApiClient } from "@/api-client/freelancer";
-import { FreelancerProfileCompletedInput } from "@/types";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import { QUERY_KEYS } from "@/constants";
+import { FREELANCER_STATUS, FreelancerProfileCompletedInput } from "@/types";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  UseQueryResult,
+} from "@tanstack/react-query";
 
 export const useCompleteFreelancerProfile = (): UseMutationResult<
   string,
@@ -12,3 +18,9 @@ export const useCompleteFreelancerProfile = (): UseMutationResult<
   });
 };
 
+export const useGetFreelancerStatus = (): UseQueryResult<FREELANCER_STATUS> => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FREELANCERS.all,
+    queryFn: freelancerApiClient.getFreelancerStatus,
+  });
+};

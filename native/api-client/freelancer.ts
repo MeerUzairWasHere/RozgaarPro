@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import { FreelancerProfileCompletedInput } from "@/types";
+import { FREELANCER_STATUS, FreelancerProfileCompletedInput } from "@/types";
 
 export const freelancerApiClient = {
   createAndCompleteFreelancerProfile: async (
@@ -9,6 +9,11 @@ export const freelancerApiClient = {
       "/freelancers/complete-profile",
       formData,
     );
+    return data;
+  },
+
+  getFreelancerStatus: async (): Promise<FREELANCER_STATUS> => {
+    const { data } = await api.get<FREELANCER_STATUS>("/freelancers/status");
     return data;
   },
 };
