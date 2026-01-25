@@ -46,7 +46,10 @@ export default function SignupScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
+    <SafeAreaView
+      className="flex-1 dark:bg-black
+    "
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -71,7 +74,11 @@ export default function SignupScreen() {
                   {/* Title */}
                   <Animated.View entering={FadeInDown.duration(400)}>
                     <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-2">
-                      Create account
+                      Create{" "}
+                      {userRole === USER_ROLE.FREELANCER
+                        ? "freelancer"
+                        : "user"}{" "}
+                      account
                     </Text>
                     <Text className="dark:text-primary-300 text-primary-700 mb-8">
                       {userRole === USER_ROLE.FREELANCER

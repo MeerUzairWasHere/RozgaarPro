@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from "react-native";
+import { useRef } from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Phone, Lock, Mail } from "lucide-react-native";
 import { ROUTES } from "@/constants";
@@ -18,12 +19,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
-import CustomInput from "@/components/CustomInput";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import BackButton from "@/components/BackButton";
 import { useLogin } from "@/hooks/useAuthMutation";
-import CustomPressableButton from "@/components/CustomPressableButton";
-import { useRef } from "react";
+import {
+  CustomPressableButton,
+  CustomTouchableOpacityButton,
+  BackButton,
+  CustomInput,
+} from "@/components";
 
 export default function LoginScreen() {
   const colourScheme = useColorScheme();

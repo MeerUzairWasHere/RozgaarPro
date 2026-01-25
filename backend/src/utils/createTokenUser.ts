@@ -9,5 +9,6 @@ export const createTokenUser = (user: User): TokenUserDto => {
     phone: user.phone,
     isVerified: user.isVerified,
     profileCompleted: user.profileCompleted,
+    profileApproved: user.ProfileApproved,
   };
 };

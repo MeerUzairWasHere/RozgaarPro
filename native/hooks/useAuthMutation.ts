@@ -3,6 +3,8 @@ import {
   useMutation,
   useQueryClient,
   UseMutationResult,
+  UseQueryResult,
+  useQuery,
 } from "@tanstack/react-query";
 import {
   RegisterInputDto,
@@ -11,13 +13,14 @@ import {
   RequestOtpInputDto,
   VerifyOtpInputDto,
   SIGN_UP_STEP,
+  TokenUser,
 } from "@/types";
 import { authApiClient } from "@/api-client";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
 import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
-import { ROUTES } from "@/constants";
+import { QUERY_KEYS, ROUTES } from "@/constants";
 
 export const useRegister = (): UseMutationResult<
   string,
@@ -102,5 +105,12 @@ export const useVerityOTP = (): UseMutationResult<
     onError: (error) => {
       Toast.error(getErrorMessage(error));
     },
+  });
+};
+
+export const useGetCurrentUser = (): UseQueryResult<TokenUser> => {
+  return useQuery({
+    queryKey: QUERY_KEYS.CURENT_USER.all,
+    queryFn: authApiClient.getCurrentUser,
   });
 };

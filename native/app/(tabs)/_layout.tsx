@@ -1,8 +1,8 @@
-import { Header } from "@/components/Header";
-import { useAuthStore } from "@/store";
 import { Tabs } from "expo-router";
 import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
 import { useColorScheme } from "react-native";
+import { Header } from "@/components";
+import { useAuthStore } from "@/store";
 
 export default function TabsLayout() {
   const colorScheme = useColorScheme();

@@ -1,4 +1,4 @@
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import { CustomTouchableOpacityButton } from "@/components";
 import { ROUTES } from "@/constants";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";

@@ -7,11 +7,11 @@ import Animated, {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
-
 import { useAuthStore } from "@/store";
 import { ROUTES } from "@/constants";
 import { useRequestOTP, useVerityOTP } from "@/hooks/useAuthMutation";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import { CustomTouchableOpacityButton } from "@/components";
+
 import { cn } from "@/utils/utils";
 
 export default function VerifyOTPScreen() {

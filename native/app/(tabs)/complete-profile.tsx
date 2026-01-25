@@ -1,4 +1,4 @@
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import { CustomTouchableOpacityButton } from "@/components";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -70,7 +70,7 @@ export default function CompleteProfile() {
     (step === 3 && !permissionGranted);
 
   return (
-    <View className="flex-1 bg-white dark:bg-primary-950">
+    <View className="flex-1 dark:bg-black">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="p-4 pt-16">

@@ -1,9 +1,9 @@
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import FreelancerProfileStats from "@/components/FreelancerProfileStats";
-import LogoutButton from "@/components/LogoutButton";
-import ProfileCard from "@/components/ProfileCard";
-import ProfileMenu from "@/components/ProfileMenu";
-import { useLogout } from "@/hooks/useAuthMutation";
+import {
+  FreelancerProfileStats,
+  LogoutButton,
+  ProfileCard,
+  ProfileMenu,
+} from "@/components";
 import { ScrollView } from "react-native";
 
 export default function ProfileScreen() {
@@ -13,7 +13,7 @@ export default function ProfileScreen() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
       bounces={true}
-      className="dark:bg-primary-950"
+      className="dark:bg-black"
     >
       <ProfileCard />
       <FreelancerProfileStats />

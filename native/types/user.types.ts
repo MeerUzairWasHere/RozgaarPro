@@ -11,6 +11,8 @@ export interface User {
   verificationToken: string | null;
   passwordToken: string | null;
   passwordTokenExpirationDate: Date | null;
+  profileCompleted: boolean;
+  ProfileApproved: boolean;
   verified: Date | null;
   id: string;
   createdAt: Date;
@@ -24,4 +26,5 @@ export interface TokenUser {
   phone: string;
   isVerified: boolean;
   profileCompleted: boolean;
+  profileApproved: boolean;
 }

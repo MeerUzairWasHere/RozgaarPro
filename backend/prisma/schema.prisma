@@ -44,6 +44,7 @@ model User {
   createdAt                   DateTime    @default(now())
   updatedAt                   DateTime    @updatedAt
   profileCompleted            Boolean     @default(false)
+  ProfileApproved             Boolean     @default(false)
   // Relations
   refreshTokens               Token[]
   freelancer                  Freelancer?

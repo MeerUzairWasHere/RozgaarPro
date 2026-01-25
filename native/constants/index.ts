@@ -1,9 +1,9 @@
 import { EXPERIENCE_LEVEL } from "@/types";
 
 export const ROUTES = {
-  ONBOARDING: "/onboarding",
+  ONBOARDING: "/(onboarding)/onboarding",
   FREELANCER_ONBOARDING: "/complete-profile",
-  SELECT_ROLE: "/select-role",
+  SELECT_ROLE: "/(onboarding)/select-role",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
   FORGOT_PASSWORD: "/forgot-password",
@@ -15,6 +15,8 @@ export const ROUTES = {
   EDIT_PROFILE: "/(screens)/edit-profile",
   HELP_SUPPORT: "/(screens)/help-support",
   SETTINGS: "/(screens)/settings",
+  FREELANCER_HOME: "/(tabs)/home/freelancer",
+  USER_HOME: "/(tabs)/home/user",
 } as const;
 
 export const experienceLevels = [
@@ -26,6 +28,9 @@ export const experienceLevels = [
 ];
 
 export const QUERY_KEYS = {
+  CURENT_USER: {
+    all: ["current-user"] as const,
+  },
   SKILLS: {
     all: ["skills"] as const,
     lists: () => [...QUERY_KEYS.SKILLS.all, "list"] as const,

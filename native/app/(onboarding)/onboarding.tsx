@@ -6,7 +6,7 @@ import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
+import { CustomTouchableOpacityButton } from "@/components";
 import { cn } from "@/utils/utils";
 
 const slides = [
@@ -96,7 +96,7 @@ export default function OnboardingScreen() {
                 "h-2 rounded-full mx-1",
                 index === currentSlide
                   ? "w-8 bg-primary-600 dark:bg-primary-500"
-                  : "w-2 bg-primary-300 dark:bg-primary-700"
+                  : "w-2 bg-primary-300 dark:bg-primary-700",
               )}
             />
           ))}

@@ -4,6 +4,7 @@ import {
   LoginInputDto,
   RegisterInputDto,
   RequestOtpInputDto,
+  TokenUser,
   VerifyOtpInputDto,
 } from "@/types";
 
@@ -29,6 +30,11 @@ export const authApiClient = {
 
   verifyOtp: async (userData: VerifyOtpInputDto): Promise<string> => {
     const { data } = await api.post<string>("/auth/verify-otp", userData);
+    return data;
+  },
+
+  getCurrentUser: async (): Promise<TokenUser> => {
+    const { data } = await api.get<TokenUser>("/users/current-user");
     return data;
   },
 };
