@@ -1,11 +1,3 @@
-export interface Skill {
-  id: string;
-  name: string;
-  profession: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export type SkillsFilterCategories = {
   id: string;
   name: string;

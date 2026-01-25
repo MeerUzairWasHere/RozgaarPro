@@ -15,7 +15,7 @@ import { useAuthStore } from "@/store";
 import { SIGN_UP_STEP, USER_ROLE } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "@/constants";
-import { useRegister } from "@/hooks/useAuthMutation";
+import { useRegister } from "@/mutations/useAuthMutation";
 import CustomInput from "@/components/CustomInput";
 import BackButton from "@/components/BackButton";
 import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";

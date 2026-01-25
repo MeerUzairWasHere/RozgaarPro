@@ -11,3 +11,4 @@ export const useCompleteFreelancerProfile = (): UseMutationResult<
     mutationFn: freelancerApiClient.createAndCompleteFreelancerProfile,
   });
 };
+

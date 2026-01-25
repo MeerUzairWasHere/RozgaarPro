@@ -4,4 +4,5 @@ export interface IPrismaService extends PrismaClient {
   connect(): Promise<void>;
   disconnect(): Promise<void>;
   healthCheck(): Promise<boolean>;
+  
 }

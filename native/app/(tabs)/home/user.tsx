@@ -1,9 +1,10 @@
-import { Text } from "react-native";
+import { SearchBar, SkillsFilter } from "@/components";
 
 const UserHomeScreen = () => {
   return (
     <>
-      <Text className="dark:text-primary">Search bar here</Text>
+      <SearchBar />
+      <SkillsFilter />
     </>
   );
 };

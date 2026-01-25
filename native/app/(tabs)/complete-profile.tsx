@@ -2,7 +2,7 @@ import { CustomTouchableOpacityButton } from "@/components";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
-import { useGetSkills } from "@/hooks/useSkillsMutation";
+import { useGetSkills } from "@/mutations/useSkillsMutation";
 import { experienceLevels, ROUTES } from "@/constants";
 import {
   useAuthStore,
@@ -10,7 +10,7 @@ import {
   useLocationStore,
 } from "@/store";
 import { cn } from "@/utils/utils";
-import { useCompleteFreelancerProfile } from "@/hooks/useFreelancersMutation";
+import { useCompleteFreelancerProfile } from "@/mutations/useFreelancersMutation";
 import { router } from "expo-router";
 
 export default function CompleteProfile() {

@@ -1,9 +1,7 @@
 import { ROUTES } from "@/constants";
-
 import { useAuthStore } from "@/store";
 import { USER_ROLE } from "@/types";
 import { Redirect } from "expo-router";
-import { useEffect } from "react";
 
 export default function index() {
   const { user, isAuthenticated } = useAuthStore();

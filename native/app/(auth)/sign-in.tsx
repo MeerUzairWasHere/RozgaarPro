@@ -19,7 +19,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { cn } from "@/utils/utils";
 import { LOGIN_METHOD } from "@/types";
-import { useLogin } from "@/hooks/useAuthMutation";
+import { useLogin } from "@/mutations/useAuthMutation";
 import {
   CustomPressableButton,
   CustomTouchableOpacityButton,

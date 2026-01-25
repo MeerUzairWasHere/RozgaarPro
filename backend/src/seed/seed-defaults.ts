@@ -2,14 +2,14 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-const defaultSkills = [
-  { name: "Plumbing" },
-  { name: "Electrical" },
-  { name: "Carpentry" },
-  { name: "Painting" },
-  { name: "Cleaning" },
-  { name: "Gardening" },
-  { name: "Masonry" },
+const defaultSkills: Array<{ name: string; profession: string }> = [
+  { name: "Plumbing", profession: "Plumber" },
+  { name: "Electrical", profession: "Electrician" },
+  { name: "Carpentry", profession: "Carpenter" },
+  { name: "Painting", profession: "Painter" },
+  { name: "Cleaning", profession: "Cleaner" },
+  { name: "Gardening", profession: "Gardener" },
+  { name: "Masonry", profession: "Mason" },
 ];
 
 async function main() {

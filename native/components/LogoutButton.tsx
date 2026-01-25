@@ -3,7 +3,7 @@ import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { LogOut } from "lucide-react-native";
 import clsx from "clsx";
-import { useLogout } from "@/hooks/useAuthMutation";
+import { useLogout } from "@/mutations/useAuthMutation";
 
 export default function LogoutButton() {
   const logoutMutation = useLogout();

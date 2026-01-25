@@ -9,4 +9,12 @@ export class SkillController {
     const skills = await this.skillService.getAllAvailableSkills();
     res.status(StatusCodes.OK).json(skills);
   };
+
+  public getSkillsFilterCategories = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const skills = await this.skillService.getSkillsFilterCategories();
+    res.status(StatusCodes.OK).json(skills);
+  };
 }

@@ -9,3 +9,5 @@ export { default as LogoutButton } from "./LogoutButton";
 export { default as ProfileApprovedCard } from "./ProfileApprovedCard";
 export { default as ProfileCard } from "./ProfileCard";
 export { default as ProfileMenu } from "./ProfileMenu";
+export { default as SearchBar } from "./SearchBar";
+export { default as SkillsFilter } from "./SkillsFilter";
