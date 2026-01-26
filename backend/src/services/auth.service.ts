@@ -47,10 +47,14 @@ export class AuthService implements IAuthService {
         phone,
         password: hashedPassword,
         role,
+        isVerified: true,
+        verified: new Date(),
+        profileCompleted: role === Role.USER ? true : false,
       },
     });
 
-    await this.verifyProvider.sendOtp(phone);
+    throw new Error("Remove later");
+    // await this.verifyProvider.sendOtp(phone);
 
     return {
       user: createTokenUser(user),

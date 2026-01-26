@@ -21,7 +21,6 @@ CREATE TABLE "public"."User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "profileCompleted" BOOLEAN NOT NULL DEFAULT false,
-    "profileApproved" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );

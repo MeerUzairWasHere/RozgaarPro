@@ -11,7 +11,6 @@ import { useAuthStore } from "@/store";
 import { ROUTES } from "@/constants";
 import { useRequestOTP, useVerityOTP } from "@/mutations/useAuthMutation";
 import { CustomTouchableOpacityButton } from "@/components";
-
 import { cn } from "@/utils/utils";
 
 export default function VerifyOTPScreen() {
@@ -55,6 +54,7 @@ export default function VerifyOTPScreen() {
     setCountdown(30);
     setOtp("");
     inputRef.current?.focus();
+
     await mutationRequestOTP.mutateAsync({ phone });
   };
 
