@@ -8,4 +8,5 @@ export * from "./storage/s3.storage.service";
 export * from "./storage/storage.factory";
 export * from "./twilio-verify.service";
 export * from "./skill.service";
+export * from "./profession.service";
 export * from "./freelancer.service";

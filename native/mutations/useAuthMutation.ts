@@ -15,7 +15,7 @@ import {
   SIGN_UP_STEP,
   TokenUser,
 } from "@/types";
-import { authApiClient } from "@/api-client";
+import { authApiClient } from "@/api";
 import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils/error.message";
 import { useAuthStore, useLocationStore } from "@/store";

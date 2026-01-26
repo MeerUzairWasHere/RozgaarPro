@@ -1,29 +1,31 @@
 import { Skill } from "@prisma/client";
-import { IPrismaService, ISkillService } from "../interfaces";
-import { SkillsFilterCategories } from "../dto";
+import {
+  IPrismaService,
+  IProfessionService,
+  ISkillService,
+} from "../interfaces";
 
 export class SkillService implements ISkillService {
-  constructor(private prismaService: IPrismaService) {}
+  constructor(
+    private prismaService: IPrismaService,
+    private professionService: IProfessionService,
+  ) {}
 
   async getAllAvailableSkills(): Promise<Skill[]> {
     return this.prismaService.skill.findMany();
   }
 
-  async getSkillsFilterCategories(): Promise<SkillsFilterCategories[]> {
-    return await this.prismaService.skill.findMany({
-      take: 6,
-      orderBy: {
-        freelancer: {
-          _count: "desc",
-        },
-      },
+  async getSkillsByProfession(professionId: string) {
+    await this.professionService.findProfessionByIdOrThrowError({
+      professionId,
+    });
+
+    return this.prismaService.skill.findMany({
+      where: { professionId },
+      orderBy: { name: "asc" },
       select: {
         id: true,
         name: true,
-        profession: true,
-        _count: {
-          select: { freelancer: true },
-        },
       },
     });
   }

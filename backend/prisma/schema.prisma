@@ -71,20 +71,22 @@ model Token {
 ////////////////////
 
 model Freelancer {
-  id         String           @id @default(uuid())
-  userId     String           @unique
-  experience Int
-  phone      String
-  status     FreelancerStatus @default(PENDING)
-  rating     Float            @default(0)
-  createdAt  DateTime         @default(now())
-  updatedAt  DateTime         @updatedAt
+  id                  String           @id @default(uuid())
+  userId              String           @unique
+  experience          Int
+  phone               String
+  status              FreelancerStatus @default(PENDING)
+  rating              Float            @default(0)
+  primaryProfessionId String
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
 
   // Relations
-  user      User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  skills    Skill[]
-  jobs      Job[]
-  locations FreelancerLocation[]
+  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  primaryProfession Profession           @relation(fields: [primaryProfessionId], references: [id])
+  skills            FreelancerSkill[]
+  jobs              Job[]
+  locations         FreelancerLocation[]
 }
 
 ////////////////////
@@ -108,16 +110,54 @@ model FreelancerLocation {
 }
 
 ////////////////////
+/// PROFESSION
+////////////////////
+
+model Profession {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  skills      Skill[]
+  freelancers Freelancer[]
+}
+
+////////////////////
 /// SKILL
 ////////////////////
 
 model Skill {
-  id         String       @id @default(uuid())
-  name       String       @unique
-  profession String       @db.VarChar(255) 
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  freelancer Freelancer[]
+  id           String   @id @default(uuid())
+  name         String
+  professionId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  profession  Profession        @relation(fields: [professionId], references: [id], onDelete: Cascade)
+  freelancers FreelancerSkill[]
+
+  @@unique([name, professionId]) // same skill name allowed in different professions
+}
+
+////////////////////
+/// FREELANCER SKILL
+////////////////////
+
+model FreelancerSkill {
+  id           String   @id @default(uuid())
+  freelancerId String
+  skillId      String
+  isVerified   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  // Relations
+  freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  skill      Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([freelancerId, skillId])
 }
 
 ////////////////////

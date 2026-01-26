@@ -3,13 +3,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { EXPERIENCE_LEVEL } from "@/types";
 
-type LocationCoords = {
-  latitude: number;
-  longitude: number;
-  accuracy: number | null;
-};
-
 type ProfileFormData = {
+  professionId: string | null;
   skills: string[];
   experience: EXPERIENCE_LEVEL;
 };
@@ -29,6 +24,9 @@ type CompleteProfileState = {
   setExperience: (experience: EXPERIENCE_LEVEL) => void;
 
   resetProfile: () => void;
+
+  setProfession: (professionId: string) => void;
+  clearSkills: () => void;
 };
 
 export const useCompleteProfileStore = create<CompleteProfileState>()(
@@ -37,6 +35,7 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
       step: 1,
       loading: false,
       formData: {
+        professionId: null,
         skills: [],
         experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
       },
@@ -45,7 +44,7 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
 
       nextStep: () =>
         set((state) => ({
-          step: Math.min(state.step + 1, 3),
+          step: Math.min(state.step + 1, 4),
         })),
 
       prevStep: () =>
@@ -55,15 +54,21 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
 
       setLoading: (loading) => set({ loading }),
 
-      toggleSkill: (skillId) =>
-        set((state) => ({
-          formData: {
-            ...state.formData,
-            skills: state.formData.skills.includes(skillId)
-              ? state.formData.skills.filter((s) => s !== skillId)
-              : [...state.formData.skills, skillId],
-          },
-        })),
+      toggleSkill: (skillId: string) =>
+        set((state) => {
+          const exists = state.formData.skills.includes(skillId);
+
+          if (!exists && state.formData.skills.length === 3) return state;
+
+          return {
+            formData: {
+              ...state.formData,
+              skills: exists
+                ? state.formData.skills.filter((id) => id !== skillId)
+                : [...state.formData.skills, skillId],
+            },
+          };
+        }),
 
       setExperience: (experience) =>
         set((state) => ({
@@ -75,10 +80,26 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
           step: 1,
           loading: false,
           formData: {
+            professionId: null,
             skills: [],
             experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
           },
         }),
+
+      clearSkills: () =>
+        set((state) => ({
+          formData: {
+            ...state.formData,
+            skills: [],
+          },
+        })),
+      setProfession: (professionId) =>
+        set((state) => ({
+          formData: {
+            ...state.formData,
+            professionId,
+          },
+        })),
     }),
     {
       name: "complete-profile-storage",

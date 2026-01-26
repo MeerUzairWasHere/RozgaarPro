@@ -7,3 +7,4 @@ export * from "./storage.interface";
 export * from "./verify-provider.interface";
 export * from "./skill.interface";
 export * from "./freelancer.interface";
+export * from "./profession.interface";

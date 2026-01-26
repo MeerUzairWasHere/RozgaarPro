@@ -1,17 +1,20 @@
+import { router } from "expo-router";
 import { CustomTouchableOpacityButton } from "@/components";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
-import { useGetSkills } from "@/mutations/useSkillsMutation";
 import { experienceLevels, ROUTES } from "@/constants";
 import {
   useAuthStore,
   useCompleteProfileStore,
   useLocationStore,
 } from "@/store";
+import {
+  useCompleteFreelancerProfile,
+  useGetProfessions,
+  useGetSkillsByProfession,
+} from "@/mutations";
 import { cn } from "@/utils/utils";
-import { useCompleteFreelancerProfile } from "@/mutations/useFreelancersMutation";
-import { router } from "expo-router";
 
 export default function CompleteProfile() {
   const mutationCompleteProfile = useCompleteFreelancerProfile();
@@ -26,27 +29,25 @@ export default function CompleteProfile() {
     toggleSkill,
     setExperience,
     resetProfile,
+    setProfession,
+    clearSkills,
   } = useCompleteProfileStore();
 
   const { coordinates, permissionGranted } = useLocationStore();
-  const { data: skills } = useGetSkills();
-
-  const handleSkillToggle = (skillId: string) => {
-    toggleSkill(skillId);
-  };
+  const { data: skills } = useGetSkillsByProfession(formData.professionId!);
+  const { data: professions } = useGetProfessions();
 
   const handleNext = async () => {
-    if (step < 3) {
+    if (step < 4) {
       nextStep();
       return;
     }
-
     setLoading(true);
-
     try {
       await mutationCompleteProfile.mutateAsync({
-        skills: formData.skills,
-        experience: formData.experience,
+        professionId: formData.professionId!,
+        skillIds: formData.skills,
+        experience: formData.experience!,
         location: {
           latitude: coordinates.latitude,
           longitude: coordinates.longitude,
@@ -56,18 +57,17 @@ export default function CompleteProfile() {
 
       setProfileCompleted(true);
       resetProfile();
-
       router.replace(ROUTES.HOME);
-    } catch (error) {
     } finally {
       setLoading(false);
     }
   };
 
   const isNextDisabled =
-    (step === 1 && formData.skills.length === 0) ||
-    (step === 2 && !formData.experience) ||
-    (step === 3 && !permissionGranted);
+    (step === 1 && !formData.professionId) ||
+    (step === 2 && formData.skills.length === 0) ||
+    (step === 3 && !formData.experience) ||
+    (step === 4 && !permissionGranted);
 
   return (
     <View className="flex-1 dark:bg-black">
@@ -84,7 +84,7 @@ export default function CompleteProfile() {
         {/* Progress */}
         <View className="px-4 py-4">
           <View className="flex-row gap-2">
-            {[1, 2, 3].map((s) => (
+            {[1, 2, 3, 4].map((s) => (
               <TouchableOpacity
                 key={s}
                 onPress={() => {
@@ -107,28 +107,32 @@ export default function CompleteProfile() {
             ))}
           </View>
           <Text className="text-sm text-primary-600 dark:text-primary-400 mt-2">
-            Step {step} of 3
+            Step {step} of 4
           </Text>
         </View>
 
         <View className="px-4 pb-32">
-          {/* Step 1: Skills */}
+          {/* Step 1: Profession */}
           {step === 1 && (
             <Animated.View entering={FadeInRight}>
-              <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                What skills do you have?
+              <Text className="text-xl font-bold mb-2">
+                Choose your profession
               </Text>
-              <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                Select all the skills you can offer
+              <Text className="text-primary-600 mb-6">
+                Select your main profession
               </Text>
 
               <View className="flex-row flex-wrap gap-3">
-                {skills?.map((category) => {
-                  const isSelected = formData.skills.includes(category.id);
+                {professions?.map((profession) => {
+                  const isSelected = formData.professionId === profession.id;
+
                   return (
                     <TouchableOpacity
-                      key={category.id}
-                      onPress={() => handleSkillToggle(category.id)}
+                      key={profession.id}
+                      onPress={() => {
+                        setProfession(profession.id);
+                        clearSkills(); // 🔥 reset skills if profession changes
+                      }}
                       className={`w-[48%] p-4 rounded-2xl border-2 ${
                         isSelected
                           ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
@@ -138,7 +142,7 @@ export default function CompleteProfile() {
                     >
                       <View className="flex-row items-center justify-between ">
                         <Text className="font-medium text-primary-900 dark:text-primary-50">
-                          {category.name}
+                          {profession.name}
                         </Text>
                         {isSelected && (
                           <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
@@ -155,8 +159,53 @@ export default function CompleteProfile() {
             </Animated.View>
           )}
 
-          {/* Step 2: Experience */}
+          {/* Step 2: Skills */}
           {step === 2 && (
+            <Animated.View entering={FadeInRight}>
+              <Text className="text-xl font-bold mb-2">
+                Select up to 3 skills
+              </Text>
+
+              <View className="flex-row flex-wrap gap-3">
+                {skills?.map((skill) => {
+                  const isSelected = formData.skills.includes(skill.id);
+
+                  return (
+                    <TouchableOpacity
+                      key={skill.id}
+                      onPress={() => toggleSkill(skill.id)}
+                      className={`w-[48%] p-4 rounded-2xl border-2 ${
+                        isSelected
+                          ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
+                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
+                      }`}
+                      activeOpacity={0.7}
+                    >
+                      <View className="flex-row items-center justify-between ">
+                        <Text className="font-medium text-primary-900 dark:text-primary-50">
+                          {skill.name}
+                        </Text>
+                        {isSelected && (
+                          <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
+                            <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                              ✓
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+
+              <Text className="text-sm mt-2 text-primary-500">
+                {formData.skills.length}/3 selected
+              </Text>
+            </Animated.View>
+          )}
+
+          {/* Step 3: Experience */}
+          {step === 3 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
                 Your experience
@@ -203,8 +252,8 @@ export default function CompleteProfile() {
             </Animated.View>
           )}
 
-          {/* Step 3: Verification */}
-          {step === 3 && (
+          {/* Step 4: Verification */}
+          {step === 4 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
                 Verify your identity
@@ -290,9 +339,9 @@ export default function CompleteProfile() {
           title={
             loading
               ? "Saving..."
-              : step === 3 && !permissionGranted
+              : step === 4 && !permissionGranted
                 ? "Enable Location to Continue"
-                : step === 3
+                : step === 4
                   ? "Complete Profile"
                   : "Continue"
           }

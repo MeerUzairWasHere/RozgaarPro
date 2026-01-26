@@ -5,7 +5,8 @@ import {
   IPrismaService,
   IUserService,
 } from "../interfaces";
-import { ForbiddenError, NotFoundError } from "../errors";
+import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
+import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -26,12 +27,33 @@ export class FreelancerService implements IFreelancerService {
       throw new ForbiddenError("Only freelancers can complete this profile");
     }
 
+    if (
+      params.skillIds.length === 0 ||
+      params.skillIds.length > MAX_NUMBER_OF_SKILLS
+    ) {
+      throw new BadRequestError(`Select up to ${MAX_NUMBER_OF_SKILLS} skills`);
+    }
+
+    // 🔐 Validate skills belong to profession
+    const skillsCount = await this.prismaService.skill.count({
+      where: {
+        id: { in: params.skillIds },
+        professionId: params.professionId,
+      },
+    });
+
+    if (skillsCount !== params.skillIds.length) {
+      throw new BadRequestError("Invalid skills for selected profession");
+    }
+
     await this.prismaService.$transaction(async (tx) => {
       await tx.freelancer.create({
         data: {
           userId: id,
           experience: params.experience,
           phone: user.phone,
+          primaryProfessionId: params.professionId,
+
           locations: {
             create: {
               latitude: params.location.latitude,
@@ -39,17 +61,18 @@ export class FreelancerService implements IFreelancerService {
               accuracy: params.location.accuracy,
             },
           },
+
           skills: {
-            connect: params.skills.map((skill) => ({ id: skill })),
+            create: params.skillIds.map((skillId) => ({
+              skillId,
+            })),
           },
         },
       });
 
       await tx.user.update({
         where: { id: user.id },
-        data: {
-          profileCompleted: true,
-        },
+        data: { profileCompleted: true },
       });
     });
   }
@@ -63,9 +86,6 @@ export class FreelancerService implements IFreelancerService {
     return this.prismaService.freelancer.findMany({
       where: {
         status: FreelancerStatus.APPROVED,
-        user: {
-          profileCompleted: true,
-        },
       },
     });
   }

@@ -1,10 +1,10 @@
-import { SearchBar, SkillsFilter } from "@/components";
+import { SearchBar, ProfessionsFilter } from "@/components";
 
 const UserHomeScreen = () => {
   return (
     <>
       <SearchBar />
-      <SkillsFilter />
+      <ProfessionsFilter />
     </>
   );
 };

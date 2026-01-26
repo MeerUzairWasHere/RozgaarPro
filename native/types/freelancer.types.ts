@@ -1,5 +1,6 @@
 export interface FreelancerProfileCompletedInput {
-  skills: string[];
+  professionId: string;
+  skillIds: string[];
   experience: number;
   location: {
     latitude: number;

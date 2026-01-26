@@ -39,6 +39,15 @@ export const QUERY_KEYS = {
     details: () => [...QUERY_KEYS.SKILLS.all, "detail"] as const,
     detail: (id: string) => [...QUERY_KEYS.SKILLS.details(), id] as const,
   },
+  PROFESSIONS: {
+    all: ["professions"] as const,
+    lists: () => [...QUERY_KEYS.PROFESSIONS.all, "list"] as const,
+    list: (filters?: Record<string, any>) =>
+      [...QUERY_KEYS.PROFESSIONS.lists(), filters] as const,
+    details: () => [...QUERY_KEYS.PROFESSIONS.all, "detail"] as const,
+    detail: (id: string) => [...QUERY_KEYS.PROFESSIONS.details(), id] as const,
+  },
+
   FREELANCERS: {
     all: ["freelancers"] as const,
     lists: () => [...QUERY_KEYS.FREELANCERS.all, "list"] as const,

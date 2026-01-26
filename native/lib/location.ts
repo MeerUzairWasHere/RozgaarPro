@@ -7,10 +7,9 @@ export async function getGoogleAddress(
 ): Promise<string> {
   try {
     const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`;
-
     const response = await fetch(url);
     const data = await response.json();
-
+    console.log(data);
     if (data.status === "OK" && data.results.length > 0) {
       const components = data.results[0].address_components;
       const get = (type: string) =>

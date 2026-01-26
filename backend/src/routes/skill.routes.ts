@@ -9,12 +9,4 @@ router
   .route("/")
   .get(authGuard, rolesGuard(Role.FREELANCER), skillController.getAllSkills);
 
-router
-  .route("/categories")
-  .get(
-    authGuard,
-    rolesGuard(Role.USER),
-    skillController.getSkillsFilterCategories,
-  );
-
 export default router;

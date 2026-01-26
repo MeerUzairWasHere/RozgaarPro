@@ -1,7 +1,8 @@
 import { Freelancer, FreelancerLocation, Skill } from "@prisma/client";
 
 export type FreelancerProfileCompletedInput = {
-  skills: Skill["name"][];
+  professionId: string;
+  skillIds: string[]; // max 3 (enforced)
   experience: Freelancer["experience"];
   location: {
     latitude: FreelancerLocation["latitude"];

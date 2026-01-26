@@ -10,11 +10,15 @@ export class SkillController {
     res.status(StatusCodes.OK).json(skills);
   };
 
-  public getSkillsFilterCategories = async (
-    req: Request,
+  public getSkillsByProfession = async (
+    req: Request<{ professionId: string }>,
     res: Response,
   ): Promise<void> => {
-    const skills = await this.skillService.getSkillsFilterCategories();
-    res.status(StatusCodes.OK).json(skills);
+    const { professionId } = req.params;
+
+    const skillsByProfession =
+      await this.skillService.getSkillsByProfession(professionId);
+
+    res.status(StatusCodes.OK).json(skillsByProfession);
   };
 }

@@ -43,7 +43,6 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
       set({ loading: true, error: null });
       // Request permissions
       const { status } = await Location.requestForegroundPermissionsAsync();
-
       if (status !== "granted") {
         set({
           error: "Permission to access location was denied",
@@ -57,10 +56,8 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
         accuracy: Location.Accuracy.Balanced,
       });
       const { latitude, longitude, accuracy } = position.coords;
-
       // Convert to address text
       const location = await getGoogleAddress(latitude, longitude);
-
       set({
         coordinates: { latitude, longitude, accuracy },
         location,

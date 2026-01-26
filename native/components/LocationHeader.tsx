@@ -5,7 +5,7 @@ import { View, Text } from "react-native";
 
 const LocationHeader = () => {
   const { location, loading, getCurrentLocation } = useLocationStore();
-
+  console.log(location);
   useEffect(() => {
     getCurrentLocation();
   }, [location]);

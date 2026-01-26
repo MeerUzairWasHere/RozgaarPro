@@ -3,4 +3,4 @@ export * from "./company.dto";
 export * from "./auth.dto";
 export * from "./email.dto";
 export * from "./freelancer.dto";
-export * from "./skill.dto";
+export * from "./profession.dto";

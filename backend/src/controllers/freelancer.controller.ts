@@ -1,13 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import { IFreelancerService, IUserService } from "../interfaces";
+import { IFreelancerService } from "../interfaces";
 import { currentUser } from "../decorators";
 
 export class FreelancerController {
-  constructor(
-    private freelancerService: IFreelancerService,
-    private userService: IUserService,
-  ) {}
+  constructor(private freelancerService: IFreelancerService) {}
 
   public completeFreelancerProfile = async (
     req: Request,
@@ -38,7 +35,6 @@ export class FreelancerController {
     res: Response,
   ): Promise<void> => {
     const id = currentUser(req).id;
-
 
     const status = await this.freelancerService.getFreelancerStatus(id);
 
