@@ -4,7 +4,7 @@
     "slug": "rozgaarpro",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "",
     "scheme": "native",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

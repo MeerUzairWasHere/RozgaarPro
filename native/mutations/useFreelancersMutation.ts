@@ -1,4 +1,4 @@
-import { freelancerApiClient } from "@/api/freelancer.client";
+import { freelancerApiClient } from "@/api/freelancer.api";
 import { QUERY_KEYS } from "@/constants";
 import { FREELANCER_STATUS, FreelancerProfileCompletedInput } from "@/types";
 import {
