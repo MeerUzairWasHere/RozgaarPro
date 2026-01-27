@@ -1,5 +1,5 @@
 import { Freelancer, FreelancerStatus, Role } from "@prisma/client";
-import { FreelancerProfileCompletedInput } from "../dto";
+import { FreelancerProfileCompletedInput, ListQueryDto } from "../dto";
 import {
   IFreelancerService,
   IPrismaService,
@@ -7,6 +7,13 @@ import {
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
+import { PaginatedResponse } from "../types";
+import {
+  buildOrderBy,
+  buildPagination,
+  buildSelect,
+  buildWhere,
+} from "../utils/prisma-list.builder";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -82,12 +89,40 @@ export class FreelancerService implements IFreelancerService {
     return freelancer.status;
   }
 
-  async getAllVisibleFreelancers(): Promise<Freelancer[]> {
-    return this.prismaService.freelancer.findMany({
-      where: {
-        status: FreelancerStatus.APPROVED,
-      },
+  async getAllVisibleFreelancers(
+    query: ListQueryDto,
+  ): Promise<PaginatedResponse<Freelancer>> {
+    const { page, pageSize, skip, take } = buildPagination(query.pagination);
+
+    const where = buildWhere(query.filters, {
+      status: FreelancerStatus.APPROVED, // 🔒 enforced rule
     });
+
+    const orderBy = buildOrderBy(query.sort);
+    const select = buildSelect(query.fields);
+
+    const [data, totalItems] = await this.prismaService.$transaction([
+      this.prismaService.freelancer.findMany({
+        where,
+        orderBy,
+        select,
+        skip,
+        take,
+      }),
+      this.prismaService.freelancer.count({ where }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        page,
+        pageSize,
+        totalItems,
+        totalPages: Math.ceil(totalItems / pageSize),
+        hasNext: page * pageSize < totalItems,
+        hasPrev: page > 1,
+      },
+    };
   }
 
   async findFreelancerByIdOrThrowError({
@@ -96,7 +131,7 @@ export class FreelancerService implements IFreelancerService {
     id: string;
   }): Promise<Freelancer> {
     const freelancer = await this.prismaService.freelancer.findUnique({
-      where: { userId: id },
+      where: { id },
     });
 
     if (!freelancer) {

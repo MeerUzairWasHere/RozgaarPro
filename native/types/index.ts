@@ -4,3 +4,4 @@ export * from "./user.types";
 export * from "./skill.types";
 export * from "./freelancer.types";
 export * from "./profession.types";
+export * from "./list.types";

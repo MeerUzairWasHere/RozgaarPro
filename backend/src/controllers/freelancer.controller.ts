@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { IFreelancerService } from "../interfaces";
 import { currentUser } from "../decorators";
+import { ListQueryDto } from "../dto";
 
 export class FreelancerController {
   constructor(private freelancerService: IFreelancerService) {}
@@ -26,18 +27,32 @@ export class FreelancerController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const freelancers = await this.freelancerService.getAllVisibleFreelancers();
-    res.status(StatusCodes.OK).json(freelancers);
+    const query: ListQueryDto = req.body ?? {};
+    const result = await this.freelancerService.getAllVisibleFreelancers(query);
+    res.status(StatusCodes.OK).json(result);
   };
 
   public getFreelancerStatus = async (
-    req: Request,
+    req: Request<{ freelancerId: string }>,
     res: Response,
   ): Promise<void> => {
-    const id = currentUser(req).id;
-
-    const status = await this.freelancerService.getFreelancerStatus(id);
+    const { freelancerId } = req.params;
+    const status =
+      await this.freelancerService.getFreelancerStatus(freelancerId);
 
     res.status(StatusCodes.OK).json(status);
+  };
+
+  public getFreelancerDetails = async (
+    req: Request<{ freelancerId: string }>,
+    res: Response,
+  ): Promise<void> => {
+    const { freelancerId } = req.params;
+    const freelancer =
+      await this.freelancerService.findFreelancerByIdOrThrowError({
+        id: freelancerId,
+      });
+
+    res.status(StatusCodes.OK).json(freelancer);
   };
 }

@@ -8,15 +8,23 @@ import { validateFreelancerProfileCompletedInput } from "../validators";
 const router = Router();
 
 router
-  .route("/")
-  .get(
+  .route("/list")
+  .post(
     authGuard,
     rolesGuard(Role.USER),
     freelancerController.getAllVisibleFreelancers,
   );
 
 router
-  .route("/status")
+  .route("/:freelancerId")
+  .get(
+    authGuard,
+    rolesGuard(Role.USER),
+    freelancerController.getFreelancerDetails,
+  );
+
+router
+  .route("/:freelancerId/status")
   .get(
     authGuard,
     rolesGuard(Role.FREELANCER),

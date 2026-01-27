@@ -1,4 +1,9 @@
-import { createTokenUser, comparePassword, hashPassword } from "../utils";
+import {
+  createTokenUser,
+  comparePassword,
+  hashPassword,
+  createTokenUserWithFreelancer,
+} from "../utils";
 import {
   TokenUserDto,
   UserUpdateInputDto,
@@ -20,7 +25,15 @@ export class UserService implements IUserService {
       return null;
     }
 
-    return createTokenUser(user);
+    const freelancer = await this.prismaService.freelancer.findUnique({
+      where: { userId: user.id },
+    });
+
+    if (!freelancer) {
+      return createTokenUser(user);
+    }
+
+    return createTokenUserWithFreelancer(user, freelancer.id);
   }
 
   async updateUser(
@@ -108,7 +121,7 @@ export class UserService implements IUserService {
 
     return user;
   }
-  
+
   async findUserByEmailOrThrowError({
     email,
   }: {

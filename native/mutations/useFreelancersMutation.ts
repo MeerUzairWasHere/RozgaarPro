@@ -1,6 +1,12 @@
 import { freelancerApiClient } from "@/api/freelancer.api";
 import { QUERY_KEYS } from "@/constants";
-import { FREELANCER_STATUS, FreelancerProfileCompletedInput } from "@/types";
+import {
+  Freelancer,
+  FREELANCER_STATUS,
+  FreelancerProfileCompletedInput,
+  ListQuery,
+  PaginatedResponse,
+} from "@/types";
 import {
   useMutation,
   UseMutationResult,
@@ -18,9 +24,31 @@ export const useCompleteFreelancerProfile = (): UseMutationResult<
   });
 };
 
-export const useGetFreelancerStatus = (): UseQueryResult<FREELANCER_STATUS> => {
+export const useGetFreelancerStatus = (
+  freelancerId: string,
+): UseQueryResult<FREELANCER_STATUS> => {
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.all,
-    queryFn: freelancerApiClient.getFreelancerStatus,
+    queryKey: QUERY_KEYS.FREELANCERS.detail(freelancerId),
+    queryFn: () => freelancerApiClient.getFreelancerStatus(freelancerId),
+    enabled: !!freelancerId,
+  });
+};
+
+export const useGetAllVisibleFreelancers = (
+  query: ListQuery = {},
+): UseQueryResult<PaginatedResponse<Freelancer>> => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.FREELANCERS.all, query],
+    queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
+  });
+};
+
+export const useGetFreelancerDetails = (
+  freelancerId: string,
+): UseQueryResult<Freelancer> => {
+  return useQuery({
+    queryKey: QUERY_KEYS.FREELANCERS.detail(freelancerId),
+    queryFn: () => freelancerApiClient.getFreelancerDetails(freelancerId),
+    enabled: !!freelancerId,
   });
 };

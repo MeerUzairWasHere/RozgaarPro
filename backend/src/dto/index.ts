@@ -4,3 +4,4 @@ export * from "./auth.dto";
 export * from "./email.dto";
 export * from "./freelancer.dto";
 export * from "./profession.dto";
+export * from "./list-query.dto";

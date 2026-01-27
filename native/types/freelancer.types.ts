@@ -14,3 +14,18 @@ export enum FREELANCER_STATUS {
   APPROVED = "APPROVED",
   REJECTED = "REJECTED",
 }
+
+export interface Freelancer {
+  id: string;
+  userId: string;
+
+  experience: number;
+  phone: string;
+  status: FREELANCER_STATUS;
+  rating: number;
+
+  primaryProfessionId: string;
+
+  createdAt: string; // ISO string from API
+  updatedAt: string;
+}

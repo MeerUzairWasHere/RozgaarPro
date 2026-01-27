@@ -2,10 +2,9 @@ import React from "react";
 import { View, Text } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { CircleCheckBig, CircleX } from "lucide-react-native";
-
 import { useAuthStore } from "@/store";
 import { FREELANCER_STATUS, USER_ROLE } from "@/types";
-import { useGetFreelancerStatus } from "@/mutations/useFreelancersMutation";
+import { useGetFreelancerDetails, useGetFreelancerStatus } from "@/mutations";
 
 /* ---------------- STATUS CONFIG ---------------- */
 
@@ -33,7 +32,8 @@ const STATUS_CONFIG = {
 /* ---------------- COMPONENT ---------------- */
 
 export default function ProfileApprovedCard() {
-  const { data } = useGetFreelancerStatus();
+  const { user } = useAuthStore();
+  const { data } = useGetFreelancerStatus(user?.freelancerId ?? "");
 
   const isFreelancer = useAuthStore(
     (s) => s.user?.role === USER_ROLE.FREELANCER,

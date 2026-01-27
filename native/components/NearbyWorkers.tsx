@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Star, MapPin, ShieldCheck } from "lucide-react-native";
 import { router } from "expo-router";
+import { useGetAllVisibleFreelancers } from "@/mutations";
 
 type Worker = {
   id: string;
@@ -77,6 +78,8 @@ export default function NearbyWorkers({
   onSeeAllPress,
   onWorkerPress,
 }: NearbyWorkersProps) {
+  const { data } = useGetAllVisibleFreelancers();
+  console.log(data);
   return (
     <View className="px-4">
       {/* Header */}

@@ -25,4 +25,5 @@ export interface TokenUser {
   phone: string;
   isVerified: boolean;
   profileCompleted: boolean;
+  freelancerId: string | null;
 }
