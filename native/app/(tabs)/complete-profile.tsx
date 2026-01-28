@@ -26,16 +26,19 @@ export default function CompleteProfile() {
     setStep,
     nextStep,
     setLoading,
-    toggleSkill,
     setExperience,
     resetProfile,
     setProfession,
     clearSkills,
+    toggleSkill,
   } = useCompleteProfileStore();
 
   const { coordinates, permissionGranted } = useLocationStore();
-  const { data: skills } = useGetSkillsByProfession(formData.professionId!);
-  const { data: professions } = useGetProfessions();
+  const { data: skills, isLoading: isLoadingSkills } = useGetSkillsByProfession(
+    formData.professionId!,
+  );
+  const { data: professions, isLoading: isLoadingProfessions } =
+    useGetProfessions();
 
   const handleNext = async () => {
     if (step < 4) {
@@ -66,7 +69,6 @@ export default function CompleteProfile() {
   const isNextDisabled =
     (step === 1 && !formData.professionId) ||
     (step === 2 && formData.skills.length === 0) ||
-    (step === 3 && !formData.experience) ||
     (step === 4 && !permissionGranted);
 
   return (
@@ -122,40 +124,56 @@ export default function CompleteProfile() {
                 Select your main profession
               </Text>
 
-              <View className="flex-row flex-wrap gap-3">
-                {professions?.map((profession) => {
-                  const isSelected = formData.professionId === profession.id;
-
-                  return (
-                    <TouchableOpacity
-                      key={profession.id}
-                      onPress={() => {
-                        setProfession(profession.id);
-                        clearSkills(); // 🔥 reset skills if profession changes
-                      }}
-                      className={`w-[48%] p-4 rounded-2xl border-2 ${
-                        isSelected
-                          ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
-                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
-                      }`}
-                      activeOpacity={0.7}
+              {isLoadingProfessions ? (
+                <View className="flex-row flex-wrap justify-between gap-y-3">
+                  {[...Array(7)].map((_, i) => (
+                    <View
+                      key={i}
+                      className="w-[48%] p-4 rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
                     >
-                      <View className="flex-row items-center justify-between ">
-                        <Text className="font-medium text-primary-900 dark:text-primary-50">
-                          {profession.name}
-                        </Text>
-                        {isSelected && (
-                          <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                            <Text className="text-white dark:text-primary-900 text-xs font-bold ">
-                              ✓
-                            </Text>
-                          </View>
-                        )}
+                      <View className="flex-row items-center justify-between">
+                        <View className="h-4 w-24 rounded-md bg-primary-200 dark:bg-primary-700 animate-pulse" />
+                        <View className="w-4 h-4 rounded-full bg-primary-200 dark:bg-primary-700 animate-pulse" />
                       </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View className="flex-row flex-wrap gap-3">
+                  {professions?.map((profession) => {
+                    const isSelected = formData.professionId === profession.id;
+
+                    return (
+                      <TouchableOpacity
+                        key={profession.id}
+                        onPress={() => {
+                          setProfession(profession.id);
+                          clearSkills(); // 🔥 reset skills if profession changes
+                        }}
+                        className={`w-[48%] p-4 rounded-2xl border-2 ${
+                          isSelected
+                            ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
+                            : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
+                        }`}
+                        activeOpacity={0.7}
+                      >
+                        <View className="flex-row items-center justify-between ">
+                          <Text className="font-medium text-primary-900 dark:text-primary-50">
+                            {profession.name}
+                          </Text>
+                          {isSelected && (
+                            <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
+                              <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                                ✓
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
             </Animated.View>
           )}
 
@@ -166,37 +184,53 @@ export default function CompleteProfile() {
                 Select up to 3 skills
               </Text>
 
-              <View className="flex-row flex-wrap gap-3">
-                {skills?.map((skill) => {
-                  const isSelected = formData.skills.includes(skill.id);
-
-                  return (
-                    <TouchableOpacity
-                      key={skill.id}
-                      onPress={() => toggleSkill(skill.id)}
-                      className={`w-[48%] p-4 rounded-2xl border-2 ${
-                        isSelected
-                          ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
-                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
-                      }`}
-                      activeOpacity={0.7}
+              {isLoadingSkills ? (
+                <View className="flex-row flex-wrap justify-between gap-y-3">
+                  {[...Array(3)].map((_, i) => (
+                    <View
+                      key={i}
+                      className="w-[48%] p-4 rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
                     >
-                      <View className="flex-row items-center justify-between ">
-                        <Text className="font-medium text-primary-900 dark:text-primary-50">
-                          {skill.name}
-                        </Text>
-                        {isSelected && (
-                          <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                            <Text className="text-white dark:text-primary-900 text-xs font-bold ">
-                              ✓
-                            </Text>
-                          </View>
-                        )}
+                      <View className="flex-row items-center justify-between">
+                        <View className="h-4 w-24 rounded-md bg-primary-200 dark:bg-primary-700 animate-pulse" />
+                        <View className="w-4 h-4 rounded-full bg-primary-200 dark:bg-primary-700 animate-pulse" />
                       </View>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                <View className="flex-row flex-wrap gap-3">
+                  {skills?.map((skill) => {
+                    const isSelected = formData.skills.includes(skill.id);
+
+                    return (
+                      <TouchableOpacity
+                        key={skill.id}
+                        onPress={() => toggleSkill(skill.id)}
+                        className={`w-[48%] p-4 rounded-2xl border-2 ${
+                          isSelected
+                            ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
+                            : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
+                        }`}
+                        activeOpacity={0.7}
+                      >
+                        <View className="flex-row items-center justify-between ">
+                          <Text className="font-medium text-primary-900 dark:text-primary-50">
+                            {skill.name}
+                          </Text>
+                          {isSelected && (
+                            <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
+                              <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                                ✓
+                              </Text>
+                            </View>
+                          )}
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
 
               <Text className="text-sm mt-2 text-primary-500">
                 {formData.skills.length}/3 selected

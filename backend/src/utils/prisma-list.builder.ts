@@ -80,3 +80,20 @@ export function buildSelect(fields?: string[]) {
     return acc;
   }, {});
 }
+
+export function buildSearch(search?: { term: string; fields?: string[] }) {
+  if (!search?.term) return undefined;
+
+  const fields = search.fields?.length ? search.fields : [];
+
+  if (!fields.length) return undefined;
+
+  return {
+    OR: fields.map((field) => ({
+      [field]: {
+        contains: search.term,
+        mode: "insensitive",
+      },
+    })),
+  };
+}

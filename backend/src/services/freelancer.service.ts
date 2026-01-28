@@ -11,6 +11,7 @@ import { PaginatedResponse } from "../types";
 import {
   buildOrderBy,
   buildPagination,
+  buildSearch,
   buildSelect,
   buildWhere,
 } from "../utils/prisma-list.builder";
@@ -94,9 +95,16 @@ export class FreelancerService implements IFreelancerService {
   ): Promise<PaginatedResponse<Freelancer>> {
     const { page, pageSize, skip, take } = buildPagination(query.pagination);
 
-    const where = buildWhere(query.filters, {
-      status: FreelancerStatus.APPROVED, // 🔒 enforced rule
-    });
+    const baseWhere = {
+      status: FreelancerStatus.APPROVED,
+    };
+
+    const filterWhere = buildWhere(query.filters);
+    const searchWhere = buildSearch(query.search);
+
+    const where = {
+      AND: [baseWhere, filterWhere, ...(searchWhere ? [searchWhere] : [])],
+    };
 
     const orderBy = buildOrderBy(query.sort);
     const select = buildSelect(query.fields);

@@ -5,7 +5,7 @@ export const validateFreelancerProfileCompletedInput = z.object({
   skillIds: z
     .array(z.string().min(1, { message: "Skill id is required" }))
     .max(3, { message: "Skill ids must be at most 3 long" }),
-  experience: z.string().min(1, { message: "Experience is required" }),
+  experience: z.number().min(0, { message: "Experience is required" }).max(5),
   location: z.object({
     latitude: z
       .number()
