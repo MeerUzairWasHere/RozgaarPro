@@ -18,14 +18,14 @@ router
   .patch(
     authGuard,
     validate(validateUserUpdateInput),
-    userController.updateUser
+    userController.updateUser,
   );
 router
   .route("/update-user-password")
   .patch(
     authGuard,
     validate(validateUpdatePasswordInput),
-    userController.updateUserPassword
+    userController.updateUserPassword,
   );
 
 export default router;

@@ -6,7 +6,7 @@ export const requiredFieldStringSchema = (
   max: number = 255,
 ) =>
   z
-    .string(`${field} is required`)
+    .string(`${field} is required and must be a string`)
     .min(min, { message: `${field} must be at least ${min} characters long` })
     .max(max, { message: `${field} must be at most ${max} characters long` });
 
@@ -16,11 +16,9 @@ export const requiredFieldNumberSchema = (
   max: number = 255,
 ) =>
   z
-    .number(`${field} is required`)
-    .min(min, { message: `${field} must be at least ${min} characters long` })
-    .max(max, {
-      message: `${field} must be at most ${max} characters long`,
-    });
+    .number(`${field} is required and must be a number`)
+    .min(min, { message: `${field} must be at least ${min}` })
+    .max(max, { message: `${field} must be at most ${max}` });
 
 export const phoneSchema = z
   .string("phone is required")

@@ -18,7 +18,7 @@ const router = Router();
 router.post(
   "/sign-up",
   validate(validateRegisterInput),
-  authController.registerUser
+  authController.registerUser,
 );
 
 router.post("/sign-in", validate(validateLoginInput), authController.login);
@@ -30,31 +30,31 @@ router.post("/sign-out", authGuard, authController.logout);
 router.post(
   "/request-otp",
   validate(validateRequestOtpInput),
-  authController.requestOtp
+  authController.requestOtp,
 );
 
 router.post(
   "/verify-otp",
   validate(validateVerifyOtpInput),
-  authController.verifyOtp
+  authController.verifyOtp,
 );
 
 router.post(
   "/verify-email",
   validate(validateVerifyEmailInput),
-  authController.verifyEmail
+  authController.verifyEmail,
 );
 
 router.post(
   "/forgot-password",
   validate(validateForgotPasswordInput),
-  authController.forgotPassword
+  authController.forgotPassword,
 );
 
 router.post(
   "/reset-password",
   validate(validateResetPasswordInput),
-  authController.resetPassword
+  authController.resetPassword,
 );
 
 export default router;

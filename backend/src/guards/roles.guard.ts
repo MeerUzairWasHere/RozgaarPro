@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { Role } from "@prisma/client";
-import { ForbiddenError } from "../errors";
+import { ForbiddenError, UnauthenticatedError } from "../errors";
 
 export const rolesGuard = (...allowedRoles: Role[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.user) {
-      return next(new ForbiddenError("User not authenticated"));
+      return next(new UnauthenticatedError("User is not authenticated"));
     }
 
     if (req.user.role === Role.SUPER_ADMIN) {
@@ -17,8 +17,8 @@ export const rolesGuard = (...allowedRoles: Role[]) => {
     if (!allowedRoles.includes(userRole)) {
       return next(
         new ForbiddenError(
-          `Access denied. Required roles: ${allowedRoles.join(", ")}`
-        )
+          `Access denied. Required roles: ${allowedRoles.join(", ")}`,
+        ),
       );
     }
 
