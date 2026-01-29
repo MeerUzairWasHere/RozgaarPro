@@ -26,7 +26,7 @@ export interface IAuthService {
 
   verifyEmail(data: VerifyEmailInputDto): Promise<{ msg: string }>;
 
-  logout(tokenUser: TokenUserDto): Promise<{ msg: string }>;
+  logout(tokenUser: TokenUserDto): Promise<void>;
 
   forgotPassword(
     data: ForgotPasswordInputDto,

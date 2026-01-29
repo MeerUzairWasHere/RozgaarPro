@@ -52,6 +52,7 @@ export class AuthService implements IAuthService {
         profileCompleted: role === Role.USER ? true : false,
       },
     });
+    console.log(user);
 
     throw new Error("Remove later");
     // await this.verifyProvider.sendOtp(phone);
@@ -153,7 +154,6 @@ export class AuthService implements IAuthService {
         userId: tokenUser.id,
       },
     });
-    return { msg: "User logged out!" };
   }
 
   async forgotPassword(data: ForgotPasswordInputDto, origin: string) {

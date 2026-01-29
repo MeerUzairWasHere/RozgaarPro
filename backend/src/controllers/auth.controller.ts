@@ -75,9 +75,9 @@ export class AuthController {
   logout = async (req: Request, res: Response): Promise<void> => {
     const loggedInUser = currentUser(req);
 
-    const result = await this.authService.logout(loggedInUser);
+    await this.authService.logout(loggedInUser);
 
-    res.status(StatusCodes.OK).json(result);
+    res.status(StatusCodes.NO_CONTENT).send();
   };
 
   forgotPassword = async (
