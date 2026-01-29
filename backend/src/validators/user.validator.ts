@@ -26,13 +26,17 @@ export const validateUserCreateInput = z.object({
 export const validateUserUpdateInput = z.object({
   username: requiredFieldStringSchema("username").optional(),
   name: requiredFieldStringSchema("name").optional(),
-  email: z.email({ message: "Invalid email format" }).optional(),
+  email: emailSchema.optional(),
   password: passwordSchema().optional(),
   role: z.enum(Role).optional(),
   profileCompleted: z.boolean().optional(),
   isVerified: z.boolean().optional(),
-  verificationToken: z.string().max(255).optional().nullable(),
-  passwordToken: z.string().max(255).optional().nullable(),
+  verificationToken: requiredFieldStringSchema("verificationToken")
+    .optional()
+    .nullable(),
+  passwordToken: requiredFieldStringSchema("passwordToken")
+    .optional()
+    .nullable(),
   passwordTokenExpirationDate: z.date().optional().nullable(),
   verified: z.date().optional().nullable(),
 });
