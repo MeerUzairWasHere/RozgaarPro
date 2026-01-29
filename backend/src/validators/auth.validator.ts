@@ -1,88 +1,51 @@
 import { Role } from "@prisma/client";
 import { z } from "zod";
-
-//#region Auth
+import {
+  emailSchema,
+  requiredFieldStringSchema,
+  otpSchema,
+  passwordSchema,
+  phoneSchema,
+} from "./zod.schema";
 
 export const validateRegisterInput = z.object({
-  name: z
-    .string("name is required")
-    .min(2, { message: "Name must be at least 2 characters long" })
-    .max(255, { message: "Name must be at most 255 characters long" }),
-  phone: z
-    .string("phone is required")
-    .min(10, { message: "phone must be at least 10 characters long" })
-    .max(15, { message: "phone must be at most 15 characters long" }),
-  password: z
-    .string("password is required")
-    .min(8, { message: "password must be at least 8 characters long" })
-    .max(20, { message: "password must be at most 20 characters long" }),
+  name: requiredFieldStringSchema("name"),
+  phone: phoneSchema,
+  password: passwordSchema(),
   role: z.enum([Role.USER, Role.FREELANCER]),
 });
 
 export const validateLoginInput = z.object({
-  email: z.email({ message: "Invalid email format" }).optional(),
-  phone: z
-    .string("Should be a valid phone number")
-    .min(10, { message: "phone must be at least 10 characters long" })
-    .max(15, { message: "phone must be at most 15 characters long" })
-    .optional(),
-  password: z
-    .string("password is required")
-    .min(1, { message: "password is required" }),
+  email: emailSchema.optional(),
+  phone: phoneSchema.optional(),
+  password: passwordSchema(),
 });
 
 export const validateUpdatePasswordInput = z.object({
-  oldPassword: z
-    .string("oldPassword is required")
-    .min(1, { message: "oldPassword is required" }),
-  newPassword: z
-    .string("newPassword is required")
-    .min(8, { message: "newPassword must be at least 8 characters long" })
-    .max(20, { message: "newPassword must be at most 20 characters long" }),
+  oldPassword: passwordSchema("oldPassword"),
+  newPassword: passwordSchema("newPassword"),
 });
 
 export const validateVerifyEmailInput = z.object({
-  verificationToken: z
-    .string("verificationToken is required")
-    .min(1, { message: "verificationToken is required" }),
-  email: z
-    .email({ message: "Invalid email format" })
-    .min(1, { message: "email is required" }),
+  verificationToken: requiredFieldStringSchema("verificationToken"),
+  email: emailSchema,
 });
 
 export const validateForgotPasswordInput = z.object({
-  email: z
-    .email({ message: "Invalid email format" })
-    .min(1, { message: "email is required" }),
+  email: emailSchema,
 });
 
 export const validateResetPasswordInput = z.object({
-  token: z.string("token is required").min(1, { message: "Token is required" }),
-  newPassword: z
-    .string("newPassword is required")
-    .min(8, { message: "newPassword must be at least 8 characters long" })
-    .max(20, { message: "newPassword must be at most 20 characters long" }),
-  email: z
-    .email({ message: "Invalid email format" })
-    .min(1, { message: "email is required" }),
+  token: requiredFieldStringSchema("token"),
+  newPassword: passwordSchema("newPassword"),
+  email: emailSchema,
 });
 
 export const validateRequestOtpInput = z.object({
-  phone: z
-    .string("Should be a valid phone number")
-    .min(10, { message: "phone must be at least 10 characters long" })
-    .max(15, { message: "phone must be at most 15 characters long" }),
+  phone: phoneSchema,
 });
 
 export const validateVerifyOtpInput = z.object({
-  phone: z
-    .string("Should be a valid phone number")
-    .min(10, { message: "phone must be at least 10 characters long" })
-    .max(15, { message: "phone must be at most 15 characters long" }),
-  code: z
-    .string("code is required")
-    .min(6, { message: "code must be 6 digits" })
-    .max(6, { message: "code must be 6 digits" }),
+  phone: phoneSchema,
+  code: otpSchema,
 });
-
-//#endregion

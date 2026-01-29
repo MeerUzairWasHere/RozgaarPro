@@ -15,7 +15,7 @@ export const prismaExceptionFilter = (
 
     switch (err.code) {
       case "P2002":
-        statusCode = StatusCodes.BAD_REQUEST;
+        statusCode = StatusCodes.CONFLICT;
         message = "Duplicate record already exists";
         break;
 
