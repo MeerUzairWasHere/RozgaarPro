@@ -1,4 +1,4 @@
-import { Freelancer, FREELANCER_STATUS } from "@/types";
+import { FREELANCER_STATUS, NearbyFreelancer } from "@/types";
 import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import InitialAvatar from "./InitialAvatar";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
@@ -7,12 +7,12 @@ import ExperienceText from "./ExperienceText";
 export default function FreelancerCard({
   freelancer,
 }: {
-  freelancer: Freelancer;
+  freelancer: NearbyFreelancer;
 }) {
   const colourScheme = useColorScheme();
   return (
     <TouchableOpacity
-      key={freelancer.id}
+      key={freelancer.freelancer_Id}
       className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm activer:opacity-90 mb-4"
       //   onPress={() => onWorkerPress?.(freelancer.id)}
       activeOpacity={0.7}
@@ -20,7 +20,7 @@ export default function FreelancerCard({
       <View className="flex-row items-start gap-3">
         {/* Profile Image */}
         <View className="relative flex-shrink-0">
-          <InitialAvatar name={freelancer.user.name} />
+          <InitialAvatar name={freelancer.name} />
 
           {freelancer.status === FREELANCER_STATUS.APPROVED && (
             <View
@@ -50,7 +50,7 @@ export default function FreelancerCard({
           {/* Name */}
           <View className="flex-row items-center gap-2 mb-1">
             <Text className="font-semibold text-primary-900 dark:text-primary-50 truncate">
-              {freelancer.user.name}
+              {freelancer.name}
             </Text>
           </View>
 
@@ -58,7 +58,7 @@ export default function FreelancerCard({
           <View className="flex-row items-center gap-2 mb-2">
             <View className="bg-primary-50 dark:bg-primary-800 px-2 py-0.5 rounded-md">
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
-                {freelancer.primaryProfession.name}
+                {freelancer.primary_profession_name}
               </Text>
             </View>
 
@@ -71,7 +71,7 @@ export default function FreelancerCard({
             <View className="flex-row items-center gap-1">
               <Star size={14} fill="#F59E0B" color="#F59E0B" />
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
-                4.2
+                {freelancer.rating}
               </Text>
               <Text className="text-xs text-primary-600 dark:text-primary-400">
                 (243)
@@ -86,7 +86,7 @@ export default function FreelancerCard({
                 className="text-primary-600 dark:text-primary-400"
               />
               <Text className="text-xs text-primary-600 dark:text-primary-400">
-                2.4 km
+                {freelancer.distance_km.toLocaleString()} km
               </Text>
             </View>
           </View>

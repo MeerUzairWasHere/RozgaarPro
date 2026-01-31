@@ -31,11 +31,16 @@ export interface Pagination {
   pageSize?: number;
 }
 
+export interface GeoLocation {
+  latitude: number;
+  longitude: number;
+}
+
 export interface ListQueryDto {
   pagination?: Pagination;
   filters?: ListFilter[];
   sort?: ListSort[];
   search?: ListSearch;
   fields?: string[];
+  location?: GeoLocation;
 }
-

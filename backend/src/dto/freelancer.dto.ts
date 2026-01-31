@@ -1,4 +1,8 @@
-import { Freelancer, FreelancerLocation, Skill } from "@prisma/client";
+import {
+  Freelancer,
+  FreelancerLocation,
+  FreelancerStatus,
+} from "@prisma/client";
 
 export type FreelancerProfileCompletedInput = {
   professionId: string;
@@ -9,4 +13,15 @@ export type FreelancerProfileCompletedInput = {
     longitude: FreelancerLocation["longitude"];
     accuracy: FreelancerLocation["accuracy"];
   };
+};
+
+export type NearbyFreelancer = {
+  freelancer_Id: string;
+  user_Id: string;
+  primary_profession_name: string;
+  name: string;
+  experience: number;
+  status: FreelancerStatus;
+  rating: number;
+  distance_km: number; // raw DB value
 };

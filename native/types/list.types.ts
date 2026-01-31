@@ -43,6 +43,12 @@ export interface ListQuery {
   sort?: ListSort[];
   search?: ListSearch;
   fields?: string[];
+  location?: GeoLocation;
+}
+
+export interface GeoLocation {
+  latitude: number;
+  longitude: number;
 }
 
 export interface PaginatedResponse<T> {

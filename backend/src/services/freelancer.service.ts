@@ -1,12 +1,16 @@
 import { Freelancer, FreelancerStatus, Role } from "@prisma/client";
-import { FreelancerProfileCompletedInput, ListQueryDto } from "../dto";
+import {
+  FreelancerProfileCompletedInput,
+  ListQueryDto,
+  NearbyFreelancer,
+} from "../dto";
 import {
   IFreelancerService,
   IPrismaService,
   IUserService,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
-import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
+import { MAX_NUMBER_OF_SKILLS, MAX_RADIUS_KM } from "../utils/constants";
 import { emptyPaginatedResponse, PaginatedResponse } from "../types";
 import {
   buildOrderBy,
@@ -92,57 +96,61 @@ export class FreelancerService implements IFreelancerService {
 
   async getAllVisibleFreelancers(
     query: ListQueryDto,
-  ): Promise<PaginatedResponse<Freelancer>> {
-    const { page, pageSize, skip, take } = buildPagination(query.pagination);
+  ): Promise<PaginatedResponse<NearbyFreelancer>> {
+    const { page, pageSize, skip, take } = buildPagination({
+      page: 1,
+      pageSize: 5,
+    });
 
-    const randomfreelancerIds = await this.getRandomFreelancerIds(5);
+    const { latitude, longitude } = query.location ?? {};
 
-    if (randomfreelancerIds.length === 0) {
-      return emptyPaginatedResponse<Freelancer>(page, pageSize);
-    }
+    const data = await this.prismaService.$queryRaw<NearbyFreelancer[]>`
+    SELECT
+      f.id AS freelancer_Id,
+      u.id AS user_Id,
+      u.name AS name,
+      f.experience AS experience,
+      f.status AS status,
+      f.rating AS rating,
+      p.name AS primary_profession_name,
+      (
+        6371 * acos(
+          cos(radians(${latitude}))
+          * cos(radians(fl.latitude))
+          * cos(radians(fl.longitude) - radians(${longitude}))
+          + sin(radians(${latitude}))
+          * sin(radians(fl.latitude))
+        )
+      ) AS distance_km
+    FROM "Freelancer" f
+    JOIN "FreelancerLocation" fl
+      ON fl."freelancerId" = f.id
+    JOIN "User" u
+  ON u.id = f."userId"
+  JOIN "Profession" p
+  ON f."primaryProfessionId" = p."id"
+    WHERE
+      f.status = 'APPROVED'
+      AND fl."recordedAt" = (
+        SELECT MAX(fl2."recordedAt")
+        FROM "FreelancerLocation" fl2
+        WHERE fl2."freelancerId" = f.id
+      )
+      AND (
+        6371 * acos(
+          cos(radians(${latitude}))
+          * cos(radians(fl.latitude))
+          * cos(radians(fl.longitude) - radians(${longitude}))
+          + sin(radians(${latitude}))
+          * sin(radians(fl.latitude))
+        )
+      ) <= ${MAX_RADIUS_KM}
+    ORDER BY distance_km ASC
+    LIMIT ${take}
+    OFFSET ${skip};
+  `;
 
-    const baseWhere = {
-      status: FreelancerStatus.APPROVED,
-      id: { in: randomfreelancerIds },
-    };
-
-    const filterWhere = buildWhere(query.filters);
-    const searchWhere = buildSearch(query.search);
-
-    const where = {
-      AND: [baseWhere, filterWhere, ...(searchWhere ? [searchWhere] : [])],
-    };
-
-    const orderBy = buildOrderBy(query.sort);
-
-    const [data, totalItems] = await this.prismaService.$transaction([
-      this.prismaService.freelancer.findMany({
-        where,
-        orderBy,
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          primaryProfession: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          skills: {
-            select: {
-              skill: true,
-            },
-          },
-        },
-        skip,
-        take,
-      }),
-      this.prismaService.freelancer.count({ where }),
-    ]);
+    const totalItems = data.length; // or run a COUNT query if needed
 
     return {
       data,

@@ -1,11 +1,12 @@
 import { freelancerApiClient } from "@/api/freelancer.api";
 import { QUERY_KEYS } from "@/constants";
 import {
-  Freelancer,
+  NearbyFreelancer,
   FREELANCER_STATUS,
   FreelancerProfileCompletedInput,
   ListQuery,
   PaginatedResponse,
+  Freelancer,
 } from "@/types";
 import {
   useMutation,
@@ -33,13 +34,14 @@ export const useGetFreelancerStatus = (
     enabled: !!freelancerId,
   });
 };
+export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
+  const hasValidLocation =
+    query.location?.latitude !== 0 && query.location?.longitude !== 0;
 
-export const useGetAllVisibleFreelancers = (
-  query: ListQuery = {},
-): UseQueryResult<PaginatedResponse<Freelancer>> => {
   return useQuery({
     queryKey: [QUERY_KEYS.FREELANCERS.all, query],
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
+    enabled: hasValidLocation, // 🔥 KEY LINE
   });
 };
 

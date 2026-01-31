@@ -13,6 +13,7 @@ import { FlatList, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import { useQueryClient } from "@tanstack/react-query";
+import { useLocationStore } from "@/store";
 
 const UserHomeScreen = () => {
   const queryClient = useQueryClient();
@@ -23,11 +24,19 @@ const UserHomeScreen = () => {
     });
   };
 
+  const { coordinates } = useLocationStore();
+
   const {
     data: freelancers,
     isFetching,
     isLoading,
-  } = useGetAllVisibleFreelancers();
+  } = useGetAllVisibleFreelancers({
+    location: {
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+    },
+  });
+
   const tabBarHeight = useBottomTabBarHeight();
 
   if (isLoading) {
@@ -49,7 +58,7 @@ const UserHomeScreen = () => {
     <>
       <FlatList
         data={freelancers?.data ?? []}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.freelancer_Id}
         renderItem={({ item }) => <FreelancerCard freelancer={item} />}
         ListHeaderComponent={
           <>

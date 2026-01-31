@@ -3,7 +3,10 @@ import { authGuard, rolesGuard } from "../guards";
 import { freelancerController } from "../container";
 import { Role } from "@prisma/client";
 import { validate } from "../decorators";
-import { validateFreelancerProfileCompletedInput } from "../validators";
+import {
+  validateFreelancerProfileCompletedInput,
+  validateGetAllVisibleFreelancersInput,
+} from "../validators";
 
 const router = Router();
 
@@ -12,6 +15,7 @@ router
   .post(
     authGuard,
     rolesGuard(Role.USER),
+    validate(validateGetAllVisibleFreelancersInput),
     freelancerController.getAllVisibleFreelancers,
   );
 

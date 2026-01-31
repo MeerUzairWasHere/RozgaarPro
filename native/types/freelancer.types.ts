@@ -41,3 +41,14 @@ export interface Freelancer {
   primaryProfession: Profession;
   skills: FreelancerSkill[];
 }
+
+export type NearbyFreelancer = {
+  freelancer_Id: string;
+  user_Id: string;
+  primary_profession_name: string;
+  name: string;
+  experience: number;
+  status: FREELANCER_STATUS;
+  rating: number;
+  distance_km: number; // raw DB value
+};

@@ -26,7 +26,6 @@ export default function SkillFilter({
   if (isLoading) {
     return <SkillFilterSkeleton />;
   }
-  console.log(JSON.stringify(data, null, 2));
 
   return (
     <View>
