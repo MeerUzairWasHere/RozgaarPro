@@ -7,7 +7,7 @@ import {
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
-import { PaginatedResponse } from "../types";
+import { emptyPaginatedResponse, PaginatedResponse } from "../types";
 import {
   buildOrderBy,
   buildPagination,
@@ -95,8 +95,15 @@ export class FreelancerService implements IFreelancerService {
   ): Promise<PaginatedResponse<Freelancer>> {
     const { page, pageSize, skip, take } = buildPagination(query.pagination);
 
+    const randomfreelancerIds = await this.getRandomFreelancerIds(5);
+
+    if (randomfreelancerIds.length === 0) {
+      return emptyPaginatedResponse<Freelancer>(page, pageSize);
+    }
+
     const baseWhere = {
       status: FreelancerStatus.APPROVED,
+      id: { in: randomfreelancerIds },
     };
 
     const filterWhere = buildWhere(query.filters);
@@ -107,13 +114,30 @@ export class FreelancerService implements IFreelancerService {
     };
 
     const orderBy = buildOrderBy(query.sort);
-    const select = buildSelect(query.fields);
 
     const [data, totalItems] = await this.prismaService.$transaction([
       this.prismaService.freelancer.findMany({
         where,
         orderBy,
-        select,
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          primaryProfession: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          skills: {
+            select: {
+              skill: true,
+            },
+          },
+        },
         skip,
         take,
       }),
@@ -147,5 +171,17 @@ export class FreelancerService implements IFreelancerService {
     }
 
     return freelancer;
+  }
+
+  async getRandomFreelancerIds(count: number): Promise<string[]> {
+    const rows = await this.prismaService.$queryRaw<Array<{ id: string }>>`
+    SELECT f."id"
+    FROM "Freelancer" f
+    WHERE f."status" = 'APPROVED'
+    ORDER BY RANDOM()
+    LIMIT ${count}
+  `;
+
+    return rows.map((r) => r.id);
   }
 }

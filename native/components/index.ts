@@ -11,4 +11,7 @@ export { default as ProfileCard } from "./ProfileCard";
 export { default as ProfileMenu } from "./ProfileMenu";
 export { default as SearchBar } from "./SearchBar";
 export { default as ProfessionsFilter } from "./ProfessionsFilter";
-export { default as NearbyWorkers } from "./NearbyWorkers";
+export { default as InitialAvatar } from "./InitialAvatar";
+export { default as ExperienceText } from "./ExperienceText";
+export { default as FreelancerCard } from "./FreelancerCard";
+export { default as SectionHeader } from "./SectionHeader";

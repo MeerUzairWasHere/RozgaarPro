@@ -6,7 +6,7 @@ export default function SearchBar() {
   const [query, setQuery] = useState("");
 
   return (
-    <View className="px-4 py-4">
+    <View className="mb-4">
       <View style={{ position: "relative" }}>
         {/* Search Icon */}
         <Search

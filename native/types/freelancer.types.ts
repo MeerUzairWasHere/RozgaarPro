@@ -1,3 +1,7 @@
+import { Profession } from "./profession.types";
+import { Skill } from "./skill.types";
+import { User } from "./user.types";
+
 export interface FreelancerProfileCompletedInput {
   professionId: string;
   skillIds: string[];
@@ -15,10 +19,13 @@ export enum FREELANCER_STATUS {
   REJECTED = "REJECTED",
 }
 
+export interface FreelancerSkill {
+  skill: Skill;
+}
+
 export interface Freelancer {
   id: string;
   userId: string;
-
   experience: number;
   phone: string;
   status: FREELANCER_STATUS;
@@ -26,6 +33,11 @@ export interface Freelancer {
 
   primaryProfessionId: string;
 
-  createdAt: string; // ISO string from API
+  createdAt: string; // ISO string
   updatedAt: string;
+
+  // relations
+  user: User;
+  primaryProfession: Profession;
+  skills: FreelancerSkill[];
 }

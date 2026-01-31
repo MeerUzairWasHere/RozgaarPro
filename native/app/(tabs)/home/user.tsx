@@ -1,13 +1,66 @@
-import { SearchBar, ProfessionsFilter, NearbyWorkers } from "@/components";
-import { router } from "expo-router";
+import {
+  SearchBar,
+  ProfessionsFilter,
+  FreelancerCard,
+  SectionHeader,
+} from "@/components";
+import {
+  NearbyWorkersSkeletonList,
+  SkillFilterSkeleton,
+} from "@/components/Skeletons";
+import { useGetAllVisibleFreelancers } from "@/mutations";
+import { FlatList, View } from "react-native";
 
 const UserHomeScreen = () => {
+  const {
+    data: freelancers,
+    refetch,
+    isFetching,
+    isLoading,
+  } = useGetAllVisibleFreelancers();
+
+  if (isLoading) {
+    return (
+      <View className="p-4">
+        <SearchBar />
+        <SectionHeader title="What do you need?" />
+        <SkillFilterSkeleton />
+        <SectionHeader
+          title="Nearby Freelancers"
+          onActionPress={() => console.log("See all pressed")}
+        />
+        <NearbyWorkersSkeletonList />
+      </View>
+    );
+  }
+  console.log(JSON.stringify(freelancers, null, 2));
+
   return (
     <>
-      <SearchBar />
-      <ProfessionsFilter />
-      <NearbyWorkers />
+      <FlatList
+        data={freelancers?.data ?? []}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <FreelancerCard freelancer={item} />}
+        ListHeaderComponent={
+          <>
+            <SearchBar />
+            <SectionHeader title="What do you need?" />
+            <ProfessionsFilter />
+            <SectionHeader
+              title="Nearby Freelancers"
+              onActionPress={() => console.log("See all pressed")}
+            />
+          </>
+        }
+        refreshing={isFetching}
+        onRefresh={refetch}
+        contentContainerStyle={{
+          padding: 16,
+        }}
+        showsVerticalScrollIndicator={false}
+      />
     </>
   );
 };
+
 export default UserHomeScreen;

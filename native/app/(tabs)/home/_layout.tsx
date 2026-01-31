@@ -1,10 +1,10 @@
 import { Slot } from "expo-router";
-import { ScrollView } from "react-native";
+import { View } from "react-native";
 
 export default function HomeLayout() {
   return (
-    <ScrollView className="dark:bg-black">
+    <View className="flex-1 dark:bg-black">
       <Slot />
-    </ScrollView>
+    </View>
   );
 }
