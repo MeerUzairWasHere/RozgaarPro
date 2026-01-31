@@ -1,5 +1,9 @@
 import { api } from "@/lib/axios";
-import { Profession, ProfessionWithFreelancerCount } from "@/types";
+import {
+  Profession,
+  ProfessionsFilterListInputDto,
+  ProfessionWithFreelancerCount,
+} from "@/types";
 
 export const professionApiClient = {
   getAllProfessions: async (): Promise<Profession[]> => {
@@ -15,11 +19,12 @@ export const professionApiClient = {
     return data;
   },
 
-  getProfessionsFilterList: async (): Promise<
-    ProfessionWithFreelancerCount[]
-  > => {
-    const { data } = await api.get<ProfessionWithFreelancerCount[]>(
+  getProfessionsFilterList: async (
+    body: ProfessionsFilterListInputDto,
+  ): Promise<ProfessionWithFreelancerCount[]> => {
+    const { data } = await api.post<ProfessionWithFreelancerCount[]>(
       "/professions/filter-list",
+      body,
     );
     return data;
   },

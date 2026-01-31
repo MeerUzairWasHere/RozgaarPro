@@ -1,7 +1,11 @@
 import { Profession } from "@prisma/client";
 import { IPrismaService, IProfessionService } from "../interfaces";
 import { NotFoundError } from "../errors";
-import { ProfessionWithFreelancerCount } from "../dto";
+import {
+  ProfessionWithFreelancerCount,
+  ProfessionWithFreelancerCountInputDto,
+} from "../dto";
+import { MAX_RADIUS_KM } from "../utils/constants";
 
 export class ProfessionService implements IProfessionService {
   constructor(private prismaService: IPrismaService) {}
@@ -36,20 +40,50 @@ export class ProfessionService implements IProfessionService {
     return profession;
   }
 
-  async getProfessionsFilterList(): Promise<ProfessionWithFreelancerCount[]> {
-    const professions = await this.prismaService.profession.findMany({
-      take: 6,
-      select: {
-        id: true,
-        name: true,
-        _count: {
-          select: {
-            freelancers: true,
-          },
-        },
-      },
-    });
+  async getNearbyProfessionCounts({
+    latitude,
+    longitude,
+  }: ProfessionWithFreelancerCountInputDto) {
+    latitude = Number(latitude);
+    longitude = Number(longitude);
 
-    return professions;
+    const result = await this.prismaService.$queryRaw<
+      ProfessionWithFreelancerCount[]
+    >`
+    SELECT
+    p.id AS profession_id,
+    p.name AS profession_name,
+    COUNT(DISTINCT f.id)::int AS count
+    FROM "FreelancerLocation" fl
+    JOIN "Freelancer" f ON f.id = fl."freelancerId"
+    JOIN "Profession" p ON p.id = f."primaryProfessionId"
+    WHERE
+    
+  -- 📍 distance filter
+
+  6371 * acos(
+    cos(radians(${latitude}))
+    * cos(radians(fl.latitude))
+    * cos(radians(fl.longitude) - radians(${longitude}))
+    + sin(radians(${latitude}))
+    * sin(radians(fl.latitude))
+  ) <= ${MAX_RADIUS_KM}
+
+  -- 🕒 latest location only
+
+    AND fl."recordedAt" = (
+    SELECT MAX(fl2."recordedAt")
+    FROM "FreelancerLocation" fl2
+    WHERE fl2."freelancerId" = fl."freelancerId"
+  )
+
+  -- ✅ approved freelancers only
+  
+  AND f.status = 'APPROVED'
+  GROUP BY p.id, p.name
+  ORDER BY count DESC
+  LIMIT 6;`;
+
+    return result;
   }
 }

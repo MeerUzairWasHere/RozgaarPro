@@ -6,9 +6,12 @@ export interface Profession {
 }
 
 export interface ProfessionWithFreelancerCount {
-  id: string;
-  name: string;
-  _count: {
-    freelancers: number;
-  };
+  profession_id: string;
+  profession_name: string;
+  count: number;
+}
+
+export interface ProfessionsFilterListInputDto {
+  latitude: number;
+  longitude: number;
 }

@@ -35,7 +35,6 @@ const UserHomeScreen = () => {
       </View>
     );
   }
-  console.log(JSON.stringify(freelancers, null, 2));
 
   return (
     <>

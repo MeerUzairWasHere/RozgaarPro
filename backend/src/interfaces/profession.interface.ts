@@ -1,5 +1,8 @@
 import { Profession } from "@prisma/client";
-import { ProfessionWithFreelancerCount } from "../dto";
+import {
+  ProfessionWithFreelancerCount,
+  ProfessionWithFreelancerCountInputDto,
+} from "../dto";
 
 export interface IProfessionService {
   getAllAvailableProfessions(): Promise<Profession[]>;
@@ -15,5 +18,10 @@ export interface IProfessionService {
     professionId: string;
   }): Promise<Profession>;
 
-  getProfessionsFilterList(): Promise<ProfessionWithFreelancerCount[]>;
+  getNearbyProfessionCounts({
+    latitude,
+    longitude,
+  }: ProfessionWithFreelancerCountInputDto): Promise<
+    ProfessionWithFreelancerCount[]
+  >;
 }

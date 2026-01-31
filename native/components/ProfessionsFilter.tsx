@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useGetProfessionsFilterList } from "@/mutations";
 import { SkillFilterSkeleton } from "./Skeletons";
-
+import { useLocationStore } from "@/store";
 
 type SkillFilterProps = {
   onCategoryPress?: (categoryId: string) => void;
@@ -14,33 +14,40 @@ export default function SkillFilter({
   onCategoryPress,
   selectedCategory,
 }: SkillFilterProps) {
-  const { data, isLoading } = useGetProfessionsFilterList();
+  const {
+    coordinates: { latitude, longitude },
+  } = useLocationStore();
+
+  const { data, isLoading } = useGetProfessionsFilterList({
+    latitude,
+    longitude,
+  });
 
   if (isLoading) {
     return <SkillFilterSkeleton />;
   }
+  console.log(JSON.stringify(data, null, 2));
 
   return (
     <View>
-
       <View className="flex-row flex-wrap -mx-1.5">
-        {data?.map((profession) => (
-          <View key={profession.id} className="w-1/3 px-1.5 mb-3">
+        {data?.map(({ profession_id, profession_name, count }) => (
+          <View key={profession_id} className="w-1/3 px-1.5 mb-3">
             <TouchableOpacity
               className={clsx(
                 "items-center rounded-xl py-4 px-2 border shadow-sm dark:shadow-none",
-                selectedCategory === profession.id
+                selectedCategory === profession_id
                   ? "border-primary-900 dark:border-primary-50 border-2 bg-primary-50 dark:bg-primary-800"
                   : "border-primary-100 dark:border-primary-800 bg-white dark:bg-primary-900",
               )}
-              onPress={() => onCategoryPress?.(profession.id)}
+              onPress={() => onCategoryPress?.(profession_id)}
               activeOpacity={0.7}
             >
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50 text-center mb-1">
-                {profession.name}
+                {profession_name}
               </Text>
               <Text className="text-xs text-primary-600 dark:text-primary-400 text-center">
-                {profession._count.freelancers} nearby
+                {count} nearby
               </Text>
             </TouchableOpacity>
           </View>

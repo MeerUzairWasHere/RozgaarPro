@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { IFreelancerService } from "../interfaces";
-import { currentUser } from "../decorators";
+import { currentUser, getBody } from "../decorators";
 import { ListQueryDto } from "../dto";
 
 export class FreelancerController {
@@ -27,8 +27,9 @@ export class FreelancerController {
     req: Request,
     res: Response,
   ): Promise<void> => {
-    const query: ListQueryDto = req.body ?? {};
-    const result = await this.freelancerService.getAllVisibleFreelancers(query);
+    const result = await this.freelancerService.getAllVisibleFreelancers(
+      getBody(req),
+    );
     res.status(StatusCodes.OK).json(result);
   };
 

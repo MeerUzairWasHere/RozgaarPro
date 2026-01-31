@@ -2,6 +2,8 @@ import { Router } from "express";
 import { authGuard, rolesGuard } from "../guards";
 import { professionController, skillController } from "../container";
 import { Role } from "@prisma/client";
+import { validateProfessionFilterListInput } from "../validators";
+import { validate } from "../decorators";
 
 const router = Router();
 
@@ -15,9 +17,10 @@ router
 
 router
   .route("/filter-list")
-  .get(
+  .post(
     authGuard,
     rolesGuard(Role.USER),
+    validate(validateProfessionFilterListInput),
     professionController.getProfessionsFilterList,
   );
 

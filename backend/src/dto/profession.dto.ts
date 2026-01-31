@@ -1,7 +1,10 @@
+export type ProfessionWithFreelancerCountInputDto = {
+  latitude: number;
+  longitude: number;
+};
+
 export type ProfessionWithFreelancerCount = {
-  id: string;
-  name: string;
-  _count: {
-    freelancers: number;
-  };
+  profession_id: string;
+  profession_name: string;
+  count: number;
 };
