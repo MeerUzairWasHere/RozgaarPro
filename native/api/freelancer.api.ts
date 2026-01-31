@@ -37,7 +37,7 @@ export const freelancerApiClient = {
     query: ListQuery,
   ): Promise<PaginatedResponse<Freelancer>> => {
     const { data } = await api.post<PaginatedResponse<Freelancer>>(
-      "/freelancers/list",
+      "/freelancers",
       query,
     );
     return data;

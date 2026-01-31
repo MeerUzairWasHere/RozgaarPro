@@ -8,7 +8,7 @@ import { validateFreelancerProfileCompletedInput } from "../validators";
 const router = Router();
 
 router
-  .route("/list")
+  .route("/")
   .post(
     authGuard,
     rolesGuard(Role.USER),
