@@ -12,10 +12,19 @@ import { useGetAllVisibleFreelancers } from "@/mutations";
 import { FlatList, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 const UserHomeScreen = () => {
+  const queryClient = useQueryClient();
+
+  const globalRefresh = async () => {
+    await queryClient.invalidateQueries({
+      type: "active", // 👈 key part
+    });
+  };
+
   const {
     data: freelancers,
-    refetch,
     isFetching,
     isLoading,
   } = useGetAllVisibleFreelancers();
@@ -54,7 +63,7 @@ const UserHomeScreen = () => {
           </>
         }
         refreshing={isFetching}
-        onRefresh={refetch}
+        onRefresh={globalRefresh}
         contentContainerStyle={{
           padding: 16,
           paddingBottom: tabBarHeight + 20, // 🔥 IMPORTANT
