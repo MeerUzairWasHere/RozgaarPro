@@ -11,11 +11,16 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We need your location so customers can find you nearby"
-      }
+        "NSLocationWhenInUseUsageDescription": "We use your location to show nearby freelancers.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Your location helps us find workers near you even when the app is in background."
+      },
+      "bundleIdentifier": "com.meeruzairwashere.rozgaarpro"
     },
     "android": {
-      "permissions": ["ACCESS_FINE_LOCATION"],
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_FINE_LOCATION"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "",
@@ -23,11 +28,12 @@
         "monochromeImage": ""
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.meeruzairwashere.rozgaarpro"
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png",
+      "favicon": "",
       "bundler": "metro"
     },
     "plugins": [
@@ -35,7 +41,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",

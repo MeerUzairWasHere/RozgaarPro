@@ -126,9 +126,9 @@ export class FreelancerService implements IFreelancerService {
     JOIN "FreelancerLocation" fl
       ON fl."freelancerId" = f.id
     JOIN "User" u
-  ON u.id = f."userId"
-  JOIN "Profession" p
-  ON f."primaryProfessionId" = p."id"
+      ON u.id = f."userId"
+    JOIN "Profession" p
+      ON f."primaryProfessionId" = p."id"
     WHERE
       f.status = 'APPROVED'
       AND fl."recordedAt" = (
