@@ -10,6 +10,7 @@ import {
 } from "@/components/Skeletons";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { FlatList, View } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const UserHomeScreen = () => {
   const {
@@ -18,6 +19,7 @@ const UserHomeScreen = () => {
     isFetching,
     isLoading,
   } = useGetAllVisibleFreelancers();
+  const tabBarHeight = useBottomTabBarHeight();
 
   if (isLoading) {
     return (
@@ -56,6 +58,7 @@ const UserHomeScreen = () => {
         onRefresh={refetch}
         contentContainerStyle={{
           padding: 16,
+          paddingBottom: tabBarHeight + 20, // 🔥 IMPORTANT
         }}
         showsVerticalScrollIndicator={false}
       />
