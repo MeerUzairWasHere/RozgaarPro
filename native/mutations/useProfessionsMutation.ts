@@ -1,18 +1,7 @@
 import { QUERY_KEYS } from "@/constants";
-import {
-  FreelancerProfileCompletedInput,
-  Profession,
-  ProfessionsFilterListInputDto,
-  ProfessionWithFreelancerCount,
-  Skill,
-} from "@/types";
-import { professionApiClient, skillsApiClient } from "@/api";
-import {
-  useMutation,
-  UseMutationResult,
-  useQuery,
-  UseQueryResult,
-} from "@tanstack/react-query";
+import { Profession, ProfessionsFilterListInputDto } from "@/types";
+import { professionApiClient } from "@/api";
+import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
 export const useGetProfessions = (): UseQueryResult<Profession[]> => {
   return useQuery({
@@ -24,9 +13,14 @@ export const useGetProfessions = (): UseQueryResult<Profession[]> => {
 export const useGetProfessionsFilterList = (
   body: ProfessionsFilterListInputDto,
 ) => {
+  const hasValidLocation = body?.latitude !== 0 && body?.longitude !== 0;
+
   return useQuery({
-    queryKey: [QUERY_KEYS.PROFESSIONS.details],
+    queryKey: QUERY_KEYS.PROFESSIONS.listByLocation(
+      body.latitude,
+      body.longitude,
+    ),
     queryFn: () => professionApiClient.getProfessionsFilterList(body),
-    enabled: !!body, // prevent running without params
+    enabled: !!hasValidLocation, // prevent running without params
   });
 };

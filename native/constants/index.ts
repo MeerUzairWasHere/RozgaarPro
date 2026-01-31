@@ -46,8 +46,9 @@ export const QUERY_KEYS = {
       [...QUERY_KEYS.PROFESSIONS.lists(), filters] as const,
     details: () => [...QUERY_KEYS.PROFESSIONS.all, "detail"] as const,
     detail: (id: string) => [...QUERY_KEYS.PROFESSIONS.details(), id] as const,
+    listByLocation: (lat: number, lng: number) =>
+      [...QUERY_KEYS.PROFESSIONS.lists(), lat, lng] as const,
   },
-
   FREELANCERS: {
     all: ["freelancers"] as const,
     lists: () => [...QUERY_KEYS.FREELANCERS.all, "list"] as const,
@@ -55,5 +56,7 @@ export const QUERY_KEYS = {
       [...QUERY_KEYS.FREELANCERS.lists(), filters] as const,
     details: () => [...QUERY_KEYS.FREELANCERS.all, "detail"] as const,
     detail: (id: string) => [...QUERY_KEYS.FREELANCERS.details(), id] as const,
+    listByLocation: (lat: number, lng: number) =>
+      [...QUERY_KEYS.FREELANCERS.lists(), lat, lng] as const,
   },
 } as const;

@@ -2,15 +2,15 @@ import React from "react";
 import clsx from "clsx";
 import { View, Text, TouchableOpacity } from "react-native";
 import { useGetProfessionsFilterList } from "@/mutations";
-import { SkillFilterSkeleton } from "./Skeletons";
 import { useLocationStore } from "@/store";
+import { ProfessionsFilterFilterSkeleton } from "./Skeletons";
 
 type SkillFilterProps = {
   onCategoryPress?: (categoryId: string) => void;
   selectedCategory?: string;
 };
 
-export default function SkillFilter({
+export default function ProfessionsFilter({
   onCategoryPress,
   selectedCategory,
 }: SkillFilterProps) {
@@ -24,7 +24,7 @@ export default function SkillFilter({
   });
 
   if (isLoading) {
-    return <SkillFilterSkeleton />;
+    return <ProfessionsFilterFilterSkeleton />;
   }
 
   return (

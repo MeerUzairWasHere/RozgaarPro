@@ -34,12 +34,16 @@ export const useGetFreelancerStatus = (
     enabled: !!freelancerId,
   });
 };
+
 export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
   const hasValidLocation =
     query.location?.latitude !== 0 && query.location?.longitude !== 0;
 
   return useQuery({
-    queryKey: [QUERY_KEYS.FREELANCERS.all, query],
+    queryKey: QUERY_KEYS.FREELANCERS.listByLocation(
+      query.location?.latitude ?? 0,
+      query.location?.longitude ?? 0,
+    ),
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
     enabled: hasValidLocation, // 🔥 KEY LINE
   });

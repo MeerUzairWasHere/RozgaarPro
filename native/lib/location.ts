@@ -67,3 +67,14 @@ export async function getAddressFromLatLng(
     return "Unable to get location";
   }
 }
+
+export const formatDistance = (distanceKm: number) => {
+  if (!distanceKm || distanceKm <= 0) return "Nearby";
+
+  if (distanceKm < 1) {
+    const meters = Math.round(distanceKm * 1000);
+    return `${meters} m`;
+  }
+
+  return `${distanceKm.toFixed(1)} km`;
+};

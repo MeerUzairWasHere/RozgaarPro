@@ -37,7 +37,6 @@ export const freelancerApiClient = {
   getAllVisibleFreelancers: async (
     query: ListQuery,
   ): Promise<PaginatedResponse<NearbyFreelancer>> => {
-    console.log(JSON.stringify(query, null, 2));
     const { data } = await api.post<PaginatedResponse<NearbyFreelancer>>(
       "/freelancers",
       query,

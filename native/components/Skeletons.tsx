@@ -1,6 +1,6 @@
 import { useColorScheme, View } from "react-native";
 
-export const SkillFilterSkeleton = () => {
+export const ProfessionsFilterFilterSkeleton = () => {
   return (
     <View>
       {/* Title skeleton */}

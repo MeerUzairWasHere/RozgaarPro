@@ -6,12 +6,11 @@ import {
 } from "@/components";
 import {
   NearbyWorkersSkeletonList,
-  SkillFilterSkeleton,
+  ProfessionsFilterFilterSkeleton,
 } from "@/components/Skeletons";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { FlatList, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocationStore } from "@/store";
 
@@ -20,17 +19,13 @@ const UserHomeScreen = () => {
 
   const globalRefresh = async () => {
     await queryClient.invalidateQueries({
-      type: "active", // 👈 key part
+      type: "active",
     });
   };
 
   const { coordinates } = useLocationStore();
 
-  const {
-    data: freelancers,
-    isFetching,
-    isLoading,
-  } = useGetAllVisibleFreelancers({
+  const { data: freelancers, isFetching } = useGetAllVisibleFreelancers({
     location: {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
@@ -39,12 +34,12 @@ const UserHomeScreen = () => {
 
   const tabBarHeight = useBottomTabBarHeight();
 
-  if (isLoading) {
+  if (!freelancers) {
     return (
       <View className="p-4">
         <SearchBar />
         <SectionHeader title="What do you need?" />
-        <SkillFilterSkeleton />
+        <ProfessionsFilterFilterSkeleton />
         <SectionHeader
           title="Nearby Freelancers"
           onActionPress={() => console.log("See all pressed")}
@@ -57,8 +52,8 @@ const UserHomeScreen = () => {
   return (
     <>
       <FlatList
-        data={freelancers?.data ?? []}
-        keyExtractor={(item) => item.freelancer_Id}
+        data={freelancers?.data}
+        keyExtractor={(item) => item.freelancer_id}
         renderItem={({ item }) => <FreelancerCard freelancer={item} />}
         ListHeaderComponent={
           <>
@@ -75,7 +70,7 @@ const UserHomeScreen = () => {
         onRefresh={globalRefresh}
         contentContainerStyle={{
           padding: 16,
-          paddingBottom: tabBarHeight + 20, // 🔥 IMPORTANT
+          paddingBottom: tabBarHeight + 20,
         }}
         showsVerticalScrollIndicator={false}
       />

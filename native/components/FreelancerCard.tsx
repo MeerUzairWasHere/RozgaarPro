@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import InitialAvatar from "./InitialAvatar";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import ExperienceText from "./ExperienceText";
+import { formatDistance } from "@/lib/location";
 
 export default function FreelancerCard({
   freelancer,
@@ -12,7 +13,7 @@ export default function FreelancerCard({
   const colourScheme = useColorScheme();
   return (
     <TouchableOpacity
-      key={freelancer.freelancer_Id}
+      key={freelancer.freelancer_id}
       className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm activer:opacity-90 mb-4"
       //   onPress={() => onWorkerPress?.(freelancer.id)}
       activeOpacity={0.7}
@@ -86,7 +87,7 @@ export default function FreelancerCard({
                 className="text-primary-600 dark:text-primary-400"
               />
               <Text className="text-xs text-primary-600 dark:text-primary-400">
-                {freelancer.distance_km.toLocaleString()} km
+                {formatDistance(freelancer.distance_km)}
               </Text>
             </View>
           </View>

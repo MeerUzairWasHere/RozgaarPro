@@ -43,8 +43,8 @@ export interface Freelancer {
 }
 
 export type NearbyFreelancer = {
-  freelancer_Id: string;
-  user_Id: string;
+  freelancer_id: string;
+  user_id: string;
   primary_profession_name: string;
   name: string;
   experience: number;
