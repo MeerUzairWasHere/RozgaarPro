@@ -1,3 +1,5 @@
+import { Href } from "expo-router";
+
 export const ROUTES = {
   ONBOARDING: "/(onboarding)/onboarding",
   FREELANCER_ONBOARDING: "/complete-profile",
@@ -16,6 +18,9 @@ export const ROUTES = {
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
 } as const;
+
+export const getFreelancerDetailsRoute = (id: string): Href =>
+  `${ROUTES.FREELANCER_HOME}/${id}`;
 
 export const QUERY_KEYS = {
   CURENT_USER: {

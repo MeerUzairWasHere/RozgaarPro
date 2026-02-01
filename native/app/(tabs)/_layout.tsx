@@ -35,6 +35,9 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         // Enable header for all tabs
+        sceneStyle: {
+          backgroundColor: theme.background,
+        },
         headerShown: true,
         // Default header component
         header: () => <Header showLocation={true} showNotification={true} />,

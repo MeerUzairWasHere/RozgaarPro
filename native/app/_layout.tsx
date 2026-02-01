@@ -36,6 +36,9 @@ export default function RootLayout() {
             headerStyle: {
               backgroundColor: colorScheme === "dark" ? "#121212" : "#F2F2F2",
             },
+            contentStyle: {
+              backgroundColor: colorScheme === "dark" ? "#121212" : "#F2F2F2",
+            },
           }}
         >
           {isAuthenticated ? (

@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import InitialAvatar from "./InitialAvatar";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import { formatDistance } from "@/lib/location";
+import { router } from "expo-router";
+import { getFreelancerDetailsRoute } from "@/constants";
 
 export default function FreelancerCard({
   freelancer,
@@ -14,7 +16,9 @@ export default function FreelancerCard({
     <TouchableOpacity
       key={freelancer.freelancer_id}
       className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm activer:opacity-90 mb-4"
-      //   onPress={() => onWorkerPress?.(freelancer.id)}
+      onPress={() =>
+        router.push(getFreelancerDetailsRoute(freelancer.freelancer_id))
+      }
       activeOpacity={0.7}
     >
       <View className="flex-row items-start gap-3">

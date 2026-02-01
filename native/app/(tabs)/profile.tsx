@@ -13,7 +13,6 @@ export default function ProfileScreen() {
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
       bounces={true}
-      className="dark:bg-black"
     >
       <ProfileCard />
       <FreelancerProfileStats />

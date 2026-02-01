@@ -21,6 +21,7 @@ import { getErrorMessage } from "@/utils/error.message";
 import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
 import { QUERY_KEYS, ROUTES } from "@/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const useRegister = (): UseMutationResult<
   string,
@@ -70,7 +71,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       setAuthenticated(false);
       resetLocation();
       clearAuth();
-
+      AsyncStorage.clear(); //TODO: Remove later.
       router.replace(ROUTES.SELECT_ROLE);
     },
   });
