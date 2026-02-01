@@ -8,6 +8,12 @@ export const httpExceptionFilter = (
   res: Response,
   _next: NextFunction,
 ) => {
+  // Log detailed errors in development mode
+  if (process.env.NODE_ENV === "development") {
+    console.error("Error Stack:", err.stack);
+    console.error("Error Details:", err);
+  }
+
   // ✅ Capture ALL unhandled server errors
   Sentry.captureException(err, {
     tags: { layer: "http" },
@@ -16,10 +22,6 @@ export const httpExceptionFilter = (
       method: req.method,
     },
   });
-
-  if (process.env.NODE_ENV === "development") {
-    console.error(err);
-  }
 
   const statusCode =
     err.statusCode && err.statusCode < 500

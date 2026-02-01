@@ -2,7 +2,6 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { IFreelancerService } from "../interfaces";
 import { currentUser, getBody } from "../decorators";
-import { ListQueryDto } from "../dto";
 
 export class FreelancerController {
   constructor(private freelancerService: IFreelancerService) {}

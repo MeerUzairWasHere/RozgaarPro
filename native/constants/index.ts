@@ -1,5 +1,3 @@
-import { EXPERIENCE_LEVEL } from "@/types";
-
 export const ROUTES = {
   ONBOARDING: "/(onboarding)/onboarding",
   FREELANCER_ONBOARDING: "/complete-profile",
@@ -18,14 +16,6 @@ export const ROUTES = {
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
 } as const;
-
-export const experienceLevels = [
-  { title: "Less than 1 year", value: EXPERIENCE_LEVEL.LESS_THAN_ONE_YEAR },
-  { title: "1-3 years", value: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS },
-  { title: "3-5 years", value: EXPERIENCE_LEVEL.THREE_TO_FIVE_YEARS },
-  { title: "5-10 years", value: EXPERIENCE_LEVEL.FIVE_TO_TEN_YEARS },
-  { title: "More than 10 years", value: EXPERIENCE_LEVEL.MORE_THAN_TEN_YEARS },
-];
 
 export const QUERY_KEYS = {
   CURENT_USER: {

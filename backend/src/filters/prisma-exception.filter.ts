@@ -35,6 +35,11 @@ export const prismaExceptionFilter = (
       tags: { layer: "prisma", code: err.code },
     });
 
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error Stack:", err.stack);
+      console.error("Error Details:", err);
+    }
+
     return res.status(statusCode).json({ msg: message });
   }
 

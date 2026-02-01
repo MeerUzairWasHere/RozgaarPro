@@ -1,8 +1,5 @@
 import { z } from "zod";
-import {
-  requiredFieldNumberSchema,
-  requiredFieldStringSchema,
-} from "./zod.schema";
+import { requiredFieldNumberSchema } from "./zod.schema";
 
 export const validateFreelancerProfileCompletedInput = z.object({
   professionId: z.uuid({ message: "Invalid professionId" }),
@@ -12,7 +9,7 @@ export const validateFreelancerProfileCompletedInput = z.object({
       message: "skillIds must be at least 1 long",
     })
     .max(3, { message: "skillIds must be at most 3 long" }),
-  experience: requiredFieldNumberSchema("experience", 0, 5),
+  experience: requiredFieldNumberSchema("experience", 0, 99),
   location: z.object(
     {
       latitude: requiredFieldNumberSchema("latitude", -90, 90),

@@ -7,7 +7,12 @@ interface CustomInputProps {
   onChangeText?: (text: string) => void;
   label?: string;
   secureTextEntry?: boolean;
-  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  keyboardType?:
+    | "default"
+    | "email-address"
+    | "numeric"
+    | "phone-pad"
+    | "decimal-pad";
   className?: string;
   icon?: React.ReactNode;
   returnKeyType?: "done" | "next" | "go" | "search" | "send";
@@ -38,7 +43,6 @@ const CustomInput = ({
       {icon}
       {label && <Text className="label">{label}</Text>}
       <TextInput
-      
         autoCapitalize={autoCapitalize}
         value={value}
         onChangeText={onChangeText}

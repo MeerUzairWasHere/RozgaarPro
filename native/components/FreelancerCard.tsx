@@ -2,7 +2,6 @@ import { FREELANCER_STATUS, NearbyFreelancer } from "@/types";
 import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import InitialAvatar from "./InitialAvatar";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
-import ExperienceText from "./ExperienceText";
 import { formatDistance } from "@/lib/location";
 
 export default function FreelancerCard({
@@ -62,8 +61,9 @@ export default function FreelancerCard({
                 {freelancer.primary_profession_name}
               </Text>
             </View>
-
-            <ExperienceText experience={freelancer.experience} />
+            <Text className="text-xs text-primary-600 dark:text-primary-400">
+              {freelancer.experience} year{freelancer.experience > 1 ? "s" : ""}
+            </Text>
           </View>
 
           {/* Rating & Distance */}

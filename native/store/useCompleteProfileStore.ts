@@ -1,12 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { EXPERIENCE_LEVEL } from "@/types";
 
 type ProfileFormData = {
   professionId: string | null;
   skills: string[];
-  experience: EXPERIENCE_LEVEL;
+  experience: number | null;
 };
 
 type CompleteProfileState = {
@@ -21,7 +20,7 @@ type CompleteProfileState = {
   setLoading: (loading: boolean) => void;
 
   toggleSkill: (skillId: string) => void;
-  setExperience: (experience: EXPERIENCE_LEVEL) => void;
+  setExperience: (experience: number | null) => void;
 
   resetProfile: () => void;
 
@@ -37,7 +36,7 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
       formData: {
         professionId: null,
         skills: [],
-        experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
+        experience: null,
       },
 
       setStep: (step) => set({ step }),
@@ -82,7 +81,7 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
           formData: {
             professionId: null,
             skills: [],
-            experience: EXPERIENCE_LEVEL.ONE_TO_THREE_YEARS,
+            experience: null,
           },
         }),
 

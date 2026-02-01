@@ -1,9 +1,15 @@
 import { router } from "expo-router";
-import { CustomTouchableOpacityButton } from "@/components";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { CustomInput, CustomTouchableOpacityButton } from "@/components";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
-import { experienceLevels, ROUTES } from "@/constants";
+import { ROUTES } from "@/constants";
 import {
   useAuthStore,
   useCompleteProfileStore,
@@ -15,6 +21,8 @@ import {
   useGetSkillsByProfession,
 } from "@/mutations";
 import { cn } from "@/utils/utils";
+import { getExperienceLabel } from "@/utils/experience";
+import { useEffect, useState } from "react";
 
 export default function CompleteProfile() {
   const mutationCompleteProfile = useCompleteFreelancerProfile();
@@ -32,6 +40,16 @@ export default function CompleteProfile() {
     clearSkills,
     toggleSkill,
   } = useCompleteProfileStore();
+
+  const [experienceText, setExperienceText] = useState("");
+
+  useEffect(() => {
+    if (step === 3) {
+      setExperienceText(
+        formData.experience !== null ? String(formData.experience) : "",
+      );
+    }
+  }, [step]);
 
   const { coordinates, permissionGranted } = useLocationStore();
   const { data: skills, isLoading: isLoadingSkills } = useGetSkillsByProfession(
@@ -69,6 +87,10 @@ export default function CompleteProfile() {
   const isNextDisabled =
     (step === 1 && !formData.professionId) ||
     (step === 2 && formData.skills.length === 0) ||
+    (step === 3 &&
+      (formData.experience === null ||
+        Number.isNaN(formData.experience) ||
+        formData.experience <= 0)) ||
     (step === 4 && !permissionGranted);
 
   return (
@@ -245,44 +267,49 @@ export default function CompleteProfile() {
                 Your experience
               </Text>
               <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                Tell us about your work experience
+                Enter total experience in years (decimals allowed, e.g. 1.5)
               </Text>
 
-              <View className="gap-3">
-                {experienceLevels.map((exp) => {
-                  const isSelected = formData.experience === exp.value;
-                  return (
-                    <TouchableOpacity
-                      key={exp.title}
-                      onPress={() => setExperience(exp.value)}
-                      className={cn(
-                        `p-4 rounded-2xl border-2 flex-row items-center justify-between`,
-                        isSelected
-                          ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
-                          : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900",
-                      )}
-                      activeOpacity={0.7}
-                    >
-                      <View className="flex-row items-center gap-3">
-                        <Clock
-                          size={20}
-                          color={isSelected ? "#1A1A1A" : "#666666"}
-                        />
-                        <Text className="font-medium text-primary-900 dark:text-primary-50">
-                          {exp.title}
-                        </Text>
-                      </View>
-                      {isSelected && (
-                        <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                          <Text className="text-white dark:text-primary-900 text-xs font-bold ">
-                            ✓
-                          </Text>
-                        </View>
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
+              <CustomInput
+                icon={<Clock size={15} color="#666" />}
+                placeholder="e.g. 1.5"
+                value={experienceText}
+                keyboardType="decimal-pad"
+                returnKeyType="done"
+                submitBehavior="blurAndSubmit"
+                onChangeText={(text) => {
+                  // allow digits + dot
+                  const sanitized = text.replace(/[^0-9.]/g, "");
+
+                  // block multiple dots
+                  if ((sanitized.match(/\./g)?.length ?? 0) > 1) return;
+
+                  // update text ALWAYS
+                  setExperienceText(sanitized);
+
+                  // allow intermediate typing
+                  if (
+                    sanitized === "" ||
+                    sanitized === "." ||
+                    sanitized.endsWith(".")
+                  ) {
+                    setExperience(null);
+                    return;
+                  }
+
+                  const numericValue = Number(sanitized);
+
+                  if (!Number.isNaN(numericValue)) {
+                    setExperience(numericValue);
+                  }
+                }}
+              />
+
+              {formData.experience !== null && formData.experience > 0 && (
+                <Text className="mt-2 text-sm text-primary-500">
+                  Experience: {getExperienceLabel(formData.experience)}
+                </Text>
+              )}
             </Animated.View>
           )}
 

@@ -14,6 +14,13 @@ export const zodExceptionFilter = (
       message: issue.message,
     }));
 
+    if (process.env.NODE_ENV === "development") {
+      console.error({
+        msg: "Validation failed",
+        errors,
+      });
+    }
+
     return res.status(StatusCodes.BAD_REQUEST).json({
       msg: "Validation failed",
       errors,

@@ -72,7 +72,7 @@ model Token {
 model Freelancer {
   id                  String           @id @default(uuid())
   userId              String           @unique
-  experience          Int
+  experience          Decimal          @db.Decimal(4, 1)
   phone               String
   status              FreelancerStatus @default(PENDING)
   rating              Float            @default(0)
