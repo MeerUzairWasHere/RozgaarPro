@@ -21,7 +21,7 @@ export const ProfessionsFilterFilterSkeleton = () => {
   );
 };
 
-const NearbyWorkerSkeleton = () => {
+export const NearbyWorkerSkeleton = () => {
   const scheme = useColorScheme();
   const base = scheme === "dark" ? "bg-primary-800" : "bg-primary-100";
 

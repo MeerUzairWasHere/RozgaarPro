@@ -14,3 +14,4 @@ export { default as ProfessionsFilter } from "./ProfessionsFilter";
 export { default as InitialAvatar } from "./InitialAvatar";
 export { default as FreelancerCard } from "./FreelancerCard";
 export { default as SectionHeader } from "./SectionHeader";
+export { default as NearbyFreelancers } from "./NearbyFreelancers";

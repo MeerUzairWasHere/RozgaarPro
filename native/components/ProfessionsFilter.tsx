@@ -23,7 +23,7 @@ export default function ProfessionsFilter({
     longitude,
   });
 
-  if (isLoading) {
+  if (!data) {
     return <ProfessionsFilterFilterSkeleton />;
   }
 

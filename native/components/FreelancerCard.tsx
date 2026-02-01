@@ -52,7 +52,7 @@ export default function FreelancerCard({
         {/* Worker Info */}
         <View className="flex-1 min-w-0">
           {/* Name */}
-          <View className="flex-row items-center gap-2 mb-1">
+          <View className="flex-row items-center gap-2 mb-2">
             <Text className="font-semibold text-primary-900 dark:text-primary-50 truncate">
               {freelancer.name}
             </Text>
@@ -60,8 +60,8 @@ export default function FreelancerCard({
 
           {/* Profession & Experience */}
           <View className="flex-row items-center gap-2 mb-2">
-            <View className="bg-primary-50 dark:bg-primary-800 px-2 py-0.5 rounded-md">
-              <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
+            <View className="bg-primary-50 dark:bg-primary-800 px-2 py-0.2 rounded-md">
+              <Text className="text-sm  text-primary-900 dark:text-primary-50">
                 {freelancer.primary_profession_name}
               </Text>
             </View>
@@ -74,12 +74,12 @@ export default function FreelancerCard({
           <View className="flex-row items-center gap-6">
             {/* Rating */}
             <View className="flex-row items-center gap-1">
-              <Star size={14} fill="#F59E0B" color="#F59E0B" />
+              <Star size={14} fill="#666666" color="#666666" />
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
-                {freelancer.rating}
+                {(Math.random() * 5).toFixed(1)} {/* TODO: Add these */}
               </Text>
               <Text className="text-xs text-primary-600 dark:text-primary-400">
-                (243)
+                ({Math.round(Math.random() * 100)}) {/* TODO: Add these */}
               </Text>
             </View>
 
