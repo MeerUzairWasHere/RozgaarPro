@@ -13,13 +13,14 @@ import { FlatList, View } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocationStore } from "@/store";
+import { QUERY_KEYS } from "@/constants";
 
 const UserHomeScreen = () => {
   const queryClient = useQueryClient();
 
   const globalRefresh = async () => {
     await queryClient.invalidateQueries({
-      type: "active",
+      queryKey: QUERY_KEYS.FREELANCERS.all,
     });
   };
 
