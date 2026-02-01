@@ -11,14 +11,8 @@ import {
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS, MAX_RADIUS_KM } from "../utils/constants";
-import { emptyPaginatedResponse, PaginatedResponse } from "../types";
-import {
-  buildOrderBy,
-  buildPagination,
-  buildSearch,
-  buildSelect,
-  buildWhere,
-} from "../utils/prisma-list.builder";
+import { PaginatedResponse } from "../types";
+import { buildPagination } from "../utils/prisma-list.builder";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -136,15 +130,6 @@ export class FreelancerService implements IFreelancerService {
         FROM "FreelancerLocation" fl2
         WHERE fl2."freelancerId" = f.id
       )
-      AND (
-        6371 * acos(
-          cos(radians(${latitude}))
-          * cos(radians(fl.latitude))
-          * cos(radians(fl.longitude) - radians(${longitude}))
-          + sin(radians(${latitude}))
-          * sin(radians(fl.latitude))
-        )
-      ) <= ${MAX_RADIUS_KM}
     ORDER BY distance_km ASC
     LIMIT ${take}
     OFFSET ${skip};
