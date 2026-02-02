@@ -17,7 +17,7 @@ import {
 } from "@/types";
 import { authApiClient } from "@/api";
 import { Toast } from "toastify-react-native";
-import { getErrorMessage } from "@/utils/error.message";
+import { getErrorMessage } from "@/utils";
 import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
 import { QUERY_KEYS, ROUTES } from "@/constants";

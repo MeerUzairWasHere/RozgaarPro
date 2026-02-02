@@ -6,6 +6,7 @@ import { validate } from "../decorators";
 import {
   validateFreelancerProfileCompletedInput,
   validateGetAllVisibleFreelancersInput,
+  validateGetSingleVisibleFreelancerDetailInput,
 } from "../validators";
 
 const router = Router();
@@ -21,10 +22,11 @@ router
 
 router
   .route("/:freelancerId")
-  .get(
+  .post(
     authGuard,
     rolesGuard(Role.USER),
-    freelancerController.getFreelancerDetails,
+    validate(validateGetSingleVisibleFreelancerDetailInput),
+    freelancerController.getSingleVisibleFreelancerDetail,
   );
 
 router

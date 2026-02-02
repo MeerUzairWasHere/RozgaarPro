@@ -7,7 +7,7 @@ import { useOnboardingStore } from "@/store/useOnboardingStore";
 import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomTouchableOpacityButton } from "@/components";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils";
 
 const slides = [
   {

@@ -1,8 +1,10 @@
 import { Freelancer, FreelancerStatus, Role } from "@prisma/client";
 import {
   FreelancerProfileCompletedInput,
+  FreelancerWithAwayDistanceInput,
   ListQueryDto,
   NearbyFreelancer,
+  NearbyFreelancerDetail,
 } from "../dto";
 import {
   IFreelancerService,
@@ -10,7 +12,7 @@ import {
   IUserService,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
-import { MAX_NUMBER_OF_SKILLS, MAX_RADIUS_KM } from "../utils/constants";
+import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
 import { PaginatedResponse } from "../types";
 import { buildPagination } from "../utils/prisma-list.builder";
 
@@ -176,5 +178,36 @@ export class FreelancerService implements IFreelancerService {
   `;
 
     return rows.map((r) => r.id);
+  }
+
+  async getSingleVisibleFreelancerDetail({
+    latitude,
+    longitude,
+    freelancerId,
+  }: FreelancerWithAwayDistanceInput): Promise<NearbyFreelancerDetail> {
+    await this.findFreelancerByIdOrThrowError({ id: freelancerId });
+
+    const freelancer = await this.prismaService.$queryRaw<NearbyFreelancerDetail[]>`
+    
+    SELECT f.id::TEXT AS freelancer_id,
+            u.id::TEXT AS user_id,
+            u.name AS name,
+            f.experience AS experience,
+            f.status AS status,
+            f.rating AS rating,
+            p.name AS primary_profession_name,
+            get_freelancer_distance_km(${latitude}, ${longitude}, ${freelancerId}) AS distance_km
+    FROM "Freelancer" f
+    JOIN "FreelancerLocation" fl ON fl."freelancerId" = f.id
+    JOIN "User" u ON u.id = f."userId"
+    JOIN "Profession" p ON f."primaryProfessionId" = p."id"
+    WHERE f.id = ${freelancerId}
+      AND fl."recordedAt" = (
+        SELECT MAX(fl2."recordedAt")
+        FROM "FreelancerLocation" fl2
+        WHERE fl2."freelancerId" = f.id
+        );`;
+
+    return freelancer[0];
   }
 }

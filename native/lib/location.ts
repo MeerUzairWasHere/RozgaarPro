@@ -78,3 +78,14 @@ export const formatDistance = (distanceKm: number) => {
 
   return `${distanceKm.toFixed(1)} km`;
 };
+
+export const hasValidCoordinates = (coords?: {
+  latitude?: number;
+  longitude?: number;
+}): boolean => {
+  return (
+    coords != null &&
+    Number.isFinite(coords.latitude) &&
+    Number.isFinite(coords.longitude)
+  );
+};

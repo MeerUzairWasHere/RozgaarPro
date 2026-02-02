@@ -20,8 +20,8 @@ import {
   useGetProfessions,
   useGetSkillsByProfession,
 } from "@/mutations";
-import { cn } from "@/utils/utils";
-import { getExperienceLabel } from "@/utils/experience";
+import { cn, getExperienceLabel } from "@/utils";
+
 import { useEffect, useState } from "react";
 
 export default function CompleteProfile() {

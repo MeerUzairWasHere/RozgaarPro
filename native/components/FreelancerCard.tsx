@@ -2,7 +2,7 @@ import { FREELANCER_STATUS, NearbyFreelancer } from "@/types";
 import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import InitialAvatar from "./InitialAvatar";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
-import { formatDistance } from "@/lib/location";
+import { formatDistance } from "@/lib";
 import { router } from "expo-router";
 import { getFreelancerDetailsRoute } from "@/constants";
 

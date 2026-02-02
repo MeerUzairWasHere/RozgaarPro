@@ -15,13 +15,15 @@ import { useAuthStore } from "@/store";
 import { SIGN_UP_STEP, USER_ROLE } from "@/types";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ROUTES } from "@/constants";
-import { useRegister } from "@/mutations/useAuthMutation";
-import CustomInput from "@/components/CustomInput";
-import BackButton from "@/components/BackButton";
-import CustomTouchableOpacityButton from "@/components/CustomTouchableOpacityButton";
-import CustomPressableButton from "@/components/CustomPressableButton";
+import { useRegister } from "@/mutations";
+import {
+  CustomInput,
+  BackButton,
+  CustomPressableButton,
+  CustomTouchableOpacityButton,
+} from "@/components";
 import { useRef } from "react";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils";
 
 export default function SignupScreen() {
   const { name, phone, password, userRole, setField, signupStep, setUserRole } =

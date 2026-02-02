@@ -4,7 +4,7 @@ import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "react-native";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { handleReactQueryError } from "@/lib/reactQueryError";
+import { handleReactQueryError } from "@/lib";
 import { useAuthStore } from "@/store";
 
 export default function RootLayout() {

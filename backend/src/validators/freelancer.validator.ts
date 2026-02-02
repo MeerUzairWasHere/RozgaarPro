@@ -29,3 +29,13 @@ export const validateGetAllVisibleFreelancersInput = z.object({
     "location must be a valid object of latitude, longitude.",
   ),
 });
+
+export const validateGetSingleVisibleFreelancerDetailInput = z.object({
+  location: z.object(
+    {
+      latitude: requiredFieldNumberSchema("latitude", -90, 90),
+      longitude: requiredFieldNumberSchema("longitude", -180, 180),
+    },
+    "location must be a valid object of latitude, longitude.",
+  ),
+});

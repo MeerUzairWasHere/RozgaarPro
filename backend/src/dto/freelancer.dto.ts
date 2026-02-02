@@ -3,6 +3,8 @@ import {
   FreelancerLocation,
   FreelancerStatus,
 } from "@prisma/client";
+import { validateGetSingleVisibleFreelancerDetailInput } from "../validators";
+import { z } from "zod";
 
 export type FreelancerProfileCompletedInput = {
   professionId: string;
@@ -15,7 +17,13 @@ export type FreelancerProfileCompletedInput = {
   };
 };
 
-export type NearbyFreelancer = {
+export type FreelancerWithAwayDistanceInput = {
+  freelancerId: string;
+  latitude: FreelancerLocation["latitude"];
+  longitude: FreelancerLocation["longitude"];
+};
+
+export interface NearbyFreelancer {
   freelancer_id: string;
   user_id: string;
   primary_profession_name: string;
@@ -23,5 +31,7 @@ export type NearbyFreelancer = {
   experience: number;
   status: FreelancerStatus;
   rating: number;
-  distance_km: number; // raw DB value
-};
+  distance_km: number;
+}
+
+export interface NearbyFreelancerDetail extends NearbyFreelancer {}

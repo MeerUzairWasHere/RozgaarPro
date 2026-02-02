@@ -1,4 +1,4 @@
-import { getAddressFromLatLng } from "@/lib/location";
+import { getAddressFromLatLng } from "@/lib";
 import * as Location from "expo-location";
 import { create } from "zustand";
 

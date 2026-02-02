@@ -1,12 +1,10 @@
-import { freelancerApiClient } from "@/api/freelancer.api";
+import { freelancerApiClient } from "@/api";
 import { QUERY_KEYS } from "@/constants";
+import { hasValidCoordinates } from "@/lib";
 import {
-  NearbyFreelancer,
   FREELANCER_STATUS,
   FreelancerProfileCompletedInput,
   ListQuery,
-  PaginatedResponse,
-  Freelancer,
 } from "@/types";
 import {
   useMutation,
@@ -36,8 +34,7 @@ export const useGetFreelancerStatus = (
 };
 
 export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
-  const hasValidLocation =
-    query.location?.latitude !== 0 && query.location?.longitude !== 0;
+  const enabled = hasValidCoordinates(query.location);
 
   return useQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listByLocation(
@@ -45,16 +42,27 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
       query.location?.longitude ?? 0,
     ),
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
-    enabled: hasValidLocation, // 🔥 KEY LINE
+    enabled,
   });
 };
 
-export const useGetFreelancerDetails = (
-  freelancerId: string,
-): UseQueryResult<Freelancer> => {
+export const useGetSingleVisibleFreelancerDetail = ({
+  freelancerId,
+  query,
+}: {
+  freelancerId: string;
+  query: ListQuery;
+}) => {
+  const enabled = hasValidCoordinates(query.location) && Boolean(freelancerId);
+
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.detail(freelancerId),
-    queryFn: () => freelancerApiClient.getFreelancerDetails(freelancerId),
-    enabled: !!freelancerId,
+    queryKey: QUERY_KEYS.FREELANCERS.DetailByLocation(
+      freelancerId!,
+      query.location?.latitude ?? 0,
+      query.location?.longitude ?? 0,
+    ),
+    queryFn: () =>
+      freelancerApiClient.getSingleVisibleFreelancerDetail(freelancerId, query),
+    enabled,
   });
 };

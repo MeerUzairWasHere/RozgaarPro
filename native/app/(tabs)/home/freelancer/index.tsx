@@ -1,5 +1,5 @@
 import { ProfileApprovedCard } from "@/components";
-import { useGetCurrentUser } from "@/mutations/useAuthMutation";
+import { useGetCurrentUser } from "@/mutations";
 import { useAuthStore } from "@/store";
 import { useEffect } from "react";
 

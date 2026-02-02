@@ -1,4 +1,4 @@
-import { api } from "@/lib/axios";
+import { api } from "@/lib";
 import { Skill } from "@/types";
 
 export const skillsApiClient = {

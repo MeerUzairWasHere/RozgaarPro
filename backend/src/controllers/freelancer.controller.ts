@@ -43,14 +43,18 @@ export class FreelancerController {
     res.status(StatusCodes.OK).json(status);
   };
 
-  public getFreelancerDetails = async (
+  public getSingleVisibleFreelancerDetail = async (
     req: Request<{ freelancerId: string }>,
     res: Response,
   ): Promise<void> => {
     const { freelancerId } = req.params;
+    const { latitude, longitude } = req.body.location;
+
     const freelancer =
-      await this.freelancerService.findFreelancerByIdOrThrowError({
-        id: freelancerId,
+      await this.freelancerService.getSingleVisibleFreelancerDetail({
+        latitude,
+        longitude,
+        freelancerId,
       });
 
     res.status(StatusCodes.OK).json(freelancer);

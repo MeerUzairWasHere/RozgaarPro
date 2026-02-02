@@ -9,9 +9,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { useAuthStore } from "@/store";
 import { ROUTES } from "@/constants";
-import { useRequestOTP, useVerityOTP } from "@/mutations/useAuthMutation";
+import { useRequestOTP, useVerityOTP } from "@/mutations";
 import { CustomTouchableOpacityButton } from "@/components";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils";
 
 export default function VerifyOTPScreen() {
   const { phone } = useAuthStore();

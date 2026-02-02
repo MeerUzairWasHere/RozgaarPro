@@ -1,5 +1,11 @@
 import { Freelancer, FreelancerStatus } from "@prisma/client";
-import { FreelancerProfileCompletedInput, ListQueryDto, NearbyFreelancer } from "../dto";
+import {
+  FreelancerProfileCompletedInput,
+  FreelancerWithAwayDistanceInput,
+  ListQueryDto,
+  NearbyFreelancer,
+  NearbyFreelancerDetail,
+} from "../dto";
 import { PaginatedResponse } from "../types";
 
 export interface IFreelancerService {
@@ -18,7 +24,9 @@ export interface IFreelancerService {
   ): Promise<PaginatedResponse<NearbyFreelancer>>;
 
   findFreelancerByIdOrThrowError({ id }: { id: string }): Promise<Freelancer>;
+  getSingleVisibleFreelancerDetail({
+    latitude,
+    longitude,
+    freelancerId,
+  }: FreelancerWithAwayDistanceInput): Promise<NearbyFreelancerDetail>;
 }
-
-
-

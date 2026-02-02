@@ -42,7 +42,7 @@ export interface Freelancer {
   skills: FreelancerSkill[];
 }
 
-export type NearbyFreelancer = {
+export interface NearbyFreelancer {
   freelancer_id: string;
   user_id: string;
   primary_profession_name: string;
@@ -51,4 +51,6 @@ export type NearbyFreelancer = {
   status: FREELANCER_STATUS;
   rating: number;
   distance_km: number; // raw DB value
-};
+}
+
+export interface NearbyFreelancerDetail extends NearbyFreelancer {}

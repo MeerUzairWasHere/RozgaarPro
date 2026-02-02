@@ -1,5 +1,5 @@
 import { View, Text, TextInput } from "react-native";
-import { cn } from "@/utils/utils";
+import { cn } from "@/utils";
 
 interface CustomInputProps {
   placeholder?: string;
