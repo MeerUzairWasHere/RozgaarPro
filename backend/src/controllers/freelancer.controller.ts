@@ -11,7 +11,7 @@ export class FreelancerController {
     res: Response,
   ): Promise<void> => {
     const id = currentUser(req).id;
-
+    console.log(id);
     await this.freelancerService.createAndCompleteFreelancerProfile({
       id,
       params: req.body,

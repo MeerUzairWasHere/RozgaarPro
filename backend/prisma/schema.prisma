@@ -7,27 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-////////////////////
-/// ENUMS
-////////////////////
-
-enum Role {
-  SUPER_ADMIN
-  ADMIN
-  USER
-  FREELANCER
-}
-
-enum FreelancerStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-////////////////////
-/// USER
-////////////////////
-
 model User {
   id                          String      @id @default(uuid())
   username                    String?     @unique
@@ -44,15 +23,14 @@ model User {
   createdAt                   DateTime    @default(now())
   updatedAt                   DateTime    @updatedAt
   profileCompleted            Boolean     @default(false)
-  // Relations
-  refreshTokens               Token[]
   freelancer                  Freelancer?
   jobs                        Job[]
+  refreshTokens               Token[]
 }
 
-////////////////////
+/// /////////////////
 /// TOKEN
-////////////////////
+/// /////////////////
 model Token {
   id           String   @id @default(uuid())
   refreshToken String   @unique
@@ -60,128 +38,88 @@ model Token {
   userAgent    String   @db.VarChar(255)
   isValid      Boolean  @default(true)
   userId       String
-  user         User     @relation(fields: [userId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
 }
-
-////////////////////
-/// FREELANCER
-////////////////////
 
 model Freelancer {
-  id                  String           @id @default(uuid())
-  userId              String           @unique
-  experience          Decimal          @db.Decimal(4, 1)
+  id                  String               @id @default(uuid())
+  userId              String               @unique
+  experience          Decimal              @db.Decimal(4, 1)
   phone               String
-  status              FreelancerStatus @default(PENDING)
-  rating              Float            @default(0)
+  status              FreelancerStatus     @default(PENDING)
+  rating              Float                @default(0)
   primaryProfessionId String
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
-
-  // Relations
-  user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-  primaryProfession Profession           @relation(fields: [primaryProfessionId], references: [id])
-  skills            FreelancerSkill[]
-  jobs              Job[]
-  locations         FreelancerLocation[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  primaryProfession   Profession           @relation(fields: [primaryProfessionId], references: [id])
+  user                User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  locations           FreelancerLocation[]
+  skills              FreelancerSkill[]
+  jobs                Job[]
 }
 
-////////////////////
-/// FREELANCER LOCATION
-////////////////////
-
 model FreelancerLocation {
-  id           String @id @default(uuid())
+  id           String     @id @default(uuid())
   freelancerId String
-
-  latitude   Decimal  @db.Decimal(9, 6)
-  longitude  Decimal  @db.Decimal(9, 6)
-  accuracy   Int?
-  recordedAt DateTime @default(now())
-
-  // Relations
-  freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  latitude     Decimal    @db.Decimal(9, 6)
+  longitude    Decimal    @db.Decimal(9, 6)
+  accuracy     Int?
+  recordedAt   DateTime   @default(now())
+  freelancer   Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
 
   @@index([latitude, longitude])
   @@index([freelancerId, recordedAt])
 }
 
-////////////////////
-/// PROFESSION
-////////////////////
-
 model Profession {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // Relations
-  skills      Skill[]
+  id          String       @id @default(uuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   freelancers Freelancer[]
+  skills      Skill[]
 }
-
-////////////////////
-/// SKILL
-////////////////////
 
 model Skill {
-  id           String   @id @default(uuid())
+  id           String            @id @default(uuid())
   name         String
   professionId String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  freelancers  FreelancerSkill[]
+  profession   Profession        @relation(fields: [professionId], references: [id], onDelete: Cascade)
 
-  // Relations
-  profession  Profession        @relation(fields: [professionId], references: [id], onDelete: Cascade)
-  freelancers FreelancerSkill[]
-
-  @@unique([name, professionId]) // same skill name allowed in different professions
+  @@unique([name, professionId])
 }
 
-////////////////////
-/// FREELANCER SKILL
-////////////////////
-
 model FreelancerSkill {
-  id           String   @id @default(uuid())
+  id           String     @id @default(uuid())
   freelancerId String
   skillId      String
-  isVerified   Boolean  @default(false)
-  createdAt    DateTime @default(now())
-
-  // Relations
-  freelancer Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
-  skill      Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  isVerified   Boolean    @default(false)
+  createdAt    DateTime   @default(now())
+  freelancer   Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+  skill        Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)
 
   @@unique([freelancerId, skillId])
 }
 
-////////////////////
-/// JOB / REQUEST
-////////////////////
-
 model Job {
-  id           String   @id @default(uuid())
+  id           String      @id @default(uuid())
   title        String
   description  String
   location     String
   budget       Float?
   userId       String
   freelancerId String?
-  isCompleted  Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  user       User        @relation(fields: [userId], references: [id])
-  freelancer Freelancer? @relation(fields: [freelancerId], references: [id])
+  isCompleted  Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  freelancer   Freelancer? @relation(fields: [freelancerId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
 }
-
-////////////////////
-/// COMPANY (Optional)
-////////////////////
 
 model Company {
   id                     String   @id @default(uuid())
@@ -193,4 +131,17 @@ model Company {
   verified_resend_domain String   @db.VarChar(55)
   createdAt              DateTime @default(now())
   updatedAt              DateTime @updatedAt
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  USER
+  FREELANCER
+}
+
+enum FreelancerStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }

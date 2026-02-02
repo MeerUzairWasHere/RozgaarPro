@@ -43,7 +43,7 @@ CREATE TABLE "public"."Token" (
 CREATE TABLE "public"."Freelancer" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "experience" INTEGER NOT NULL,
+    "experience" DECIMAL(4,1) NOT NULL,
     "phone" TEXT NOT NULL,
     "status" "public"."FreelancerStatus" NOT NULL DEFAULT 'PENDING',
     "rating" DOUBLE PRECISION NOT NULL DEFAULT 0,
@@ -175,10 +175,10 @@ CREATE UNIQUE INDEX "Company_email_key" ON "public"."Company"("email");
 ALTER TABLE "public"."Token" ADD CONSTRAINT "Token_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Freelancer" ADD CONSTRAINT "Freelancer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "public"."Freelancer" ADD CONSTRAINT "Freelancer_primaryProfessionId_fkey" FOREIGN KEY ("primaryProfessionId") REFERENCES "public"."Profession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Freelancer" ADD CONSTRAINT "Freelancer_primaryProfessionId_fkey" FOREIGN KEY ("primaryProfessionId") REFERENCES "public"."Profession"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Freelancer" ADD CONSTRAINT "Freelancer_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "public"."FreelancerLocation" ADD CONSTRAINT "FreelancerLocation_freelancerId_fkey" FOREIGN KEY ("freelancerId") REFERENCES "public"."Freelancer"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -193,7 +193,7 @@ ALTER TABLE "public"."FreelancerSkill" ADD CONSTRAINT "FreelancerSkill_freelance
 ALTER TABLE "public"."FreelancerSkill" ADD CONSTRAINT "FreelancerSkill_skillId_fkey" FOREIGN KEY ("skillId") REFERENCES "public"."Skill"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_freelancerId_fkey" FOREIGN KEY ("freelancerId") REFERENCES "public"."Freelancer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_freelancerId_fkey" FOREIGN KEY ("freelancerId") REFERENCES "public"."Freelancer"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "public"."Job" ADD CONSTRAINT "Job_userId_fkey" FOREIGN KEY ("userId") REFERENCES "public"."User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

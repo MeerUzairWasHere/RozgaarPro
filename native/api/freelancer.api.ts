@@ -1,6 +1,5 @@
 import { api } from "@/lib";
 import {
-  Freelancer,
   FREELANCER_STATUS,
   FreelancerProfileCompletedInput,
   ListQuery,

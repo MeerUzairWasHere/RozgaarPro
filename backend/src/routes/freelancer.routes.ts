@@ -12,6 +12,15 @@ import {
 const router = Router();
 
 router
+  .route("/complete-profile")
+  .post(
+    authGuard,
+    rolesGuard(Role.FREELANCER),
+    validate(validateFreelancerProfileCompletedInput),
+    freelancerController.completeFreelancerProfile,
+  );
+
+router
   .route("/")
   .post(
     authGuard,
@@ -35,15 +44,6 @@ router
     authGuard,
     rolesGuard(Role.FREELANCER),
     freelancerController.getFreelancerStatus,
-  );
-
-router
-  .route("/complete-profile")
-  .post(
-    authGuard,
-    rolesGuard(Role.FREELANCER),
-    validate(validateFreelancerProfileCompletedInput),
-    freelancerController.completeFreelancerProfile,
   );
 
 export default router;

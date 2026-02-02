@@ -109,35 +109,31 @@ export class FreelancerService implements IFreelancerService {
       f.status AS status,
       f.rating AS rating,
       p.name AS primary_profession_name,
-      (
-        6371 * acos(
-          cos(radians(${latitude}))
-          * cos(radians(fl.latitude))
-          * cos(radians(fl.longitude) - radians(${longitude}))
-          + sin(radians(${latitude}))
-          * sin(radians(fl.latitude))
-        )
+      get_distance_km(
+        ${latitude},
+        ${longitude},
+        fl.latitude,
+        fl.longitude
       ) AS distance_km
     FROM "Freelancer" f
     JOIN "FreelancerLocation" fl
       ON fl."freelancerId" = f.id
+     AND fl."recordedAt" = (
+       SELECT MAX(fl2."recordedAt")
+       FROM "FreelancerLocation" fl2
+       WHERE fl2."freelancerId" = f.id
+     )
     JOIN "User" u
       ON u.id = f."userId"
     JOIN "Profession" p
       ON f."primaryProfessionId" = p."id"
-    WHERE
-      f.status = 'APPROVED'
-      AND fl."recordedAt" = (
-        SELECT MAX(fl2."recordedAt")
-        FROM "FreelancerLocation" fl2
-        WHERE fl2."freelancerId" = f.id
-      )
+    WHERE f.status = 'APPROVED'
     ORDER BY distance_km ASC
     LIMIT ${take}
     OFFSET ${skip};
   `;
 
-    const totalItems = data.length; // or run a COUNT query if needed
+    const totalItems = data.length; // OK for now
 
     return {
       data,
@@ -185,29 +181,43 @@ export class FreelancerService implements IFreelancerService {
     longitude,
     freelancerId,
   }: FreelancerWithAwayDistanceInput): Promise<NearbyFreelancerDetail> {
+    // Ensure freelancer exists
     await this.findFreelancerByIdOrThrowError({ id: freelancerId });
 
-    const freelancer = await this.prismaService.$queryRaw<NearbyFreelancerDetail[]>`
-    
-    SELECT f.id::TEXT AS freelancer_id,
-            u.id::TEXT AS user_id,
-            u.name AS name,
-            f.experience AS experience,
-            f.status AS status,
-            f.rating AS rating,
-            p.name AS primary_profession_name,
-            get_freelancer_distance_km(${latitude}, ${longitude}, ${freelancerId}) AS distance_km
-    FROM "Freelancer" f
-    JOIN "FreelancerLocation" fl ON fl."freelancerId" = f.id
-    JOIN "User" u ON u.id = f."userId"
-    JOIN "Profession" p ON f."primaryProfessionId" = p."id"
-    WHERE f.id = ${freelancerId}
-      AND fl."recordedAt" = (
-        SELECT MAX(fl2."recordedAt")
-        FROM "FreelancerLocation" fl2
-        WHERE fl2."freelancerId" = f.id
-        );`;
+    if (latitude == null || longitude == null) {
+      throw new Error("Location (latitude, longitude) is required");
+    }
 
-    return freelancer[0];
+    const result = await this.prismaService.$queryRaw<NearbyFreelancerDetail[]>`
+    SELECT
+      f.id::TEXT AS freelancer_id,
+      u.id::TEXT AS user_id,
+      u.name AS name,
+      f.experience AS experience,
+      f.status AS status,
+      f.rating AS rating,
+      p.name AS primary_profession_name,
+      get_distance_km(
+        ${latitude},
+        ${longitude},
+        fl.latitude,
+        fl.longitude
+      ) AS distance_km
+    FROM "Freelancer" f
+    JOIN "FreelancerLocation" fl
+      ON fl."freelancerId" = f.id
+     AND fl."recordedAt" = (
+       SELECT MAX(fl2."recordedAt")
+       FROM "FreelancerLocation" fl2
+       WHERE fl2."freelancerId" = f.id
+     )
+    JOIN "User" u
+      ON u.id = f."userId"
+    JOIN "Profession" p
+      ON f."primaryProfessionId" = p."id"
+    WHERE f.id = ${freelancerId};
+  `;
+
+    return result[0];
   }
 }
