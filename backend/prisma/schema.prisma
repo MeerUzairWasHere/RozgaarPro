@@ -99,7 +99,7 @@ model FreelancerSkill {
   id           String     @id @default(uuid())
   freelancerId String
   skillId      String
-  isVerified   Boolean    @default(false)
+  isVerified   Boolean    @default(true)
   createdAt    DateTime   @default(now())
   freelancer   Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
   skill        Skill      @relation(fields: [skillId], references: [id], onDelete: Cascade)

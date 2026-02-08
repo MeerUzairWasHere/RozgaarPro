@@ -12,7 +12,7 @@ interface HeaderProps {
   showNotification?: boolean;
 }
 
-export default function Header({
+export default function AppHeader({
   title,
   showBack = false,
   showLocation = false,

@@ -1,4 +1,4 @@
-import { useColorScheme, View } from "react-native";
+import { ScrollView, useColorScheme, View } from "react-native";
 
 export const ProfessionsFilterFilterSkeleton = () => {
   return (
@@ -59,6 +59,99 @@ export const NearbyWorkersSkeletonList = () => {
       {Array.from({ length: 4 }).map((_, i) => (
         <NearbyWorkerSkeleton key={i} />
       ))}
+    </View>
+  );
+};
+
+export const FreelancerDetailSkeleton = () => {
+  return (
+    <View className="flex-1 bg-primary-50 dark:bg-primary-950">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Header */}
+
+        <View className="px-4">
+          <View className="items-center pt-12 pb-6">
+            {/* Avatar */}
+            <View className="w-28 h-28 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse mb-4" />
+
+            {/* Name */}
+            <View className="w-44 h-7 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
+
+            {/* Profession badge */}
+            <View className="w-32 h-9 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+          </View>
+          {/* Stats Card */}
+          <View className="bg-white dark:bg-primary-900 rounded-3xl p-5 mb-6">
+            <View className="flex-row justify-around">
+              {[1, 2, 3].map((i) => (
+                <View key={i} className="items-center">
+                  <View className="w-12 h-6 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+                  <View className="w-16 h-3 rounded bg-primary-200 dark:bg-primary-800 animate-pulse" />
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Verification badges */}
+          <View className="flex-row flex-wrap gap-2 mb-6">
+            <View className="w-24 h-8 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            <View className="w-28 h-8 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            <View className="w-32 h-8 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+          </View>
+
+          {/* About Section */}
+          <View className="mb-6">
+            <View className="w-24 h-5 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
+
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5">
+              <View className="h-4 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+              <View className="h-4 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+              <View className="h-4 w-3/4 rounded bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            </View>
+          </View>
+
+          {/* Location Section */}
+          <View className="mb-6">
+            <View className="w-24 h-5 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
+
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5">
+              <View className="flex-row gap-4">
+                <View className="w-12 h-12 rounded-2xl bg-primary-200 dark:bg-primary-800 animate-pulse" />
+
+                <View className="flex-1">
+                  <View className="h-4 w-2/3 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+                  <View className="h-3 w-1/2 rounded bg-primary-200 dark:bg-primary-800 animate-pulse" />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Reviews Section */}
+          <View className="mb-6">
+            <View className="w-32 h-5 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
+
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5">
+              <View className="h-4 w-1/3 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
+              <View className="h-4 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+              <View className="h-4 w-5/6 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-4" />
+
+              <View className="flex-row items-center gap-3">
+                <View className="w-10 h-10 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+                <View>
+                  <View className="w-24 h-4 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-2" />
+                  <View className="w-20 h-3 rounded bg-primary-200 dark:bg-primary-800 animate-pulse" />
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View className="flex-row gap-3 mb-32">
+            <View className="flex-1 h-14 rounded-2xl bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            <View className="flex-1 h-14 rounded-2xl bg-primary-200 dark:bg-primary-800 animate-pulse" />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 };

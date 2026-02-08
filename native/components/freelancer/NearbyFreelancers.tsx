@@ -1,11 +1,11 @@
 import { View, FlatList } from "react-native";
-import SectionHeader from "./SectionHeader";
+import SectionHeader from "../SectionHeader";
 import { useQueryClient } from "@tanstack/react-query";
 import { useLocationStore } from "@/store";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
-import { NearbyWorkersSkeletonList } from "./Skeletons";
+import { NearbyWorkersSkeletonList } from "../Skeletons";
 
 export default function NearbyFreelancers() {
   const { coordinates } = useLocationStore();

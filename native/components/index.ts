@@ -1,17 +1,30 @@
-export { default as BackButton } from "./BackButton";
-export { default as CustomInput } from "./CustomInput";
-export { default as CustomPressableButton } from "./CustomPressableButton";
-export { default as CustomTouchableOpacityButton } from "./CustomTouchableOpacityButton";
-export { default as FreelancerProfileStats } from "./FreelancerProfileStats";
-export { default as Header } from "./Header";
-export { default as LocationHeader } from "./LocationHeader";
+// Common
+export { default as BackButton } from "./common/BackButton";
+export { default as CustomInput } from "./common/CustomInput";
+export { default as CustomPressableButton } from "./common/CustomPressableButton";
+export { default as CustomTouchableOpacityButton } from "./common/CustomTouchableOpacityButton";
+export { default as Header } from "./common/AppHeader";
+export { default as LocationHeader } from "./common/LocationHeader";
+export { default as InitialAvatar } from "./common/InitialAvatar";
+export { default as ErrorState } from "./common/ErrorState";
+
 export { default as LogoutButton } from "./LogoutButton";
 export { default as ProfileApprovedCard } from "./ProfileApprovedCard";
 export { default as ProfileCard } from "./ProfileCard";
 export { default as ProfileMenu } from "./ProfileMenu";
 export { default as SearchBar } from "./SearchBar";
 export { default as ProfessionsFilter } from "./ProfessionsFilter";
-export { default as InitialAvatar } from "./InitialAvatar";
-export { default as FreelancerCard } from "./FreelancerCard";
 export { default as SectionHeader } from "./SectionHeader";
-export { default as NearbyFreelancers } from "./NearbyFreelancers";
+
+// Freelancer
+export { default as FreelancerDetails } from "./freelancer/FreelancerDetails";
+export { default as AboutSection } from "./freelancer/AboutSection";
+export { default as ActionButtons } from "./freelancer/ActionButtons";
+export { default as LocationSection } from "./freelancer/LocationSection";
+export { default as ProfileHeader } from "./freelancer/ProfileHeader";
+export { default as QuickStats } from "./freelancer/QuickStats";
+export { default as ReviewsSection } from "./freelancer/ReviewsSection";
+export { default as FreelancerCard } from "./freelancer/FreelancerCard";
+export { default as NearbyFreelancers } from "./freelancer/NearbyFreelancers";
+export { default as VerificationBadges } from "./freelancer/VerificationBadges";
+export { default as FreelancerProfileStats } from "./freelancer/FreelancerProfileStats";
