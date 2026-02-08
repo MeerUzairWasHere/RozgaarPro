@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { View, Text } from "react-native";
 
 interface InitialAvatarProps {
@@ -21,16 +20,10 @@ const InitialAvatar = ({
     .toUpperCase();
 
   return (
-    <View
-      style={{ width: size, height: size }}
-      className={clsx(
-        "bg-primary-500 dark:bg-primary-800 rounded-xl items-center justify-center",
-        ...className,
-      )}
-    >
+    <View style={{ width: size, height: size }} className={className}>
       <Text
         style={{ fontSize: size / 2.2 }}
-        className="text-white font-semibold"
+        className="dark:text-white text-2xl font-semibold"
       >
         {initials}
       </Text>

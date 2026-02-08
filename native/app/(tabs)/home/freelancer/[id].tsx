@@ -20,7 +20,7 @@ import {
   Shield,
 } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { BackButton } from "@/components";
+import { BackButton, InitialAvatar } from "@/components";
 import { formatDistance } from "@/lib";
 
 export default function FreelancerDetailScreen() {
@@ -91,19 +91,22 @@ export default function FreelancerDetailScreen() {
               className="items-center"
             >
               {/* Avatar */}
-              <View className="w-28 h-28 bg-white dark:bg-primary-800 rounded-full items-center justify-center mb-4 shadow-xl border-4 border-white dark:border-primary-700">
+              <View className="w-28 h-28  dark:bg-primary-800 rounded-full items-center justify-center mb-4 shadow-xl border-4 border-white dark:border-primary-700">
                 <Text className="text-5xl font-bold text-primary-600 dark:text-primary-300">
-                  {freelancer.name.charAt(0).toUpperCase()}
+                  <InitialAvatar
+                    name={freelancer.name}
+                    className="text-primary-950 justify-center items-center"
+                  />
                 </Text>
               </View>
 
               {/* Name */}
-              <Text className="text-3xl font-bold text-white mb-2 text-center">
+              <Text className="text-3xl font-bold dark:text-white  mb-2 text-center">
                 {freelancer.name}
               </Text>
 
               {/* Profession Badge */}
-              <View className="flex-row my-4 items-center gap-2 px-5 py-2.5 bg-white/20 dark:bg-white/10 backdrop-blur-xl rounded-full border border-white/30">
+              <View className="flex-row my-4 items-center gap-2 px-5 py-2.5 bg-black dark:bg-white/10 backdrop-blur-xl rounded-full border border-white/30">
                 <Briefcase size={16} color="#fff" strokeWidth={2.5} />
                 <Text className="font-semibold text-white">
                   {freelancer.primary_profession_name}

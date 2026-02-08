@@ -24,8 +24,11 @@ export default function FreelancerCard({
       <View className="flex-row items-start gap-3">
         {/* Profile Image */}
         <View className="relative flex-shrink-0">
-          <InitialAvatar name={freelancer.name} />
-
+          <InitialAvatar
+            name={freelancer.name}
+            className="bg-primary-500 dark:bg-primary-800 rounded-xl items-center
+          justify-center"
+          />
           {freelancer.status === FREELANCER_STATUS.APPROVED && (
             <View
               className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full items-center justify-center
