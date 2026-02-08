@@ -198,6 +198,7 @@ export class FreelancerService implements IFreelancerService {
       f.experience AS experience,
       f.status AS status,
       f.rating AS rating,
+      f.description AS description,
       p.name AS primary_profession_name,
       fl.latitude AS latitude,
       fl.longitude AS longitude,

@@ -31,10 +31,12 @@ export interface NearbyFreelancer {
   experience: number;
   status: FreelancerStatus;
   rating: number;
-  latitude: number;
-  longitude: number;
-  location: string;
   distance_km: number;
 }
 
-export interface NearbyFreelancerDetail extends NearbyFreelancer {}
+export interface NearbyFreelancerDetail extends NearbyFreelancer {
+  latitude: number;
+  longitude: number;
+  location: string;
+  description: string | null;
+}
