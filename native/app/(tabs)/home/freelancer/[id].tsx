@@ -132,7 +132,7 @@ export default function FreelancerDetailScreen() {
                   </Text>
                 </View>
                 <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
-                  Rating
+                  124 reviews {/* TODO: Add these */}
                 </Text>
               </View>
 
@@ -147,11 +147,11 @@ export default function FreelancerDetailScreen() {
                     color={isDark ? "#a5b4fc" : "#6366f1"}
                   />
                   <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
-                    {freelancer.experience}
+                    {freelancer.experience} Years
                   </Text>
                 </View>
                 <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
-                  Years Exp
+                  Experience
                 </Text>
               </View>
 

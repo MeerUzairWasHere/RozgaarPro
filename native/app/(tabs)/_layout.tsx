@@ -42,7 +42,7 @@ export default function TabsLayout() {
         // Default header component
         header: () => <Header showLocation={true} showNotification={true} />,
         tabBarStyle: {
-          display: user?.profileCompleted ? "flex" : "none", // TODO: remove this
+          display: user?.profileCompleted ? "flex" : "none",
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           borderBottomLeftRadius: 50,

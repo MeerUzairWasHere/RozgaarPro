@@ -9,7 +9,7 @@ const BackButton = () => {
     <Pressable
       onPress={() => router.back()}
       android_ripple={{ color: "rgba(0,0,0,0.12)" }}
-      className="p-2 rounded-full overflow-hidden self-start"
+      className="p-2 rounded-full overflow-hidden self-start dark:bg-primary-900"
     >
       <ArrowLeft size={24} color={colourScheme === "dark" ? "#fff" : "#000"} />
     </Pressable>
