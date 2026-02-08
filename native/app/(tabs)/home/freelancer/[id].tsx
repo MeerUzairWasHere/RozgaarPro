@@ -13,10 +13,11 @@ import {
   Star,
   MapPin,
   Phone,
-  Clock,
   Award,
   Briefcase,
-  CheckCircle,
+  Calendar,
+  TrendingUp,
+  Shield,
 } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { BackButton } from "@/components";
@@ -27,8 +28,8 @@ export default function FreelancerDetailScreen() {
   const router = useRouter();
   const { coordinates } = useLocationStore();
   const colourScheme = useColorScheme();
+  const isDark = colourScheme === "dark";
 
-  // Fetch freelancer details
   const {
     data: freelancer,
     isLoading,
@@ -40,10 +41,13 @@ export default function FreelancerDetailScreen() {
 
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center bg-primary-50 dark:bg-primary-950">
-        <Text className="text-lg text-primary-950 dark:text-primary-50">
-          Loading...
-        </Text>
+      <View className="flex-1 items-center justify-center bg-gradient-to-b from-primary-50 to-primary-100 dark:from-primary-950 dark:to-primary-900">
+        <View className="items-center">
+          <View className="w-16 h-16 bg-primary-200 dark:bg-primary-800 rounded-full mb-4 animate-pulse" />
+          <Text className="text-lg font-medium text-primary-950 dark:text-primary-50">
+            Loading profile...
+          </Text>
+        </View>
       </View>
     );
   }
@@ -51,15 +55,23 @@ export default function FreelancerDetailScreen() {
   if (error || !freelancer) {
     return (
       <View className="flex-1 items-center justify-center bg-primary-50 dark:bg-primary-950 px-6">
-        <Text className="text-lg text-red-500 dark:text-red-400 mb-4">
-          Failed to load freelancer details
-        </Text>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          className="px-6 py-3 bg-primary-800 dark:bg-primary-700 rounded-xl"
-        >
-          <Text className="text-primary-50 font-semibold">Go Back</Text>
-        </TouchableOpacity>
+        <View className="bg-white dark:bg-primary-900 rounded-3xl p-8 items-center shadow-lg">
+          <View className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full items-center justify-center mb-4">
+            <Text className="text-3xl">⚠️</Text>
+          </View>
+          <Text className="text-lg font-semibold text-primary-950 dark:text-primary-50 mb-2">
+            Something went wrong
+          </Text>
+          <Text className="text-sm text-primary-600 dark:text-primary-400 text-center mb-6">
+            We couldn't load this freelancer's profile
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="px-8 py-3.5 bg-primary-900 dark:bg-primary-700 rounded-full shadow-sm active:opacity-80"
+          >
+            <Text className="text-white font-semibold">Go Back</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   }
@@ -67,93 +79,137 @@ export default function FreelancerDetailScreen() {
   return (
     <View className="flex-1 bg-primary-50 dark:bg-primary-950">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        <View className="px-4 pt-4 pb-32 ">
-          {/* Name & Profession */}
-          <View className="flex flex-row justify-between">
+        {/* Header Section with Gradient */}
+        <View className="relative">
+          <View className="p-4">
+            {/* Back Button */}
             <BackButton />
+
+            {/* Profile Header */}
             <Animated.View
-              entering={FadeInDown.delay(200)}
-              className="mb-6 flex justify-between flex-row"
+              entering={FadeInDown.delay(100)}
+              className="items-center"
             >
-              <View>
-                <Text className="text-3xl font-bold text-primary-950 dark:text-primary-50 mb-2">
-                  {freelancer.name}
+              {/* Avatar */}
+              <View className="w-28 h-28 bg-white dark:bg-primary-800 rounded-full items-center justify-center mb-4 shadow-xl border-4 border-white dark:border-primary-700">
+                <Text className="text-5xl font-bold text-primary-600 dark:text-primary-300">
+                  {freelancer.name.charAt(0).toUpperCase()}
                 </Text>
-                <View className="flex-row  ml-auto items-center gap-2 px-4 py-3 bg-primary-100 dark:bg-primary-800 rounded-xl ">
-                  <Briefcase
-                    size={18}
-                    color={colourScheme === "light" ? "#000" : "#fff"}
-                  />
-                  <Text className="font-medium text-primary-950 dark:text-primary-50">
-                    {freelancer.primary_profession_name}
-                  </Text>
-                </View>
+              </View>
+
+              {/* Name */}
+              <Text className="text-3xl font-bold text-white mb-2 text-center">
+                {freelancer.name}
+              </Text>
+
+              {/* Profession Badge */}
+              <View className="flex-row my-4 items-center gap-2 px-5 py-2.5 bg-white/20 dark:bg-white/10 backdrop-blur-xl rounded-full border border-white/30">
+                <Briefcase size={16} color="#fff" strokeWidth={2.5} />
+                <Text className="font-semibold text-white">
+                  {freelancer.primary_profession_name}
+                </Text>
               </View>
             </Animated.View>
           </View>
+        </View>
 
-          {/* Stats Cards */}
+        <View className="px-6 -mt-4">
+          {/* Quick Stats Cards */}
           <Animated.View
-            entering={FadeInDown.delay(300)}
-            className="flex-row gap-3 mb-8"
+            entering={FadeInDown.delay(200)}
+            className="bg-white dark:bg-primary-900 rounded-3xl p-5 shadow-2xl mb-6 border border-primary-100 dark:border-primary-800"
           >
-            {/* Rating Card */}
-            <View className="flex-1 bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <View className="flex-row items-center gap-2 mb-1">
-                <Star
-                  size={15}
-                  color={colourScheme === "light" ? "#000" : "#fff"}
-                  fill={colourScheme === "light" ? "#000" : "#fff"}
-                />
-                <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
-                  {freelancer.rating.toFixed(1)}
+            <View className="flex-row justify-around">
+              {/* Rating */}
+              <View className="items-center">
+                <View className="flex-row items-center gap-1 mb-1">
+                  <Star size={18} color="#FFA500" fill="#FFA500" />
+                  <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
+                    {freelancer.rating.toFixed(1)}
+                  </Text>
+                </View>
+                <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
+                  Rating
                 </Text>
               </View>
-              <Text className="text-sm text-primary-600 dark:text-primary-400">
-                Rating
-              </Text>
-            </View>
 
-            {/* Experience Card */}
-            <View className="flex-1 bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <View className="flex-row items-center gap-2 mb-1">
-                <Clock
-                  size={15}
-                  color={colourScheme === "light" ? "#000" : "#fff"}
-                />
-                <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
-                  {freelancer.experience}
-                </Text>
-              </View>
-              <Text className="text-sm text-primary-600 dark:text-primary-400">
-                Years of Exp
-              </Text>
-            </View>
+              {/* Divider */}
+              <View className="w-px bg-primary-200 dark:bg-primary-800" />
 
-            {/* Distance Card */}
-            <View className="flex-1 bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <View className="flex-row items-center gap-2 mb-1">
-                <MapPin
-                  size={15}
-                  color={colourScheme === "light" ? "#000" : "#fff"}
-                />
-                <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
-                  {formatDistance(freelancer.distance_km)}
+              {/* Experience */}
+              <View className="items-center">
+                <View className="flex-row items-center gap-1 mb-1">
+                  <TrendingUp
+                    size={18}
+                    color={isDark ? "#a5b4fc" : "#6366f1"}
+                  />
+                  <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
+                    {freelancer.experience}
+                  </Text>
+                </View>
+                <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
+                  Years Exp
                 </Text>
               </View>
-              <Text className="text-sm text-primary-600 dark:text-primary-400">
-                away from you
-              </Text>
+
+              {/* Divider */}
+              <View className="w-px bg-primary-200 dark:bg-primary-800" />
+
+              {/* Distance */}
+              <View className="items-center">
+                <View className="flex-row items-center gap-1 mb-1">
+                  <MapPin size={18} color={isDark ? "#86efac" : "#16a34a"} />
+                  <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
+                    {parseFloat(formatDistance(freelancer.distance_km))}
+                  </Text>
+                </View>
+                <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
+                  km away
+                </Text>
+              </View>
+            </View>
+          </Animated.View>
+
+          {/* Verification Badges */}
+          <Animated.View entering={FadeInDown.delay(300)} className="mb-6">
+            <View className="flex-row flex-wrap gap-2">
+              {freelancer.status === "APPROVED" && (
+                <View className="flex-row items-center gap-2 px-4 py-2.5 bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900 rounded-full">
+                  <Shield size={14} color={isDark ? "#86efac" : "#16a34a"} />
+                  <Text className="text-xs font-semibold text-green-700 dark:text-green-400">
+                    Verified
+                  </Text>
+                </View>
+              )}
+
+              {freelancer.rating >= 4.5 && (
+                <View className="flex-row items-center gap-2 px-4 py-2.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-full">
+                  <Award size={14} color={isDark ? "#fcd34d" : "#f59e0b"} />
+                  <Text className="text-xs font-semibold text-amber-700 dark:text-amber-400">
+                    Top Rated
+                  </Text>
+                </View>
+              )}
+
+              <View className="flex-row items-center gap-2 px-4 py-2.5 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900 rounded-full">
+                <Phone size={14} color={isDark ? "#93c5fd" : "#3b82f6"} />
+                <Text className="text-xs font-semibold text-blue-700 dark:text-blue-400">
+                  Phone Verified
+                </Text>
+              </View>
             </View>
           </Animated.View>
 
           {/* About Section */}
           <Animated.View entering={FadeInDown.delay(400)} className="mb-6">
-            <Text className="text-xl font-semibold text-primary-950 dark:text-primary-50 mb-3">
-              About
-            </Text>
-            <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <Text className="text-primary-950 dark:text-primary-50 leading-relaxed">
+            <View className="flex-row items-center gap-2 mb-3">
+              <View className="w-1 h-6 bg-primary-600 dark:bg-primary-400 rounded-full" />
+              <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
+                About
+              </Text>
+            </View>
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5 border border-primary-100 dark:border-primary-800">
+              <Text className="text-primary-700 dark:text-primary-300 leading-7 text-base">
                 {freelancer.description
                   ? freelancer.description
                   : `Professional ${freelancer.primary_profession_name.toLowerCase()} with ${freelancer.experience} years of experience. Specialized in high-quality work with attention to detail. Committed to delivering excellent results and customer satisfaction.`}
@@ -163,103 +219,116 @@ export default function FreelancerDetailScreen() {
 
           {/* Location Section */}
           <Animated.View entering={FadeInDown.delay(500)} className="mb-6">
-            <Text className="text-xl font-semibold text-primary-950 dark:text-primary-50 mb-3">
-              Location
-            </Text>
-            <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <View className="flex-row items-start gap-3">
-                <View className="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-xl items-center justify-center">
-                  <MapPin
-                    size={15}
-                    color={colourScheme === "light" ? "#000" : "#fff"}
-                  />
+            <View className="flex-row items-center gap-2 mb-3">
+              <View className="w-1 h-6 bg-primary-600 dark:bg-primary-400 rounded-full" />
+              <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
+                Location
+              </Text>
+            </View>
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5 border border-primary-100 dark:border-primary-800">
+              <View className="flex-row items-start gap-4">
+                <View className="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-2xl items-center justify-center">
+                  <MapPin size={20} color={isDark ? "#a5b4fc" : "#6366f1"} />
                 </View>
                 <View className="flex-1">
-                  <Text className="font-medium text-primary-950 dark:text-primary-50">
+                  <Text className="font-semibold text-primary-950 dark:text-primary-50 text-base mb-1">
                     {freelancer.location || "Location not available"}
                   </Text>
-                  <Text className="text-sm text-primary-600 dark:text-primary-400 mt-1">
+                  <Text className="text-sm text-primary-600 dark:text-primary-400">
                     Approximately {formatDistance(freelancer.distance_km)} from
-                    your location
+                    your current location
                   </Text>
                 </View>
               </View>
             </View>
           </Animated.View>
 
-          {/* Verification Badges */}
+          {/* Reviews Section */}
           <Animated.View entering={FadeInDown.delay(600)} className="mb-6">
-            <Text className="text-xl font-semibold text-primary-950 dark:text-primary-50 mb-3">
-              Verification
-            </Text>
-            <View className="flex-row flex-wrap gap-2">
-              {/* ID Verified */}
-              {freelancer.status === "APPROVED" && (
-                <View className="flex-row items-center gap-2 px-4 py-3 bg-primary-100 dark:bg-primary-800 rounded-xl">
-                  <CheckCircle
-                    size={15}
-                    color={colourScheme === "light" ? "#000" : "#fff"}
-                  />
-                  <Text className="font-medium text-primary-950 dark:text-primary-50">
-                    ID Verified
+            <View className="flex-row items-center gap-2 mb-3">
+              <View className="w-1 h-6 bg-primary-600 dark:bg-primary-400 rounded-full" />
+              <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
+                Recent Reviews
+              </Text>
+            </View>
+            <View className="bg-white dark:bg-primary-900 rounded-2xl p-5 border border-primary-100 dark:border-primary-800">
+              {/* Review Header */}
+              <View className="flex-row items-center justify-between mb-4">
+                <View className="flex-row items-center gap-2">
+                  <View className="flex-row gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        size={14}
+                        color="#FFA500"
+                        fill="#FFA500"
+                      />
+                    ))}
+                  </View>
+                  <Text className="text-xs font-semibold text-primary-500 dark:text-primary-400">
+                    5.0
                   </Text>
                 </View>
-              )}
-
-              {/* Phone Verified */}
-              <View className="flex-row items-center gap-2 px-4 py-3 bg-primary-100 dark:bg-primary-800 rounded-xl">
-                <Phone
-                  size={15}
-                  color={colourScheme === "light" ? "#000" : "#fff"}
-                />
-                <Text className="font-medium text-primary-950 dark:text-primary-50">
-                  Phone Verified
-                </Text>
+                <View className="flex-row items-center gap-1">
+                  <Calendar size={12} color={isDark ? "#9ca3af" : "#6b7280"} />
+                  <Text className="text-xs text-primary-500 dark:text-primary-400">
+                    2 days ago
+                  </Text>
+                </View>
               </View>
 
-              {/* Top Rated */}
-              {freelancer.rating >= 4.5 && (
-                <View className="flex-row items-center gap-2 px-4 py-3 bg-primary-100 dark:bg-primary-800 rounded-xl">
-                  <Award
-                    size={15}
-                    color={colourScheme === "light" ? "#000" : "#fff"}
-                  />
-                  <Text className="font-medium text-primary-950 dark:text-primary-50">
-                    Top Rated
+              {/* Review Text */}
+              <Text className="text-primary-700 dark:text-primary-300 leading-6 mb-4">
+                "Excellent work! Very professional and completed the job on
+                time. Would definitely hire again. Great attention to detail and
+                communication throughout."
+              </Text>
+
+              {/* Reviewer */}
+              <View className="flex-row items-center gap-3 pt-4 border-t border-primary-100 dark:border-primary-800">
+                <View className="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-full items-center justify-center">
+                  <Text className="text-sm font-bold text-primary-600 dark:text-primary-300">
+                    SC
                   </Text>
                 </View>
-              )}
+                <View>
+                  <Text className="font-semibold text-primary-950 dark:text-primary-50 text-sm">
+                    Satisfied Customer
+                  </Text>
+                  <Text className="text-xs text-primary-500 dark:text-primary-400">
+                    Verified Client
+                  </Text>
+                </View>
+              </View>
             </View>
           </Animated.View>
 
-          {/* Reviews */}
-          <Animated.View entering={FadeInDown.delay(700)}>
-            <Text className="text-xl font-semibold text-primary-950 dark:text-primary-50 mb-3">
-              Recent Reviews
-            </Text>
-            <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-800">
-              <View className="flex-row items-center gap-2 mb-3">
-                <View className="flex-row">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <Star
-                      key={star}
-                      size={16}
-                      color={colourScheme === "light" ? "#000" : "#fff"}
-                      fill={colourScheme === "light" ? "#000" : "#fff"}
-                    />
-                  ))}
+          {/* Action Buttons */}
+          <Animated.View entering={FadeInDown.delay(700)} className="mb-32">
+            <View className="flex-row gap-3">
+              <TouchableOpacity
+                className="flex-1 bg-primary-600 dark:bg-primary-500 rounded-2xl py-4 items-center shadow-lg active:opacity-90"
+                activeOpacity={0.8}
+              >
+                <View className="flex-row items-center gap-2">
+                  <Phone size={20} color="#fff" />
+                  <Text className="text-white font-bold text-base">
+                    Contact
+                  </Text>
                 </View>
-                <Text className="text-sm text-primary-600 dark:text-primary-400">
-                  • 2 days ago
-                </Text>
-              </View>
-              <Text className="text-primary-950 dark:text-primary-50 mb-4 leading-relaxed">
-                "Excellent work! Very professional and completed the job on
-                time. Would definitely hire again."
-              </Text>
-              <Text className="text-sm text-primary-600 dark:text-primary-400">
-                - Satisfied Customer
-              </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="flex-1 bg-white dark:bg-primary-900 border-2 border-primary-600 dark:border-primary-500 rounded-2xl py-4 items-center active:opacity-80"
+                activeOpacity={0.8}
+              >
+                <View className="flex-row items-center gap-2">
+                  <Calendar size={20} color={isDark ? "#a5b4fc" : "#6366f1"} />
+                  <Text className="text-primary-600 dark:text-primary-400 font-bold text-base">
+                    Book Now
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </Animated.View>
         </View>
