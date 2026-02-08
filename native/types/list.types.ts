@@ -43,10 +43,10 @@ export interface ListQuery {
   sort?: ListSort[];
   search?: ListSearch;
   fields?: string[];
-  location?: GeoLocation;
+  location?: Coordinates;
 }
 
-export interface GeoLocation {
+export interface Coordinates {
   latitude: number;
   longitude: number;
 }

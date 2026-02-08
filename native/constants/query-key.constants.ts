@@ -32,4 +32,10 @@ export const QUERY_KEYS = {
     DetailByLocation: (freelancerId: string, lat: number, lng: number) =>
       [...QUERY_KEYS.FREELANCERS.detail(freelancerId), lat, lng] as const,
   },
+  LOCATIONS: {
+    all: ["locations"] as const,
+    lists: () => [...QUERY_KEYS.LOCATIONS.all, "list"] as const,
+    listByLocation: (lat: number, lng: number) =>
+      [...QUERY_KEYS.LOCATIONS.lists(), lat, lng] as const,
+  },
 } as const;

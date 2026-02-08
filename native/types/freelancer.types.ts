@@ -53,4 +53,9 @@ export interface NearbyFreelancer {
   distance_km: number; // raw DB value
 }
 
-export interface NearbyFreelancerDetail extends NearbyFreelancer {}
+export interface NearbyFreelancerDetail extends NearbyFreelancer {
+  latitude: number;
+  longitude: number;
+  location: string;
+  description: string | null;
+}

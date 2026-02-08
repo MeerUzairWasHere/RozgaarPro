@@ -1,4 +1,4 @@
-import { getAddressFromLatLng } from "@/lib";
+import { locationApiClient } from "@/api";
 import * as Location from "expo-location";
 import { create } from "zustand";
 
@@ -54,8 +54,12 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
         accuracy: Location.Accuracy.BestForNavigation,
       });
       const { latitude, longitude, accuracy } = position.coords;
-      // Convert to address text
-      const location = await getAddressFromLatLng(latitude, longitude);
+
+      const location = await locationApiClient.getAddressFromLatLng({
+        latitude,
+        longitude,
+      });
+
       set({
         coordinates: { latitude, longitude, accuracy },
         location,
@@ -78,11 +82,15 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
     try {
       set({ loading: true, coordinates: coords });
 
+      const { latitude, longitude } = coords;
+
       // Convert coordinates to address text
-      const location = await getAddressFromLatLng(
-        coords.latitude,
-        coords.longitude,
-      );
+
+      // Convert to address text using the API client directly
+      const location = await locationApiClient.getAddressFromLatLng({
+        latitude,
+        longitude,
+      });
 
       set({
         location,

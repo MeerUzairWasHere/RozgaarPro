@@ -18,7 +18,7 @@ export default function ProfessionsFilter({
     coordinates: { latitude, longitude },
   } = useLocationStore();
 
-  const { data, isLoading } = useGetProfessionsFilterList({
+  const { data } = useGetProfessionsFilterList({
     latitude,
     longitude,
   });

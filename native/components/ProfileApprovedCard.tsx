@@ -4,7 +4,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { CircleCheckBig, CircleX } from "lucide-react-native";
 import { useAuthStore } from "@/store";
 import { FREELANCER_STATUS, USER_ROLE } from "@/types";
-import { useGetFreelancerDetails, useGetFreelancerStatus } from "@/mutations";
+import { useGetFreelancerStatus } from "@/mutations";
 
 /* ---------------- STATUS CONFIG ---------------- */
 
