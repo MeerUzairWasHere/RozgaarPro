@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Briefcase } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { InitialAvatar, BackButton } from "@/components";
+import BackButton from "../common/BackButton";
+import InitialAvatar from "../common/InitialAvatar";
 
 type Props = {
   name: string;
