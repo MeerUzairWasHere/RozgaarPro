@@ -31,7 +31,7 @@ export interface Pagination {
   pageSize?: number;
 }
 
-export interface GeoLocation {
+export interface Coordinates {
   latitude: number;
   longitude: number;
 }
@@ -42,5 +42,5 @@ export interface ListQueryDto {
   sort?: ListSort[];
   search?: ListSearch;
   fields?: string[];
-  location?: GeoLocation;
+  location?: Coordinates;
 }

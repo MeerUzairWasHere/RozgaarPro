@@ -8,6 +8,7 @@ import {
 } from "../dto";
 import {
   IFreelancerService,
+  ILocationService,
   IPrismaService,
   IUserService,
 } from "../interfaces";
@@ -20,6 +21,7 @@ export class FreelancerService implements IFreelancerService {
   constructor(
     private prismaService: IPrismaService,
     private userService: IUserService,
+    private locationService: ILocationService,
   ) {}
 
   async createAndCompleteFreelancerProfile({
@@ -197,6 +199,8 @@ export class FreelancerService implements IFreelancerService {
       f.status AS status,
       f.rating AS rating,
       p.name AS primary_profession_name,
+      fl.latitude AS latitude,
+      fl.longitude AS longitude,
       get_distance_km(
         ${latitude},
         ${longitude},
@@ -218,6 +222,16 @@ export class FreelancerService implements IFreelancerService {
     WHERE f.id = ${freelancerId};
   `;
 
-    return result[0];
+    const location = await this.locationService.getAddressFromCoordinates({
+      latitude: result[0].latitude,
+      longitude: result[0].longitude,
+    });
+
+    const freelancerDetails = {
+      ...result[0],
+      location,
+    };
+
+    return freelancerDetails;
   }
 }

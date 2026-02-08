@@ -31,6 +31,9 @@ export interface NearbyFreelancer {
   experience: number;
   status: FreelancerStatus;
   rating: number;
+  latitude: number;
+  longitude: number;
+  location: string;
   distance_km: number;
 }
 

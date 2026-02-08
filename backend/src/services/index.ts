@@ -10,3 +10,4 @@ export * from "./twilio-verify.service";
 export * from "./skill.service";
 export * from "./profession.service";
 export * from "./freelancer.service";
+export * from "./location.service";

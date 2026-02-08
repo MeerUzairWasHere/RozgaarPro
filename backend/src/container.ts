@@ -15,6 +15,7 @@ import {
   createStorageService,
   EmailService,
   FreelancerService,
+  LocationService,
   PrismaService,
   ProfessionService,
   SkillService,
@@ -37,6 +38,7 @@ class Container {
   public skillService: SkillService;
   public professionService: ProfessionService;
   public freelancerService: FreelancerService;
+  public locationService: LocationService;
 
   // Controllers
   public authController: AuthController;
@@ -49,6 +51,7 @@ class Container {
   constructor() {
     // Initialize Database
     this.prismaService = new PrismaService();
+    this.locationService = new LocationService();
     this.storageService = createStorageService();
 
     // Initialize Services
@@ -73,6 +76,7 @@ class Container {
     this.freelancerService = new FreelancerService(
       this.prismaService,
       this.userService,
+      this.locationService,
     );
 
     // Initialize Controllers
