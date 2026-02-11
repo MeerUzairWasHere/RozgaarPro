@@ -30,17 +30,15 @@ router
     freelancerController.getAllVisibleFreelancers,
   );
 
-router
-  .route("/:freelancerId")
-  .post(
-    authGuard,
-    rolesGuard(Role.USER),
-    validate({
-      body: validateGetSingleVisibleFreelancerDetailInput,
-      params: freelancerIdParamSchema,
-    }),
-    freelancerController.getSingleVisibleFreelancerDetail,
-  );
+router.route("/:freelancerId").post(
+  authGuard,
+  rolesGuard(Role.USER),
+  validate({
+    body: validateGetSingleVisibleFreelancerDetailInput,
+    params: freelancerIdParamSchema,
+  }),
+  freelancerController.getSingleVisibleFreelancerDetail,
+);
 
 router
   .route("/:freelancerId/status")

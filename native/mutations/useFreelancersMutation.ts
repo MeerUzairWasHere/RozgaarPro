@@ -74,9 +74,27 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
 
 export const useGetFilteredVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
-  return useQuery({
+
+  return useInfiniteQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
-    queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) =>
+      freelancerApiClient.getAllVisibleFreelancers({
+        ...query,
+        pagination: {
+          page: pageParam,
+          pageSize: query.pagination?.pageSize ?? 15,
+        },
+      }),
+
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNext) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+
     enabled,
   });
 };
