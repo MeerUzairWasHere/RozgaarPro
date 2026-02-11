@@ -21,9 +21,11 @@ import {
   BackButton,
   CustomPressableButton,
   CustomTouchableOpacityButton,
+  ErrorBanner,
 } from "@/components";
 import { useRef } from "react";
 import { cn } from "@/utils";
+import { useFormErrors } from "@/hooks";
 
 export default function SignupScreen() {
   const { name, phone, password, userRole, setField, signupStep, setUserRole } =
@@ -32,9 +34,12 @@ export default function SignupScreen() {
   const registerMutation = useRegister();
   const phoneInputRef = useRef<any>(null);
   const passwordInputRef = useRef<any>(null);
+  const { errors, generalError, clearErrors, clearFieldError } =
+    useFormErrors(registerMutation);
 
   const handleSignup = async () => {
     Keyboard.dismiss();
+    clearErrors();
     registerMutation.mutate({
       name,
       password,
@@ -120,6 +125,19 @@ export default function SignupScreen() {
                     </Animated.View>
                   </Animated.View>
 
+                  {/* General Error Banner */}
+                  {generalError && (
+                    <Animated.View
+                      entering={FadeInDown.delay(200)}
+                      className="mb-4"
+                    >
+                      <ErrorBanner
+                        message={generalError}
+                        onDismiss={clearErrors}
+                      />
+                    </Animated.View>
+                  )}
+
                   {/* Form */}
                   <Animated.View
                     entering={FadeInDown.delay(200)}
@@ -130,10 +148,14 @@ export default function SignupScreen() {
                       icon={<User size={15} color="#6B4EEA" />}
                       placeholder="Full Name"
                       value={name}
-                      onChangeText={(text) => setField("name", text)}
+                      onChangeText={(text) => {
+                        setField("name", text);
+                        clearFieldError("name");
+                      }}
                       autoCapitalize="words"
                       returnKeyType="next"
                       onSubmitEditing={() => phoneInputRef.current?.focus()}
+                      error={errors.name}
                     />
 
                     {/* Phone */}
@@ -142,10 +164,14 @@ export default function SignupScreen() {
                       icon={<Phone size={15} color="#6B4EEA" />}
                       placeholder="Phone Number"
                       value={phone}
-                      onChangeText={(text) => setField("phone", text)}
+                      onChangeText={(text) => {
+                        setField("phone", text);
+                        clearFieldError("phone");
+                      }}
                       keyboardType="phone-pad"
                       returnKeyType="next"
                       onSubmitEditing={() => passwordInputRef.current?.focus()}
+                      error={errors.phone}
                     />
 
                     {/* Password */}
@@ -154,12 +180,16 @@ export default function SignupScreen() {
                       icon={<Lock size={15} color="#6B4EEA" />}
                       placeholder="Password"
                       value={password}
-                      onChangeText={(text) => setField("password", text)}
+                      onChangeText={(text) => {
+                        setField("password", text);
+                        clearFieldError("password");
+                      }}
                       secureTextEntry={true}
                       autoCapitalize="none"
                       autoCorrect={false}
                       returnKeyType="done"
                       onSubmitEditing={handleSignup}
+                      error={errors.password}
                     />
                   </Animated.View>
 

@@ -16,7 +16,6 @@ import {
   TokenUser,
 } from "@/types";
 import { authApiClient } from "@/api";
-import { Toast } from "toastify-react-native";
 import { getErrorMessage } from "@/utils";
 import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
@@ -84,9 +83,6 @@ export const useRequestOTP = (): UseMutationResult<
 > => {
   return useMutation({
     mutationFn: authApiClient.requestOtp,
-    onError: (error) => {
-      Toast.error(getErrorMessage(error));
-    },
   });
 };
 
@@ -102,9 +98,6 @@ export const useVerityOTP = (): UseMutationResult<
     onSuccess: async (data) => {
       setSignupStep(SIGN_UP_STEP.DONE);
       router.replace(ROUTES.SIGN_IN);
-    },
-    onError: (error) => {
-      Toast.error(getErrorMessage(error));
     },
   });
 };

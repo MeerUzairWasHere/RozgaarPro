@@ -7,6 +7,7 @@ export { default as Header } from "./common/AppHeader";
 export { default as LocationHeader } from "./common/LocationHeader";
 export { default as InitialAvatar } from "./common/InitialAvatar";
 export { default as ErrorState } from "./common/ErrorState";
+export { default as ErrorBanner } from "./common/ErrorBanner";
 
 export { default as LogoutButton } from "./LogoutButton";
 export { default as ProfileApprovedCard } from "./ProfileApprovedCard";

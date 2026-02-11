@@ -20,11 +20,13 @@ import { router } from "expo-router";
 import { cn } from "@/utils";
 import { LOGIN_METHOD } from "@/types";
 import { useLogin } from "@/mutations";
+import { useFormErrors } from "@/hooks";
 import {
   CustomPressableButton,
   CustomTouchableOpacityButton,
   BackButton,
   CustomInput,
+  ErrorBanner,
 } from "@/components";
 
 export default function LoginScreen() {
@@ -33,11 +35,13 @@ export default function LoginScreen() {
     useAuthStore();
 
   const passwordRef = useRef<TextInput | null>(null);
-
   const loginMutation = useLogin();
+  const { errors, generalError, clearErrors, clearFieldError } =
+    useFormErrors(loginMutation);
 
   const handleLogin = () => {
     Keyboard.dismiss();
+    clearErrors();
 
     if (loginMethod === LOGIN_METHOD.EMAIL) {
       loginMutation.mutate({
@@ -120,6 +124,13 @@ export default function LoginScreen() {
                     ))}
                   </Animated.View>
 
+                  {/* General Error Banner */}
+                  {generalError && (
+                    <Animated.View entering={FadeInDown.delay(200)} className="mb-4">
+                      <ErrorBanner message={generalError} onDismiss={clearErrors} />
+                    </Animated.View>
+                  )}
+
                   {/* Form */}
                   <Animated.View
                     entering={FadeInDown.delay(200)}
@@ -144,14 +155,17 @@ export default function LoginScreen() {
                         loginMethod === LOGIN_METHOD.EMAIL ? "Email" : "Phone"
                       }
                       value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
-                      onChangeText={(text) =>
+                      onChangeText={(text) => {
                         setField(
                           loginMethod === LOGIN_METHOD.EMAIL
                             ? "email"
                             : "phone",
                           text,
-                        )
-                      }
+                        );
+                        // Clear error when user types
+                        const fieldName = loginMethod === LOGIN_METHOD.EMAIL ? "email" : "phone";
+                        clearFieldError(fieldName);
+                      }}
                       keyboardType={
                         loginMethod === LOGIN_METHOD.EMAIL
                           ? "email-address"
@@ -160,6 +174,11 @@ export default function LoginScreen() {
                       returnKeyType="next"
                       onSubmitEditing={() => passwordRef.current?.focus()}
                       submitBehavior="blurAndSubmit"
+                      error={
+                        loginMethod === LOGIN_METHOD.EMAIL
+                          ? errors.email
+                          : errors.phone
+                      }
                     />
 
                     {/* Password */}
@@ -172,10 +191,14 @@ export default function LoginScreen() {
                       }
                       placeholder="Password"
                       value={password}
-                      onChangeText={(text) => setField("password", text)}
+                      onChangeText={(text) => {
+                        setField("password", text);
+                        clearFieldError("password");
+                      }}
                       secureTextEntry={true}
                       returnKeyType="done"
                       ref={passwordRef}
+                      error={errors.password}
                     />
 
                     {/* Forgot Password */}

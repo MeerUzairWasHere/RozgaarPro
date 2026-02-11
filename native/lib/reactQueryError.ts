@@ -1,7 +1,8 @@
-import { Toast } from "toastify-react-native";
-import { getErrorMessage } from "@/utils";
-
+// Error handling is now done at the component level
+// This function can be used for logging or other error handling needs
 export const handleReactQueryError = (error: unknown) => {
-  const message = getErrorMessage(error);
-  Toast.error(message);
+  // Log errors for debugging
+  // if (__DEV__) {
+  //   console.error("React Query Error:", error);
+  // }
 };

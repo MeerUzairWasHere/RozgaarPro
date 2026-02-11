@@ -1,5 +1,4 @@
 import "./global.css";
-import ToastManager from "toastify-react-native";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useColorScheme } from "react-native";
@@ -28,7 +27,6 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider className={colorScheme === "dark" ? "dark" : ""}>
-        <ToastManager position="bottom" toastOptions={{ duration: 1000 }} />
         <Stack
           key={isAuthenticated ? "app" : "auth"} // 👈 CRITICAL
           screenOptions={{
