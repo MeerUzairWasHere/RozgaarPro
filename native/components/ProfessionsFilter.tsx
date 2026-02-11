@@ -29,7 +29,7 @@ export default function ProfessionsFilter() {
               className="items-center rounded-xl py-4 px-2 border-2 shadow-sm dark:shadow-none border-primary-100 dark:border-primary-800 bg-white dark:bg-primary-900"
               onPress={() =>
                 router.push({
-                  pathname: ROUTES.FREELANCERS,
+                  pathname: ROUTES.FILTERED_FREELANCERS,
                   params: {
                     professionId: profession_id,
                     professionName: profession_name,

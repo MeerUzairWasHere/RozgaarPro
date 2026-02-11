@@ -46,6 +46,21 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
   });
 };
 
+export const useGetFilteredVisibleFreelancers = (query: ListQuery = {}) => {
+  const enabled = hasValidCoordinates(query.location);
+  return useQuery({
+    queryKey: [
+      ...QUERY_KEYS.FREELANCERS.listByLocation(
+        query.location?.latitude ?? 0,
+        query.location?.longitude ?? 0,
+      ),
+      ...(query.filters?.map((filter) => [filter.field, filter.value]) ?? []),
+    ],
+    queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
+    enabled,
+  });
+};
+
 export const useGetSingleVisibleFreelancerDetail = ({
   freelancerId,
   query,

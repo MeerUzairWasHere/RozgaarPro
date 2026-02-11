@@ -43,8 +43,6 @@ export const freelancerApiClient = {
     freelancerId: string,
     query: ListQuery,
   ): Promise<NearbyFreelancerDetail> => {
-    console.log(JSON.stringify({ freelancerId, query }, null, 2));
-
     const { data } = await api.post<NearbyFreelancerDetail>(
       `/freelancers/${freelancerId}`,
       query,

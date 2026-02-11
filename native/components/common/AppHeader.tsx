@@ -29,7 +29,7 @@ export default function AppHeader({
     >
       <View className="flex-row items-center justify-between px-4 py-3">
         <View className="flex-row items-center gap-3">
-          {showBack && <BackButton light={isDark} />}
+          {showBack && <BackButton />}
           {showLocation && <LocationHeader lightBackground={!isDark} />}
           {title && (
             <Text
