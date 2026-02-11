@@ -41,11 +41,10 @@ export class ProfessionService implements IProfessionService {
   }
 
   async getNearbyProfessionCounts({
-    latitude,
-    longitude,
+    location,
   }: ProfessionWithFreelancerCountInputDto) {
-    latitude = Number(latitude);
-    longitude = Number(longitude);
+    const latitude = Number(location.latitude);
+    const longitude = Number(location.longitude);
 
     const result = await this.prismaService.$queryRaw<
       ProfessionWithFreelancerCount[]

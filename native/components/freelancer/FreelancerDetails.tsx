@@ -1,4 +1,3 @@
-import { ScrollView } from "react-native";
 import ProfileHeader from "./ProfileHeader";
 import QuickStats from "./QuickStats";
 import VerificationBadges from "./VerificationBadges";
@@ -6,11 +5,12 @@ import AboutSection from "./AboutSection";
 import LocationSection from "./LocationSection";
 import ReviewsSection from "./ReviewsSection";
 import ActionButtons from "./ActionButtons";
+import ErrorState from "../common/ErrorState";
+import { ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
-import ErrorState from "../common/ErrorState";
 import { FilterOperator } from "@/types";
 
 export default function FreelancerDetails() {

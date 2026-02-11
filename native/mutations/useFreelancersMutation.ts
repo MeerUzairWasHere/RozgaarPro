@@ -57,7 +57,7 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
         ...query,
         pagination: {
           page: pageParam,
-          pageSize: query.pagination?.pageSize ?? 25,
+          pageSize: query.pagination?.pageSize ?? 1,
         },
       }),
 

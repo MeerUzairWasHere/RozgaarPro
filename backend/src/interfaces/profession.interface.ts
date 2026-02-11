@@ -19,8 +19,7 @@ export interface IProfessionService {
   }): Promise<Profession>;
 
   getNearbyProfessionCounts({
-    latitude,
-    longitude,
+    location,
   }: ProfessionWithFreelancerCountInputDto): Promise<
     ProfessionWithFreelancerCount[]
   >;

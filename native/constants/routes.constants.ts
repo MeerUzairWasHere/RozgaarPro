@@ -2,7 +2,6 @@ import { Href } from "expo-router";
 
 export const ROUTES = {
   ONBOARDING: "/(onboarding)/onboarding",
-  FREELANCER_ONBOARDING: "/complete-profile",
   SELECT_ROLE: "/(onboarding)/select-role",
   SIGN_IN: "/sign-in",
   SIGN_UP: "/sign-up",
@@ -17,6 +16,7 @@ export const ROUTES = {
   SETTINGS: "/(screens)/settings",
   FILTERED_FREELANCERS: "/(screens)/filtered-freelancers",
   FREELANCER_DETAILS: "/(screens)/freelancer-details",
+  FREELANCER_ONBOARDING: "/(screens)/complete-profile",
   ALL_VISIBLE_FREELANCERS: "/(screens)/all-visible-freelancers",
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",

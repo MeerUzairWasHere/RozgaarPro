@@ -2,12 +2,10 @@ import { Tabs } from "expo-router";
 import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import { AppHeader } from "@/components";
-import { useAuthStore } from "@/store";
 
 export default function TabsLayout() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-  const { user } = useAuthStore();
 
   const colors = {
     light: {
@@ -45,7 +43,7 @@ export default function TabsLayout() {
         // Default header component
         header: () => <AppHeader showLocation={true} showNotification={true} />,
         tabBarStyle: {
-          display: user?.profileCompleted ? "flex" : "none",
+          display: "flex",
           borderTopLeftRadius: 50,
           borderTopRightRadius: 50,
           borderBottomLeftRadius: 50,
@@ -118,13 +116,6 @@ export default function TabsLayout() {
           ),
           // Custom header for Profile tab
           header: () => <AppHeader title="Profile" showNotification={true} />,
-        }}
-      />
-      <Tabs.Screen
-        name="complete-profile"
-        options={{
-          href: null,
-          headerShown: false,
         }}
       />
     </Tabs>
