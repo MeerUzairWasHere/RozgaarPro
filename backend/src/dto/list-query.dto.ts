@@ -11,6 +11,7 @@ export type FilterOperator =
   | "endsWith";
 
 export interface ListFilter {
+  alias?: string;
   field: string;
   operator: FilterOperator;
   value: unknown;
@@ -19,11 +20,13 @@ export interface ListFilter {
 export interface ListSort {
   field: string;
   direction: "asc" | "desc";
+  alias?: string;
 }
 
 export interface ListSearch {
   term: string;
   fields?: string[];
+  alias?: string;
 }
 
 export interface Pagination {
@@ -44,3 +47,4 @@ export interface ListQueryDto {
   fields?: string[];
   location?: Coordinates;
 }
+

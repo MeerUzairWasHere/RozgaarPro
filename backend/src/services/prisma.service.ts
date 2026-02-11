@@ -3,7 +3,9 @@ import { IPrismaService } from "../interfaces";
 
 export class PrismaService extends PrismaClient implements IPrismaService {
   constructor() {
-    super();
+    super({
+      log: ["query", "info", "warn", "error"],
+    });
   }
 
   async connect(): Promise<void> {

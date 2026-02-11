@@ -52,8 +52,8 @@ export default function FreelancerCard({
 
           {/* Profession & Experience */}
           <View className="flex-row items-center gap-2 mb-2">
-            <View className="bg-brand/10 dark:bg-brand-500/20 px-2 py-1 rounded-md border border-brand/20 dark:border-brand-500/30">
-              <Text className="text-sm font-medium text-brand dark:text-brand-300">
+            <View className="bg-brand-300 dark:bg-brand-300 px-2 py-1 rounded-md ">
+              <Text className="text-sm font-medium text-black dark:text-primary-950">
                 {freelancer.primary_profession_name}
               </Text>
             </View>
@@ -79,7 +79,7 @@ export default function FreelancerCard({
             <View className="flex-row items-center gap-1">
               <MapPin
                 size={14}
-                color={colourScheme === "dark" ? "#86efac" : "#16a34a"}
+                color={colourScheme === "dark" ? "#ff0000" : "#ff0000"}
               />
               <Text className="text-xs text-primary-600 dark:text-primary-400">
                 {formatDistance(freelancer.distance_km)}

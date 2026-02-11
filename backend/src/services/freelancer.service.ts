@@ -1,10 +1,13 @@
-import { Freelancer, FreelancerStatus, Role } from "@prisma/client";
+import { Freelancer, FreelancerStatus, Prisma, Role } from "@prisma/client";
 import {
   FreelancerProfileCompletedInput,
   FreelancerWithAwayDistanceInput,
+  ListFilter,
   ListQueryDto,
+  ListSort,
   NearbyFreelancer,
   NearbyFreelancerDetail,
+  Pagination,
 } from "../dto";
 import {
   IFreelancerService,
@@ -15,7 +18,13 @@ import {
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
 import { PaginatedResponse } from "../types";
-import { buildPagination } from "../utils/prisma-list.builder";
+import {
+  buildPagination,
+  buildSqlFilters,
+  buildSqlOrderBy,
+  buildSqlPagination,
+  executePaginatedRawQuery,
+} from "../utils";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -95,59 +104,68 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
-    const { page, pageSize, skip, take } = buildPagination({
+    const defaultPagination: Pagination = {
       page: 1,
       pageSize: 5,
-    });
+    };
+
+    const defaultFilters: ListFilter[] = [
+      {
+        alias: "f",
+        field: "status",
+        operator: "eq",
+        value: "APPROVED",
+      },
+    ];
+
+    const defaultSort: ListSort[] = [
+      {
+        field: "distance_km",
+        direction: "desc",
+      },
+    ];
 
     const { latitude, longitude } = query.location ?? {};
 
-    const data = await this.prismaService.$queryRaw<NearbyFreelancer[]>`
-    SELECT
-      f.id AS freelancer_Id,
-      u.id AS user_Id,
-      u.name AS name,
-      f.experience AS experience,
-      f.status AS status,
-      f.rating AS rating,
-      p.name AS primary_profession_name,
-      get_distance_km(
-        ${latitude},
-        ${longitude},
-        fl.latitude,
-        fl.longitude
-      ) AS distance_km
-    FROM "Freelancer" f
-    JOIN "FreelancerLocation" fl
-      ON fl."freelancerId" = f.id
-     AND fl."recordedAt" = (
-       SELECT MAX(fl2."recordedAt")
-       FROM "FreelancerLocation" fl2
-       WHERE fl2."freelancerId" = f.id
-     )
-    JOIN "User" u
-      ON u.id = f."userId"
-    JOIN "Profession" p
-      ON f."primaryProfessionId" = p."id"
-    WHERE f.status = 'APPROVED'
-    ORDER BY distance_km ASC
-    LIMIT ${take}
-    OFFSET ${skip};
-  `;
-
-    const totalItems = data.length; // OK for now
-
-    return {
-      data,
-      meta: {
-        page,
-        pageSize,
-        totalItems,
-        totalPages: Math.ceil(totalItems / pageSize),
-        hasNext: page * pageSize < totalItems,
-        hasPrev: page > 1,
-      },
-    };
+    return executePaginatedRawQuery<NearbyFreelancer>({
+      prisma: this.prismaService,
+      query,
+      defaultFilters,
+      defaultSort,
+      defaultPagination,
+      baseQuery: (sqlFilters, sqlOrder, take, skip) => Prisma.sql`
+      SELECT
+        f.id AS freelancer_Id,
+        u.id AS user_Id,
+        u.name AS name,
+        f.experience AS experience,
+        f.status AS status,
+        f.rating AS rating,
+        p.name AS primary_profession_name,
+        get_distance_km(
+          ${latitude},
+          ${longitude},
+          fl.latitude,
+          fl.longitude
+        ) AS distance_km
+      FROM "Freelancer" f
+      JOIN "FreelancerLocation" fl
+        ON fl."freelancerId" = f.id
+       AND fl."recordedAt" = (
+         SELECT MAX(fl2."recordedAt")
+         FROM "FreelancerLocation" fl2
+         WHERE fl2."freelancerId" = f.id
+       )
+      JOIN "User" u
+        ON u.id = f."userId"
+      JOIN "Profession" p
+        ON f."primaryProfessionId" = p."id"
+      ${sqlFilters}
+      ${sqlOrder}
+      LIMIT ${take}
+      OFFSET ${skip}
+    `,
+    });
   }
 
   async findFreelancerByIdOrThrowError({
