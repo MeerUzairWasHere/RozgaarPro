@@ -1,7 +1,7 @@
 import { View, FlatList } from "react-native";
 import SectionHeader from "../SectionHeader";
 import { useLocationStore } from "@/store";
-import { useGetAllVisibleFreelancers } from "@/mutations";
+import { useGetRandomVisibleFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
 import { NearbyWorkersSkeletonList } from "../Skeletons";
@@ -11,7 +11,7 @@ import { ROUTES } from "@/constants";
 export default function NearbyFreelancers() {
   const { coordinates } = useLocationStore();
 
-  const { data: freelancers } = useGetAllVisibleFreelancers({
+  const { data: freelancers } = useGetRandomVisibleFreelancers({
     location: {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,

@@ -1,3 +1,6 @@
+import { ListQuery } from "@/types";
+import { all } from "axios";
+
 export const QUERY_KEYS = {
   CURENT_USER: {
     all: ["current-user"] as const,
@@ -22,15 +25,11 @@ export const QUERY_KEYS = {
   },
   FREELANCERS: {
     all: ["freelancers"] as const,
-    lists: () => [...QUERY_KEYS.FREELANCERS.all, "list"] as const,
-    list: (filters?: Record<string, any>) =>
-      [...QUERY_KEYS.FREELANCERS.lists(), filters] as const,
-    details: () => [...QUERY_KEYS.FREELANCERS.all, "detail"] as const,
-    detail: (id: string) => [...QUERY_KEYS.FREELANCERS.details(), id] as const,
-    listByLocation: (lat: number, lng: number) =>
-      [...QUERY_KEYS.FREELANCERS.lists(), lat, lng] as const,
-    DetailByLocation: (freelancerId: string, lat: number, lng: number) =>
-      [...QUERY_KEYS.FREELANCERS.detail(freelancerId), lat, lng] as const,
+    byId: (id: string) => [...QUERY_KEYS.FREELANCERS.all, id] as const,
+    detailByLocation: (freelancerId: string, lat: number, lng: number) =>
+      [...QUERY_KEYS.FREELANCERS.byId(freelancerId), lat, lng] as const,
+    listQuery: (query: ListQuery) =>
+      [...QUERY_KEYS.FREELANCERS.all, JSON.stringify(query)] as const,
   },
   LOCATIONS: {
     all: ["locations"] as const,

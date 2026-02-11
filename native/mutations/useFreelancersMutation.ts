@@ -1,3 +1,4 @@
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { freelancerApiClient } from "@/api";
 import { QUERY_KEYS } from "@/constants";
 import { hasValidCoordinates } from "@/lib";
@@ -5,8 +6,10 @@ import {
   FREELANCER_STATUS,
   FreelancerProfileCompletedInput,
   ListQuery,
+  NearbyFreelancer,
+  PaginatedResponse,
 } from "@/types";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {
   useMutation,
   UseMutationResult,
@@ -28,20 +31,44 @@ export const useGetFreelancerStatus = (
   freelancerId: string,
 ): UseQueryResult<FREELANCER_STATUS> => {
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.detail(freelancerId),
+    queryKey: QUERY_KEYS.FREELANCERS.byId(freelancerId),
     queryFn: () => freelancerApiClient.getFreelancerStatus(freelancerId),
     enabled: !!freelancerId,
   });
 };
 
-export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
+export const useGetRandomVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.listByLocation(
-      query.location?.latitude ?? 0,
-      query.location?.longitude ?? 0,
-    ),
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
+    enabled,
+  });
+};
+
+export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
+  const enabled = hasValidCoordinates(query.location);
+
+  return useInfiniteQuery({
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) =>
+      freelancerApiClient.getAllVisibleFreelancers({
+        ...query,
+        pagination: {
+          page: pageParam,
+          pageSize: query.pagination?.pageSize ?? 25,
+        },
+      }),
+
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNext) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+
     enabled,
   });
 };
@@ -49,13 +76,7 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
 export const useGetFilteredVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
   return useQuery({
-    queryKey: [
-      ...QUERY_KEYS.FREELANCERS.listByLocation(
-        query.location?.latitude ?? 0,
-        query.location?.longitude ?? 0,
-      ),
-      ...(query.filters?.map((filter) => [filter.field, filter.value]) ?? []),
-    ],
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
     enabled,
   });
@@ -71,7 +92,7 @@ export const useGetSingleVisibleFreelancerDetail = ({
   const enabled = hasValidCoordinates(query.location) && Boolean(freelancerId);
 
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.DetailByLocation(
+    queryKey: QUERY_KEYS.FREELANCERS.detailByLocation(
       freelancerId!,
       query.location?.latitude ?? 0,
       query.location?.longitude ?? 0,
