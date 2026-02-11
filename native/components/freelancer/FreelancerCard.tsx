@@ -34,7 +34,7 @@ export default function FreelancerCard({
             <View
               className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full items-center justify-center
                   bg-green-500 dark:bg-green-400
-                  border-2 border-white dark:border-primary-900"
+ border-white dark:border-primary-900"
             >
               <ShieldCheck size={12} color="#FFF" />
             </View>
