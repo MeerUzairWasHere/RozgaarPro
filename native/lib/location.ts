@@ -48,6 +48,8 @@ export const hasValidCoordinates = (coords?: {
   return (
     coords != null &&
     Number.isFinite(coords.latitude) &&
-    Number.isFinite(coords.longitude)
+    Number.isFinite(coords.longitude) &&
+    coords.latitude !== 0 &&
+    coords.longitude !== 0
   );
 };
