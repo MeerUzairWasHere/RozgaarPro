@@ -23,7 +23,6 @@ export const validate =
 
       // Validate params
       if (schemas.params) {
-        console.log(req.params);
         const parsedParams = await schemas.params.parseAsync(req.params);
         req.params = parsedParams as typeof req.params;
       }

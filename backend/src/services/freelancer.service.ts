@@ -155,6 +155,8 @@ export class FreelancerService implements IFreelancerService {
       LIMIT ${take}
       OFFSET ${skip}
     `,
+      countQuery: (sqlFilters) => Prisma.sql`
+        SELECT COUNT(*)::int AS count FROM "Freelancer" f ${sqlFilters}`,
     });
   }
 
@@ -190,7 +192,6 @@ export class FreelancerService implements IFreelancerService {
     coords: Coordinates,
     freelancerId: string,
   ): Promise<NearbyFreelancerDetail> {
-    // Ensure freelancer exists
     await this.findFreelancerByIdOrThrowError({
       id: freelancerId,
     });

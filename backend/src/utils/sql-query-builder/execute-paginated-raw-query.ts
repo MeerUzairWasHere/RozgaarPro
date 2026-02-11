@@ -8,6 +8,7 @@ import { PaginatedResponse } from "../../types";
 export async function executePaginatedRawQuery<T>({
   prisma,
   baseQuery,
+  countQuery,
   query,
   defaultFilters = [],
   defaultSort = [],
@@ -20,6 +21,7 @@ export async function executePaginatedRawQuery<T>({
     take: number,
     skip: number,
   ) => Prisma.Sql;
+  countQuery: (sqlFilters: Prisma.Sql) => Prisma.Sql;
   query: ListQueryDto;
   defaultFilters?: ListFilter[];
   defaultSort?: ListSort[];
@@ -40,7 +42,11 @@ export async function executePaginatedRawQuery<T>({
     baseQuery(sqlFilters, sqlOrder, take, skip),
   );
 
-  const totalItems = data.length;
+  const countResult = await prisma.$queryRaw<{ count: number }[]>(
+    countQuery(sqlFilters),
+  );
+
+  const totalItems = Number(countResult[0]?.count ?? 0);
 
   return {
     data,

@@ -34,7 +34,7 @@ const AllVisibleFreelancers = () => {
         onEndReached={() => {
           if (hasNextPage) fetchNextPage();
         }}
-        onEndReachedThreshold={0.1}
+        onEndReachedThreshold={0.4}
         ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={{ marginVertical: 16 }} />
@@ -43,6 +43,7 @@ const AllVisibleFreelancers = () => {
         contentContainerStyle={{
           padding: 16,
           paddingBottom: 20,
+          flexGrow: 1, // add this
         }}
       />
     </>
