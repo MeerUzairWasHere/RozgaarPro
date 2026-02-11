@@ -15,6 +15,7 @@ export const ROUTES = {
   EDIT_PROFILE: "/(screens)/edit-profile",
   HELP_SUPPORT: "/(screens)/help-support",
   SETTINGS: "/(screens)/settings",
+  FREELANCERS: "/(screens)/freelancers",
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
 } as const;
