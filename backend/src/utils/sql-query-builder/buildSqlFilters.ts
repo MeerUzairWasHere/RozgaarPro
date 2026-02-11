@@ -1,18 +1,31 @@
 import { Prisma } from "@prisma/client";
 import { FilterOperator, ListFilter } from "../../dto";
 import { ENUM_FIELDS } from "../constants";
+import { COMPUTED_FIELD_BUILDERS } from "./property-mapper";
 
-export function buildSqlFilters(filters?: ListFilter[]) {
+export function buildSqlFilters(
+  filters?: ListFilter[],
+  ctx?: { latitude: number; longitude: number },
+) {
   if (!filters?.length) return Prisma.empty;
 
   const conditions: Prisma.Sql[] = [];
 
   for (const filter of filters) {
-    const alias = filter.alias ? `${filter.alias}.` : "";
-    const column = Prisma.raw(`${alias}"${filter.field}"`);
+    let column: Prisma.Sql;
+
+    if (COMPUTED_FIELD_BUILDERS[filter.field]) {
+      if (!ctx) {
+        throw new Error(`Context required for computed field: ${filter.field}`);
+      }
+      column = COMPUTED_FIELD_BUILDERS[filter.field](filter, ctx);
+    } else {
+      const alias = filter.alias ? `${filter.alias}.` : "";
+      column = Prisma.raw(`${alias}"${filter.field}"`);
+    }
+
     const enumType = ENUM_FIELDS[filter.field];
 
-    // helper for enum-safe value
     const value = enumType
       ? Prisma.sql`${filter.value}::${Prisma.raw(enumType)}`
       : Prisma.sql`${filter.value}`;
@@ -27,19 +40,19 @@ export function buildSqlFilters(filters?: ListFilter[]) {
         break;
 
       case FilterOperator.GREATER_THAN:
-        conditions.push(Prisma.sql`${column} > ${filter.value}`);
+        conditions.push(Prisma.sql`${column} > ${value}`);
         break;
 
       case FilterOperator.GREATER_THAN_OR_EQUAL:
-        conditions.push(Prisma.sql`${column} >= ${filter.value}`);
+        conditions.push(Prisma.sql`${column} >= ${value}`);
         break;
 
       case FilterOperator.LESS_THAN:
-        conditions.push(Prisma.sql`${column} < ${filter.value}`);
+        conditions.push(Prisma.sql`${column} < ${value}`);
         break;
 
       case FilterOperator.LESS_THAN_OR_EQUAL:
-        conditions.push(Prisma.sql`${column} <= ${filter.value}`);
+        conditions.push(Prisma.sql`${column} <= ${value}`);
         break;
 
       case FilterOperator.IN:

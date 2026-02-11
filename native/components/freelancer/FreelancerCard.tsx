@@ -68,7 +68,7 @@ export default function FreelancerCard({
             <View className="flex-row items-center gap-1">
               <Star size={14} fill="#FFA500" color="#FFA500" />
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
-                {(Math.random() * 5).toFixed(1)} {/* TODO: Add these */}
+                {freelancer.rating.toFixed(1)}
               </Text>
               <Text className="text-xs text-primary-600 dark:text-primary-400">
                 ({Math.round(Math.random() * 100)}) {/* TODO: Add these */}

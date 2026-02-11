@@ -11,10 +11,13 @@ import { FlatList, ActivityIndicator } from "react-native";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { extractInfiniteList } from "@/utils";
 import { useState } from "react";
+import { ListFilter, ListSort } from "@/types";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [activeFilters, setActiveFilters] = useState<ListFilter[]>([]);
+  const [activeSort, setActiveSort] = useState<ListSort[]>([]);
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetAllVisibleFreelancers({
@@ -22,9 +25,16 @@ const AllVisibleFreelancers = () => {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
       },
+      filters: activeFilters,
+      sort: activeSort,
     });
 
   const { items, totalItems } = extractInfiniteList(data);
+
+  const handleApplyFilters = (filters: ListFilter[], sort: ListSort[]) => {
+    setActiveFilters(filters);
+    setActiveSort(sort);
+  };
 
   if (isLoading) {
     return <FreelancerListSkeleton />;
@@ -35,7 +45,7 @@ const AllVisibleFreelancers = () => {
       <AppHeader showBack title="All visible freelancers" />
 
       <ListFilterHeader
-        freelancersCount={totalItems}
+        freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
       />
 
@@ -55,13 +65,14 @@ const AllVisibleFreelancers = () => {
         contentContainerStyle={{
           padding: 16,
           paddingBottom: 20,
-          flexGrow: 1, // add this
+          flexGrow: 1,
         }}
       />
 
       <FilterDrawer
         visible={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
+        onApplyFilters={handleApplyFilters}
       />
     </>
   );

@@ -31,10 +31,13 @@ export async function executePaginatedRawQuery<T>({
     query.pagination ?? defaultPagination,
   );
 
-  const sqlFilters = buildSqlFilters([
-    ...defaultFilters,
-    ...(query.filters ?? []),
-  ]);
+  const sqlFilters = buildSqlFilters(
+    [...defaultFilters, ...(query.filters ?? [])],
+    {
+      latitude: query.location?.latitude ?? 0,
+      longitude: query.location?.longitude ?? 0,
+    },
+  );
 
   const sqlOrder = buildSqlOrderBy([...defaultSort, ...(query.sort ?? [])]);
 

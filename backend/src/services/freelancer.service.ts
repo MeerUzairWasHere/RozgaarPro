@@ -99,6 +99,8 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
+    console.log(JSON.stringify(query, null, 2));
+
     const defaultFilters: ListFilter[] = [
       {
         alias: "f",
@@ -108,20 +110,14 @@ export class FreelancerService implements IFreelancerService {
       },
     ];
 
-    const defaultSort: ListSort[] = [
-      {
-        field: "distance_km",
-        direction: SortDirection.ASC,
-      },
-    ];
-
     const { latitude, longitude } = query.location ?? {};
+
+    console.log(this.prismaService.$queryRaw.toString());
 
     return executePaginatedRawQuery<NearbyFreelancer>({
       prisma: this.prismaService,
       query,
       defaultFilters,
-      defaultSort,
       baseQuery: (sqlFilters, sqlOrder, take, skip) => Prisma.sql`
       SELECT
         f.id AS freelancer_Id,
@@ -156,7 +152,7 @@ export class FreelancerService implements IFreelancerService {
       OFFSET ${skip}
     `,
       countQuery: (sqlFilters) => Prisma.sql`
-        SELECT COUNT(*)::int AS count FROM "Freelancer" f ${sqlFilters}`,
+        SELECT COUNT(*)::int AS count FROM "Freelancer"`,
     });
   }
 

@@ -14,7 +14,11 @@ const ListFilterHeader = ({
   return (
     <View className="px-6 h-16 flex-row items-center justify-between border-b border-primary-200 dark:border-primary-800 dark:bg-primary-950">
       <Text className="text-xl text-brand-400">
-        {freelancersCount} {label ? `${label}s` : "freelancers"} found
+        {freelancersCount}{" "}
+        {label
+          ? `${label}${freelancersCount > 1 ? "s" : ""}`
+          : `freelancer${freelancersCount > 1 ? "s" : ""}`}{" "}
+        found
       </Text>
 
       <CustomTouchableOpacityButton

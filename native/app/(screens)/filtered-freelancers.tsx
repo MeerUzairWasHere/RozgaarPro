@@ -7,14 +7,17 @@ import {
 } from "@/components";
 import { useGetFilteredVisibleFreelancers } from "@/mutations";
 import { useLocationStore } from "@/store";
-import { FilterOperator } from "@/types";
+import { FilterOperator, ListFilter, ListSort } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, ActivityIndicator } from "react-native";
 import { extractInfiniteList } from "@/utils";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function FreelancerFilterView() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [additionalFilters, setAdditionalFilters] = useState<ListFilter[]>([]);
+  const [activeSort, setActiveSort] = useState<ListSort[]>([]);
+
   const { professionId, professionName } = useLocalSearchParams<{
     professionId: string;
     professionName: string;
@@ -22,22 +25,32 @@ export default function FreelancerFilterView() {
 
   const { coordinates } = useLocationStore();
 
+  // Combine profession filter with additional filters
+  const allFilters = useMemo(() => {
+    const professionFilter: ListFilter = {
+      field: "primaryProfessionId",
+      operator: FilterOperator.EQUAL_TO,
+      value: professionId,
+    };
+    return [professionFilter, ...additionalFilters];
+  }, [professionId, additionalFilters]);
+
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetFilteredVisibleFreelancers({
       location: {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
       },
-      filters: [
-        {
-          field: "primaryProfessionId",
-          operator: FilterOperator.EQUAL_TO,
-          value: professionId,
-        },
-      ],
+      filters: allFilters,
+      sort: activeSort,
     });
 
   const { items, totalItems } = extractInfiniteList(data);
+
+  const handleApplyFilters = (filters: ListFilter[], sort: ListSort[]) => {
+    setAdditionalFilters(filters);
+    setActiveSort(sort);
+  };
 
   if (isLoading) {
     return <FreelancerListSkeleton professionName={professionName} />;
@@ -48,7 +61,7 @@ export default function FreelancerFilterView() {
       <AppHeader showBack title={`${professionName}s Nearby`} />
 
       <ListFilterHeader
-        freelancersCount={totalItems}
+        freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
         label={professionName}
       />
@@ -79,6 +92,7 @@ export default function FreelancerFilterView() {
       <FilterDrawer
         visible={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
+        onApplyFilters={handleApplyFilters}
       />
     </>
   );

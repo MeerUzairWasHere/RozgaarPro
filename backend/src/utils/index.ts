@@ -5,6 +5,7 @@ export * from "./constants";
 
 // SQL Query Builders
 export * from "./sql-query-builder/execute-paginated-raw-query";
+export * from "./sql-query-builder/property-mapper";
 export * from "./sql-query-builder/buildSqlFilters";
 export * from "./sql-query-builder/buildSqlPagination";
 export * from "./sql-query-builder/buildSqlSearch";

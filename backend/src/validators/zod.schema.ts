@@ -113,3 +113,26 @@ export const validatePaginationInput = z.object({
   page: z.number().int().min(1).default(1),
   pageSize: z.number().int().min(1).max(100).default(25),
 });
+
+export const locationWithAccuracySchema = z.object(
+  {
+    latitude: requiredFieldNumberSchema("latitude", -90, 90),
+    longitude: requiredFieldNumberSchema("longitude", -180, 180),
+    accuracy: requiredFieldNumberSchema("accuracy", 0, 15),
+  },
+  "location must be a valid object of latitude, longitude and accuracy",
+);
+
+export const locationSchema = z.object(
+  {
+    latitude: requiredFieldNumberSchema("latitude", -90, 90),
+    longitude: requiredFieldNumberSchema("longitude", -180, 180),
+  },
+  "location must be a valid object of latitude, longitude and accuracy",
+);
+
+export const sortableFields = <T extends readonly string[]>(fields: T) =>
+  z.object({
+    field: z.enum(fields),
+    direction: z.enum(["asc", "desc"]),
+  });
