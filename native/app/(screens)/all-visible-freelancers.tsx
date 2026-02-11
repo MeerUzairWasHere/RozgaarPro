@@ -3,6 +3,7 @@ import { FreelancerListSkeleton } from "@/components/Skeletons";
 import { useLocationStore } from "@/store";
 import { FlatList, ActivityIndicator } from "react-native";
 import { useGetAllVisibleFreelancers } from "@/mutations";
+import { extractInfiniteList } from "@/utils";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
@@ -15,8 +16,7 @@ const AllVisibleFreelancers = () => {
       },
     });
 
-  const freelancers = data?.pages.flatMap((p) => p.data) ?? [];
-  const totalItems = data?.pages[0]?.meta.totalItems ?? 0;
+  const { items, totalItems } = extractInfiniteList(data);
 
   if (isLoading) {
     return <FreelancerListSkeleton />;
@@ -28,7 +28,7 @@ const AllVisibleFreelancers = () => {
       <ListFilterHeader freelancersCount={totalItems} />
 
       <FlatList
-        data={freelancers}
+        data={items}
         keyExtractor={(item) => item.freelancer_id}
         renderItem={({ item }) => <FreelancerCard freelancer={item} />}
         onEndReached={() => {
