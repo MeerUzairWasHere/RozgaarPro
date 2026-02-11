@@ -99,7 +99,6 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
-    console.log(query);
     const defaultFilters: ListFilter[] = [
       {
         alias: "f",
