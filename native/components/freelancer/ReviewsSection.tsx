@@ -8,7 +8,7 @@ export default function ReviewsSection() {
   return (
     <Animated.View entering={FadeInDown.delay(600)} className="mb-6">
       <View className="flex-row items-center gap-2 mb-3">
-        <View className="w-1 h-6 bg-primary-600 dark:bg-primary-400 rounded-full" />
+        <View className="w-1 h-6 bg-brand dark:bg-brand-400 rounded-full" />
         <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
           Recent Reviews
         </Text>

@@ -52,9 +52,10 @@ export default function ProfessionsFilter({
               >
                 {profession_name}
               </Text>
-              <Text className="text-xs text-primary-600 dark:text-primary-400 text-center">
+              <Text className="text-xs text-brand-600 dark:text-brand-400 text-center">
                 {count} nearby
               </Text>
+              
             </TouchableOpacity>
           </View>
         ))}

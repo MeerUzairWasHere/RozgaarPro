@@ -43,7 +43,7 @@ export default function FreelancerDetails() {
   }
   return (
     <ScrollView
-      className="flex-1 bg-primary dark:bg-primary-950 px-4"
+      className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pb-8"
       showsVerticalScrollIndicator={false}
     >
       <ProfileHeader
