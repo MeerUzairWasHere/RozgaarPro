@@ -18,13 +18,7 @@ import {
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
 import { PaginatedResponse } from "../types";
-import {
-  buildPagination,
-  buildSqlFilters,
-  buildSqlOrderBy,
-  buildSqlPagination,
-  executePaginatedRawQuery,
-} from "../utils";
+import { executePaginatedRawQuery } from "../utils";
 
 export class FreelancerService implements IFreelancerService {
   constructor(
@@ -142,6 +136,7 @@ export class FreelancerService implements IFreelancerService {
         f.status AS status,
         f.rating AS rating,
         p.name AS primary_profession_name,
+        p.id AS primary_profession_id,
         get_distance_km(
           ${latitude},
           ${longitude},
@@ -218,6 +213,7 @@ export class FreelancerService implements IFreelancerService {
       f.rating AS rating,
       f.description AS description,
       p.name AS primary_profession_name,
+      p.id AS primary_profession_id,
       fl.latitude AS latitude,
       fl.longitude AS longitude,
       get_distance_km(

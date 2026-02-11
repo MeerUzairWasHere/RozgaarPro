@@ -12,25 +12,34 @@ export function buildSqlFilters(filters?: ListFilter[]) {
     const column = Prisma.raw(`${alias}"${filter.field}"`);
     const enumType = ENUM_FIELDS[filter.field];
 
+    // helper for enum-safe value
+    const value = enumType
+      ? Prisma.sql`${filter.value}::${Prisma.raw(enumType)}`
+      : Prisma.sql`${filter.value}`;
+
     switch (filter.operator) {
       case "eq":
-        if (enumType) {
-          conditions.push(
-            Prisma.sql`${column} = ${Prisma.sql`${filter.value}::${Prisma.raw(enumType)}`}`,
-          );
-        } else {
-          conditions.push(Prisma.sql`${column} = ${filter.value}`);
-        }
+        conditions.push(Prisma.sql`${column} = ${value}`);
         break;
 
       case "neq":
-        if (enumType) {
-          conditions.push(
-            Prisma.sql`${column} != ${Prisma.sql`${filter.value}::${Prisma.raw(enumType)}`}`,
-          );
-        } else {
-          conditions.push(Prisma.sql`${column} != ${filter.value}`);
-        }
+        conditions.push(Prisma.sql`${column} != ${value}`);
+        break;
+
+      case "gt":
+        conditions.push(Prisma.sql`${column} > ${filter.value}`);
+        break;
+
+      case "gte":
+        conditions.push(Prisma.sql`${column} >= ${filter.value}`);
+        break;
+
+      case "lt":
+        conditions.push(Prisma.sql`${column} < ${filter.value}`);
+        break;
+
+      case "lte":
+        conditions.push(Prisma.sql`${column} <= ${filter.value}`);
         break;
 
       case "in":
@@ -38,6 +47,27 @@ export function buildSqlFilters(filters?: ListFilter[]) {
         conditions.push(
           Prisma.sql`${column} IN (${Prisma.join(filter.value)})`,
         );
+        break;
+
+      case "nin":
+        if (!Array.isArray(filter.value)) continue;
+        conditions.push(
+          Prisma.sql`${column} NOT IN (${Prisma.join(filter.value)})`,
+        );
+        break;
+
+      case "contains":
+        conditions.push(
+          Prisma.sql`${column} ILIKE ${"%" + filter.value + "%"}`,
+        );
+        break;
+
+      case "startsWith":
+        conditions.push(Prisma.sql`${column} ILIKE ${filter.value + "%"}`);
+        break;
+
+      case "endsWith":
+        conditions.push(Prisma.sql`${column} ILIKE ${"%" + filter.value}`);
         break;
 
       default:

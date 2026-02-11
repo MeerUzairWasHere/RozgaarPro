@@ -35,3 +35,33 @@ export const emailSchema = z.email({ message: "Invalid email format" });
 export const otpSchema = z
   .string("code is required")
   .length(6, { message: "code must be 6 digits" });
+
+export const allowedOperatorSchema = z.enum([
+  "eq",
+  "neq",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "in",
+  "nin",
+  "contains",
+  "startsWith",
+  "endsWith",
+] as const);
+
+export function allowedFilterFieldSchema<
+  T extends readonly [string, ...string[]],
+>(fields: T) {
+  return z.enum(fields);
+}
+
+export function filterableFields<
+  T extends readonly [string, ...string[]],
+>(fields: T) {
+  return z.object({
+    field: allowedFilterFieldSchema(fields),
+    operator: allowedOperatorSchema,
+    value: z.any(),
+  });
+}

@@ -6,6 +6,7 @@ export type FilterOperator =
   | "lt"
   | "lte"
   | "in"
+  | "nin"
   | "contains"
   | "startsWith"
   | "endsWith";
@@ -47,4 +48,3 @@ export interface ListQueryDto {
   fields?: string[];
   location?: Coordinates;
 }
-
