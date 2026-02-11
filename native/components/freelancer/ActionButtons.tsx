@@ -18,7 +18,7 @@ export default function ActionButtons() {
 
         <TouchableOpacity className="flex-1 bg-white dark:bg-primary-900 border-2 border-primary-600 dark:border-primary-500 rounded-2xl py-4 items-center">
           <View className="flex-row items-center gap-2">
-            <Calendar size={20} color={isDark ? "#a5b4fc" : "#6366f1"} />
+            <Calendar size={20} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
             <Text className="text-primary-600 dark:text-primary-400 font-bold text-base">
               Book Now
             </Text>

@@ -14,13 +14,16 @@ const SectionHeader = ({
 }: SectionHeaderProps) => {
   return (
     <View className="flex-row items-center justify-between mb-4">
-      <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50">
-        {title}
-      </Text>
+      <View className="flex-row items-center gap-2">
+        <View className="w-1 h-5 bg-brand dark:bg-brand-400 rounded-full" />
+        <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50">
+          {title}
+        </Text>
+      </View>
 
       {onActionPress && (
         <TouchableOpacity onPress={onActionPress} activeOpacity={0.7}>
-          <Text className="text-sm font-medium text-primary-600 dark:text-primary-400">
+          <Text className="text-sm font-medium text-brand dark:text-brand-300">
             {actionLabel}
           </Text>
         </TouchableOpacity>

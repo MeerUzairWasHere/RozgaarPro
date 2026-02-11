@@ -22,22 +22,44 @@ export default function AppHeader({
   const isDark = colorScheme === "dark";
 
   return (
-    <SafeAreaView className="bg-primary dark:bg-primary-950" edges={["top"]}>
-      <View className="flex-row items-center justify-between px-4 py-3 border-b border-primary-200 dark:border-primary-800">
+    <SafeAreaView
+      className="border-b border-primary-200 dark:border-primary-800"
+      style={{ backgroundColor: isDark ? "#121212" : "#F2F2F2" }}
+      edges={["top"]}
+    >
+      <View className="flex-row items-center justify-between px-4 py-3">
         <View className="flex-row items-center gap-3">
-          {showBack && <BackButton />}
-          {showLocation && <LocationHeader />}
+          {showBack && <BackButton light={isDark} />}
+          {showLocation && <LocationHeader lightBackground={!isDark} />}
           {title && (
-            <Text className="text-lg font-semibold text-primary-900 dark:text-primary-100">
+            <Text
+              className={
+                isDark
+                  ? "text-lg font-semibold text-white"
+                  : "text-lg font-semibold text-primary-900"
+              }
+            >
               {title}
             </Text>
           )}
         </View>
 
         {showNotification && (
-          <TouchableOpacity className="p-2 rounded-full relative">
-            <Bell size={24} color={isDark ? "#F2F2F2" : "#121212"} />
-            <View className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white dark:border-primary-950" />
+          <TouchableOpacity
+            className={
+              isDark
+                ? "p-2 rounded-full relative bg-white/20"
+                : "p-2 rounded-full relative bg-primary-200/80"
+            }
+          >
+            <Bell size={24} color={isDark ? "#FFFFFF" : "#1A1A1A"} />
+            <View
+              className={
+                isDark
+                  ? "absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-accent-red rounded-full border-2 border-[#121212]"
+                  : "absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-accent-red rounded-full border-2 border-[#F2F2F2]"
+              }
+            />
           </TouchableOpacity>
         )}
       </View>

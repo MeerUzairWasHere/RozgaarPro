@@ -37,7 +37,7 @@ export default function QuickStats({ rating, experience, distance }: Props) {
         {/* Experience */}
         <View className="items-center">
           <View className="flex-row items-center gap-1 mb-1">
-            <TrendingUp size={18} color={isDark ? "#a5b4fc" : "#6366f1"} />
+            <TrendingUp size={18} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
             <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
               {experience} Years
             </Text>

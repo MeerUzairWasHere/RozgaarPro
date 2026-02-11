@@ -96,9 +96,9 @@ export default function VerifyOTPScreen() {
                 key={index}
                 onPress={() => inputRef.current?.focus()}
                 className={cn(
-                  "w-14 h-16  border-2 rounded-2xl  items-center justify-center ",
+                  "w-14 h-16 border-2 rounded-2xl items-center justify-center",
                   digit
-                    ? "border-gray-500 bg-gray-50 dark:bg-gray-950/30"
+                    ? "border-brand bg-brand/5 dark:bg-brand-500/10"
                     : "border-primary-300 dark:border-primary-700 bg-white dark:bg-primary-800",
                 )}
               >

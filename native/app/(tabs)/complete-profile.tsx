@@ -8,6 +8,7 @@ import {
   TextInput,
 } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
+import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { ROUTES } from "@/constants";
 import {
@@ -25,6 +26,8 @@ import { cn, getExperienceLabel } from "@/utils";
 import { useEffect, useState } from "react";
 
 export default function CompleteProfile() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
   const mutationCompleteProfile = useCompleteFreelancerProfile();
   const { setProfileCompleted } = useAuthStore();
   const {
@@ -94,7 +97,7 @@ export default function CompleteProfile() {
     (step === 4 && !permissionGranted);
 
   return (
-    <View className="flex-1 dark:bg-black">
+    <View className="flex-1 bg-primary-50 dark:bg-primary-950">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View className="p-4 pt-16">
@@ -123,7 +126,7 @@ export default function CompleteProfile() {
                 <View
                   className={`h-2 rounded-full ${
                     s <= step
-                      ? "bg-primary-900 dark:bg-primary-50"
+                      ? "bg-brand dark:bg-brand-400"
                       : "bg-primary-200 dark:bg-primary-800"
                   }`}
                 />
@@ -139,10 +142,10 @@ export default function CompleteProfile() {
           {/* Step 1: Profession */}
           {step === 1 && (
             <Animated.View entering={FadeInRight}>
-              <Text className="text-xl font-bold mb-2">
+              <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
                 Choose your profession
               </Text>
-              <Text className="text-primary-600 mb-6">
+              <Text className="text-primary-600 dark:text-primary-400 mb-6">
                 Select your main profession
               </Text>
 
@@ -174,7 +177,7 @@ export default function CompleteProfile() {
                         }}
                         className={`w-[48%] p-4 rounded-2xl border-2 ${
                           isSelected
-                            ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
+                            ? "border-brand dark:border-brand-400 bg-brand/10 dark:bg-brand-500/20"
                             : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
                         }`}
                         activeOpacity={0.7}
@@ -184,8 +187,8 @@ export default function CompleteProfile() {
                             {profession.name}
                           </Text>
                           {isSelected && (
-                            <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                              <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                            <View className="w-4 h-4 bg-brand dark:bg-brand-400 rounded-full items-center justify-center">
+                              <Text className="text-white text-xs font-bold">
                                 ✓
                               </Text>
                             </View>
@@ -202,7 +205,7 @@ export default function CompleteProfile() {
           {/* Step 2: Skills */}
           {step === 2 && (
             <Animated.View entering={FadeInRight}>
-              <Text className="text-xl font-bold mb-2">
+              <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
                 Select up to 3 skills
               </Text>
 
@@ -231,7 +234,7 @@ export default function CompleteProfile() {
                         onPress={() => toggleSkill(skill.id)}
                         className={`w-[48%] p-4 rounded-2xl border-2 ${
                           isSelected
-                            ? "border-primary-900 dark:border-primary-50 bg-primary-100 dark:bg-primary-800"
+                            ? "border-brand dark:border-brand-400 bg-brand/10 dark:bg-brand-500/20"
                             : "border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900"
                         }`}
                         activeOpacity={0.7}
@@ -241,8 +244,8 @@ export default function CompleteProfile() {
                             {skill.name}
                           </Text>
                           {isSelected && (
-                            <View className="w-4 h-4 bg-primary-900 dark:bg-primary-50 rounded-full items-center justify-center">
-                              <Text className="text-white dark:text-primary-900 text-xs font-bold ">
+                            <View className="w-4 h-4 bg-brand dark:bg-brand-400 rounded-full items-center justify-center">
+                              <Text className="text-white text-xs font-bold">
                                 ✓
                               </Text>
                             </View>
@@ -254,7 +257,7 @@ export default function CompleteProfile() {
                 </View>
               )}
 
-              <Text className="text-sm mt-2 text-primary-500">
+              <Text className="text-sm mt-2 text-primary-600 dark:text-primary-400">
                 {formData.skills.length}/3 selected
               </Text>
             </Animated.View>
@@ -271,7 +274,7 @@ export default function CompleteProfile() {
               </Text>
 
               <CustomInput
-                icon={<Clock size={15} color="#666" />}
+                icon={<Clock size={15} color={isDark ? "#B3A5F5" : "#6B4EEA"} />}
                 placeholder="e.g. 1.5"
                 value={experienceText}
                 keyboardType="decimal-pad"
@@ -306,7 +309,7 @@ export default function CompleteProfile() {
               />
 
               {formData.experience !== null && formData.experience > 0 && (
-                <Text className="mt-2 text-sm text-primary-500">
+                <Text className="mt-2 text-sm text-primary-600 dark:text-primary-400">
                   Experience: {getExperienceLabel(formData.experience)}
                 </Text>
               )}
@@ -328,8 +331,8 @@ export default function CompleteProfile() {
                   className="p-6 rounded-2xl border-2 border-dashed border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-900 items-center"
                   activeOpacity={0.7}
                 >
-                  <View className="w-16 h-16 bg-primary-200 dark:bg-primary-800 rounded-full items-center justify-center mb-3">
-                    <Camera size={28} color="#666666" />
+                  <View className="w-16 h-16 bg-brand/10 dark:bg-brand-500/20 rounded-full items-center justify-center mb-3">
+                    <Camera size={28} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
                   </View>
                   <Text className="font-medium text-primary-900 dark:text-primary-50 mb-1">
                     Upload ID Photo

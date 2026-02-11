@@ -32,22 +32,10 @@ export default function FreelancerCard({
           {freelancer.status === FREELANCER_STATUS.APPROVED && (
             <View
               className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full items-center justify-center
-                  bg-primary-900 dark:bg-primary-50
+                  bg-green-500 dark:bg-green-400
                   border-2 border-white dark:border-primary-900"
             >
-              {colourScheme === "light" ? (
-                <ShieldCheck
-                  size={12}
-                  color="#F8FAFC"
-                  className="block dark:hidden"
-                />
-              ) : (
-                <ShieldCheck
-                  size={12}
-                  color="#0F172A"
-                  className="hidden dark:block"
-                />
-              )}
+              <ShieldCheck size={12} color="#FFF" />
             </View>
           )}
         </View>
@@ -63,8 +51,8 @@ export default function FreelancerCard({
 
           {/* Profession & Experience */}
           <View className="flex-row items-center gap-2 mb-2">
-            <View className="bg-primary-50 dark:bg-primary-800 px-2 py-0.2 rounded-md">
-              <Text className="text-sm  text-primary-900 dark:text-primary-50">
+            <View className="bg-brand/10 dark:bg-brand-500/20 px-2 py-1 rounded-md border border-brand/20 dark:border-brand-500/30">
+              <Text className="text-sm font-medium text-brand dark:text-brand-300">
                 {freelancer.primary_profession_name}
               </Text>
             </View>
@@ -77,7 +65,7 @@ export default function FreelancerCard({
           <View className="flex-row items-center gap-6">
             {/* Rating */}
             <View className="flex-row items-center gap-1">
-              <Star size={14} fill="#666666" color="#666666" />
+              <Star size={14} fill="#FFA500" color="#FFA500" />
               <Text className="text-sm font-medium text-primary-900 dark:text-primary-50">
                 {(Math.random() * 5).toFixed(1)} {/* TODO: Add these */}
               </Text>
@@ -90,8 +78,7 @@ export default function FreelancerCard({
             <View className="flex-row items-center gap-1">
               <MapPin
                 size={14}
-                color="#666666"
-                className="text-primary-600 dark:text-primary-400"
+                color={colourScheme === "dark" ? "#86efac" : "#16a34a"}
               />
               <Text className="text-xs text-primary-600 dark:text-primary-400">
                 {formatDistance(freelancer.distance_km)}

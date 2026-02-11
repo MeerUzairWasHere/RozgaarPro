@@ -48,7 +48,7 @@ export default function SignupScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1">
+    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1"
@@ -86,7 +86,7 @@ export default function SignupScreen() {
                     </Text>
                     <Animated.View
                       entering={FadeInDown.delay(100)}
-                      className="flex-row bg-primary-100 dark:bg-primary-800 rounded-xl p-1 mb-6"
+                      className="flex-row bg-brand/10 dark:bg-brand-500/20 rounded-xl p-1 mb-6 border border-brand/20 dark:border-brand-500/30"
                     >
                       {[USER_ROLE.USER, USER_ROLE.FREELANCER].map((type) => (
                         <Pressable
@@ -95,11 +95,11 @@ export default function SignupScreen() {
                             Keyboard.dismiss();
                             setUserRole(type);
                           }}
-                          android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+                          android_ripple={{ color: "rgba(107,78,234,0.15)" }}
                           className={cn(
                             "flex-1 py-2 rounded-lg overflow-hidden items-center",
                             userRole === type
-                              ? "bg-white dark:bg-primary-700"
+                              ? "bg-brand dark:bg-brand-500"
                               : "",
                           )}
                         >
@@ -107,8 +107,8 @@ export default function SignupScreen() {
                             className={cn(
                               "text-sm",
                               userRole === type
-                                ? "text-primary-900 dark:text-primary-50 font-semibold"
-                                : "text-primary-500 dark:text-primary-400 font-medium",
+                                ? "text-white font-semibold"
+                                : "text-primary-600 dark:text-primary-400 font-medium",
                             )}
                           >
                             {type === USER_ROLE.USER
@@ -127,7 +127,7 @@ export default function SignupScreen() {
                   >
                     {/* Name */}
                     <CustomInput
-                      icon={<User size={15} color="#64748b" />}
+                      icon={<User size={15} color="#6B4EEA" />}
                       placeholder="Full Name"
                       value={name}
                       onChangeText={(text) => setField("name", text)}
@@ -139,7 +139,7 @@ export default function SignupScreen() {
                     {/* Phone */}
                     <CustomInput
                       ref={phoneInputRef}
-                      icon={<Phone size={15} color="#64748b" />}
+                      icon={<Phone size={15} color="#6B4EEA" />}
                       placeholder="Phone Number"
                       value={phone}
                       onChangeText={(text) => setField("phone", text)}
@@ -151,7 +151,7 @@ export default function SignupScreen() {
                     {/* Password */}
                     <CustomInput
                       ref={passwordInputRef}
-                      icon={<Lock size={15} color="#64748b" />}
+                      icon={<Lock size={15} color="#6B4EEA" />}
                       placeholder="Password"
                       value={password}
                       onChangeText={(text) => setField("password", text)}

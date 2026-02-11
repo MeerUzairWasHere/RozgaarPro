@@ -1,4 +1,4 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text, TextInput, useColorScheme } from "react-native";
 import { cn } from "@/utils";
 
 interface CustomInputProps {
@@ -38,8 +38,10 @@ const CustomInput = ({
   submitBehavior,
   ref,
 }: CustomInputProps) => {
+  const isDark = useColorScheme() === "dark";
+
   return (
-    <View className="flex-row items-center border-2 border-slate-200 rounded-2xl px-4 h-14 space-x-3">
+    <View className="flex-row items-center border-2 border-primary-200 dark:border-primary-800 rounded-2xl px-4 h-14 space-x-3 bg-white dark:bg-primary-900">
       {icon}
       {label && <Text className="label">{label}</Text>}
       <TextInput
@@ -49,8 +51,11 @@ const CustomInput = ({
         secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
         placeholder={placeholder}
-        placeholderTextColor="#888"
-        className={cn("flex-1 text-base ml-2 mb-1 primary-text", className)}
+        placeholderTextColor={isDark ? "#9ca3af" : "#6b7280"}
+        className={cn(
+          "flex-1 text-base ml-2 mb-1 text-primary-950 dark:text-primary-50",
+          className,
+        )}
         returnKeyType={returnKeyType}
         onSubmitEditing={onSubmitEditing}
         autoCorrect={autoCorrect}

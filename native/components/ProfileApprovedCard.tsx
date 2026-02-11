@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { CircleCheckBig, CircleX } from "lucide-react-native";
 import { useAuthStore } from "@/store";
@@ -34,6 +34,7 @@ const STATUS_CONFIG = {
 export default function ProfileApprovedCard() {
   const { user } = useAuthStore();
   const { data } = useGetFreelancerStatus(user?.freelancerId ?? "");
+  const isDark = useColorScheme() === "dark";
 
   const isFreelancer = useAuthStore(
     (s) => s.user?.role === USER_ROLE.FREELANCER,
@@ -46,21 +47,48 @@ export default function ProfileApprovedCard() {
 
   const { title, subtitle, icon: Icon, showStats } = statusConfig;
 
+  const isApproved = data === FREELANCER_STATUS.APPROVED;
+
   return (
     <View className="px-4 py-4">
       <Animated.View
         entering={FadeInUp.duration(500)}
-        className="rounded-2xl p-4 bg-primary-900 dark:bg-primary-800"
+        className={`rounded-2xl p-4 border shadow-lg ${
+          isApproved
+            ? "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-900"
+            : "bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900"
+        }`}
       >
         {/* Header */}
         <View className="flex-row items-center gap-3">
-          <View className="w-10 h-10 rounded-full items-center justify-center bg-white/20">
-            <Icon size={22} color="white" />
+          <View
+            className={`w-10 h-10 rounded-full items-center justify-center ${
+              isApproved ? "bg-green-500/20" : "bg-amber-500/20"
+            }`}
+          >
+            <Icon
+              size={22}
+              color={
+                isApproved
+                  ? isDark
+                    ? "#86efac"
+                    : "#16a34a"
+                  : isDark
+                    ? "#fcd34d"
+                    : "#f59e0b"
+              }
+            />
           </View>
 
           <View className="flex-1">
-            <Text className="font-semibold text-primary-50">{title}</Text>
-            <Text className="text-sm opacity-80 text-primary-200">
+            <Text
+              className={`font-semibold ${isApproved ? "text-green-800 dark:text-green-200" : "text-amber-800 dark:text-amber-200"}`}
+            >
+              {title}
+            </Text>
+            <Text
+              className={`text-sm ${isApproved ? "text-green-600 dark:text-green-400" : "text-amber-600 dark:text-amber-400"}`}
+            >
               {subtitle}
             </Text>
           </View>
@@ -68,11 +96,21 @@ export default function ProfileApprovedCard() {
 
         {/* Footer */}
         {showStats && (
-          <View className="flex-row items-center justify-between rounded-xl px-4 py-2 bg-white/10 mt-3">
-            <Text className="text-sm text-primary-100">
+          <View
+            className={`flex-row items-center justify-between rounded-xl px-4 py-2 mt-3 ${
+              isApproved ? "bg-green-100/50 dark:bg-green-900/30" : "bg-amber-100/50 dark:bg-amber-900/30"
+            }`}
+          >
+            <Text
+              className={`text-sm ${isApproved ? "text-green-700 dark:text-green-300" : "text-amber-700 dark:text-amber-300"}`}
+            >
               Profile views today
             </Text>
-            <Text className="text-lg font-bold text-primary-50">12</Text>
+            <Text
+              className={`text-lg font-bold ${isApproved ? "text-green-800 dark:text-green-200" : "text-amber-800 dark:text-amber-200"}`}
+            >
+              12
+            </Text>
             {/* TODO: wire real analytics */}
           </View>
         )}

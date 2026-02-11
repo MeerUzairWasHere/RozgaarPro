@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, useColorScheme } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import { User, Shield, Phone, MapPin, User2 } from "lucide-react-native";
+import { User, Shield, Phone, MapPin } from "lucide-react-native";
 import clsx from "clsx";
 import { useAuthStore, useLocationStore } from "@/store";
 import { USER_ROLE } from "@/types";
@@ -9,14 +9,15 @@ import { USER_ROLE } from "@/types";
 export default function ProfileCard() {
   const { user } = useAuthStore();
   const { location } = useLocationStore();
+  const isDark = useColorScheme() === "dark";
 
   return (
     <Animated.View
       entering={FadeInUp.duration(600)}
       className={clsx(
-        "rounded-3xl p-6 m-6 border",
-        "bg-white border-primary-200",
-        "dark:bg-primary-900 dark:border-primary-700",
+        "rounded-3xl p-6 m-6 border shadow-lg",
+        "bg-white border-primary-100",
+        "dark:bg-primary-900 dark:border-primary-800",
       )}
       style={{
         shadowColor: "#000",
@@ -29,7 +30,7 @@ export default function ProfileCard() {
       {/* Header */}
       <View className="flex-row items-center gap-4 mb-4">
         {/* Avatar */}
-        <View className="w-20 h-20 rounded-2xl flex items-center justify-center bg-primary-300 dark:bg-primary-700">
+        <View className="w-20 h-20 rounded-2xl flex items-center justify-center bg-brand dark:bg-brand-500">
           <User size={40} color="#FFF" />
         </View>
 
@@ -41,12 +42,14 @@ export default function ProfileCard() {
 
           <View className="flex-row items-center gap-2">
             {/* Verified Badge */}
-            <View className="flex-row items-center gap-1 px-2 py-1 rounded-full bg-primary-100 dark:bg-primary-800">
-              <Shield size={12} color="#666" />
-              <Text className="text-xs font-medium text-primary-700 dark:text-primary-200">
-                {user?.isVerified && "Verified"}
-              </Text>
-            </View>
+            {user?.isVerified && (
+              <View className="flex-row items-center gap-1 px-2 py-1 rounded-full bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-900">
+                <Shield size={12} color={isDark ? "#86efac" : "#16a34a"} />
+                <Text className="text-xs font-medium text-green-700 dark:text-green-400">
+                  Verified
+                </Text>
+              </View>
+            )}
 
             {/* Role Badge */}
             <Text className="text-xs font-medium text-primary-700 dark:text-primary-200">
@@ -58,16 +61,16 @@ export default function ProfileCard() {
       </View>
 
       {/* Contact Info */}
-      <View className="flex-row items-center gap-4">
+      <View className="flex-row items-center gap-4 pt-2 border-t border-primary-100 dark:border-primary-800">
         <View className="flex-row items-center gap-1.5">
-          <Phone size={14} color="#666" />
+          <Phone size={14} color={isDark ? "#93c5fd" : "#3b82f6"} />
           <Text className="text-sm text-primary-600 dark:text-primary-400">
             +91-{user?.phone}
           </Text>
         </View>
 
         <View className="flex-row items-center gap-1.5">
-          <MapPin size={14} color="#666" />
+          <MapPin size={14} color={isDark ? "#86efac" : "#16a34a"} />
           <Text className="text-sm text-primary-600 dark:text-primary-400">
             {location}
           </Text>

@@ -95,7 +95,7 @@ export default function OnboardingScreen() {
               className={cn(
                 "h-2 rounded-full mx-1",
                 index === currentSlide
-                  ? "w-8 bg-primary-600 dark:bg-primary-500"
+                  ? "w-8 bg-brand dark:bg-brand-400"
                   : "w-2 bg-primary-300 dark:bg-primary-700",
               )}
             />

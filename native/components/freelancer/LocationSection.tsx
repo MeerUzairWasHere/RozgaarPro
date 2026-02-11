@@ -24,7 +24,7 @@ export default function LocationSection({ location, distance }: Props) {
       <View className="bg-white dark:bg-primary-900 rounded-2xl p-5 border border-primary-100 dark:border-primary-800">
         <View className="flex-row items-start gap-4">
           <View className="w-12 h-12 bg-primary-100 dark:bg-primary-800 rounded-2xl items-center justify-center">
-            <MapPin size={20} color={isDark ? "#a5b4fc" : "#6366f1"} />
+            <MapPin size={20} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
           </View>
 
           <View className="flex-1">

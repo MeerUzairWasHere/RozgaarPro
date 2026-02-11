@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -29,32 +29,31 @@ export default function RoleSelectScreen() {
     router.push(ROUTES.SIGN_IN);
   };
 
-  const colourScheme = useColorScheme();
   return (
-    <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
+    <SafeAreaView className="flex-1 bg-primary-50 dark:bg-primary-950">
       <View className="flex-1 px-6">
         {/* Header */}
         <View className="items-center pt-8 pb-10 mt-24">
           <Animated.View
             entering={FadeIn}
-            className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center mb-4"
+            className="w-14 h-14 rounded-2xl bg-brand dark:bg-brand-500 items-center justify-center mb-4 shadow-card-lg"
           >
             <Briefcase
               size={32}
-              color={colourScheme === "dark" ? "#000" : "#fff"}
+              color="#FFFFFF"
             />
           </Animated.View>
 
           <Animated.Text
             entering={FadeInDown.delay(100)}
-            className="text-2xl font-bold text-slate-900 dark:text-primary-50 mb-2"
+            className="text-2xl font-bold text-primary-900 dark:text-primary-50 mb-2"
           >
             Welcome to RozgaarPro
           </Animated.Text>
 
           <Animated.Text
             entering={FadeInDown.delay(200)}
-            className="text-sm text-slate-500 dark:text-primary-300 text-center"
+            className="text-sm text-primary-600 dark:text-primary-400 text-center"
           >
             How would you like to use the app?
           </Animated.Text>
@@ -67,20 +66,20 @@ export default function RoleSelectScreen() {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => handleSelectRole(USER_ROLE.USER)}
-              className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
+              className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-primary-200 dark:border-primary-800 rounded-3xl shadow-card"
             >
-              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center">
+              <View className="w-14 h-14 rounded-2xl bg-brand dark:bg-brand-500 items-center justify-center">
                 <Search
                   size={28}
-                  color={colourScheme === "dark" ? "#000" : "#fff"}
+                  color="#FFFFFF"
                 />
               </View>
 
               <View className="flex-1">
-                <Text className="text-lg font-semibold text-slate-900 dark:text-primary-50 mb-1">
+                <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50 mb-1">
                   I am a user
                 </Text>
-                <Text className="text-sm text-slate-500 dark:text-primary-300 leading-5">
+                <Text className="text-sm text-primary-600 dark:text-primary-400 leading-5">
                   Find and hire skilled professionals for your home or business
                 </Text>
               </View>
@@ -92,20 +91,20 @@ export default function RoleSelectScreen() {
             <TouchableOpacity
               activeOpacity={0.9}
               onPress={() => handleSelectRole(USER_ROLE.FREELANCER)}
-              className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-gray-200 dark:border-primary-800 rounded-3xl"
+              className="flex-row gap-4 p-6 bg-white dark:bg-primary-900 border border-primary-200 dark:border-primary-800 rounded-3xl shadow-card"
             >
-              <View className="w-14 h-14 rounded-2xl bg-primary-950 dark:bg-primary items-center justify-center">
+              <View className="w-14 h-14 rounded-2xl bg-brand dark:bg-brand-500 items-center justify-center">
                 <Wrench
                   size={28}
-                  color={colourScheme === "dark" ? "#000" : "#fff"}
+                  color="#FFFFFF"
                 />
               </View>
 
               <View className="flex-1">
-                <Text className="text-lg font-semibold text-slate-900 dark:text-primary-50 mb-1">
+                <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50 mb-1">
                   I am a freelancer
                 </Text>
-                <Text className="text-sm text-slate-500 dark:text-primary-300 leading-5">
+                <Text className="text-sm text-primary-600 dark:text-primary-400 leading-5">
                   Get discovered by customers and find work nearby
                 </Text>
               </View>

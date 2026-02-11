@@ -22,7 +22,7 @@ const CustomPressableButton = ({
       className={className}
       style={({ pressed }) => [pressed ? { opacity: 0.8 } : null]}
     >
-      <Text className={cn("primary-text font-medium ", className)}>
+      <Text className={cn("text-brand dark:text-brand-300 font-medium", className)}>
         {title}
       </Text>
     </Pressable>

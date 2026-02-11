@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import ProfileHeader from "./ProfileHeader";
 import QuickStats from "./QuickStats";
 import VerificationBadges from "./VerificationBadges";
@@ -42,7 +42,10 @@ export default function FreelancerDetails() {
     );
   }
   return (
-    <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
+    <ScrollView
+      className="flex-1 bg-primary dark:bg-primary-950 px-4"
+      showsVerticalScrollIndicator={false}
+    >
       <ProfileHeader
         name={freelancer.name}
         profession={freelancer.primary_profession_name}

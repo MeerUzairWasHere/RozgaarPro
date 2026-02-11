@@ -9,23 +9,26 @@ export default function TabsLayout() {
   const isDark = colorScheme === "dark";
   const { user } = useAuthStore();
 
-  // Colors based on your Tailwind config
   const colors = {
     light: {
-      background: "#F2F2F2",
+      background: "#F5F5F7",
       card: "#FFFFFF",
+      tabBar: "#6B4EEA",
       text: "#1A1A1A",
       textSecondary: "#666666",
+      textOnBrand: "#FFFFFF",
       border: "#E6E6E6",
-      active: "#1A1A1A",
+      active: "#6B4EEA",
     },
     dark: {
       background: "#121212",
       card: "#1A1A1A",
+      tabBar: "#5A3DD6",
       text: "#F2F2F2",
       textSecondary: "#999999",
+      textOnBrand: "#FFFFFF",
       border: "#333333",
-      active: "#F2F2F2",
+      active: "#B3A5F5",
     },
   };
 
@@ -48,22 +51,21 @@ export default function TabsLayout() {
           borderBottomLeftRadius: 50,
           borderBottomRightRadius: 50,
           marginHorizontal: 20,
-          backgroundColor: theme.card,
-          borderTopColor: theme.border,
-          borderBottomColor: theme.border,
+          backgroundColor: theme.tabBar,
+          borderTopWidth: 0,
           position: "absolute",
           height: 70,
           paddingBottom: 8,
           paddingTop: 8,
-          shadowColor: "#1a1a1a",
+          shadowColor: "#6B4EEA",
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
           shadowRadius: 4,
           elevation: 5,
           bottom: 20,
         },
-        tabBarActiveTintColor: theme.active,
-        tabBarInactiveTintColor: theme.textSecondary,
+        tabBarActiveTintColor: theme.textOnBrand,
+        tabBarInactiveTintColor: "rgba(255,255,255,0.6)",
         tabBarLabelStyle: {
           fontSize: 12,
           fontWeight: "500",

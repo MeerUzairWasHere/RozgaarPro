@@ -1,9 +1,16 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
-const LocationHeader = () => {
+export interface LocationHeaderProps {
+  /** When true, header background is light (#F2F2F2) – use dark text/icon */
+  lightBackground?: boolean;
+}
+
+const LocationHeader: React.FC<LocationHeaderProps> = ({
+  lightBackground = false,
+}) => {
   const { location, loading, getCurrentLocation } = useLocationStore();
 
   useEffect(() => {
@@ -17,16 +24,34 @@ const LocationHeader = () => {
       disabled={loading}
       className="flex-row items-center gap-2"
     >
-      <View className="p-2 bg-primary-100 dark:bg-primary-100 rounded-full">
-        <MapPin size={18} />
+      <View
+        className={
+          lightBackground
+            ? "p-2 bg-primary-300/50 rounded-full"
+            : "p-2 bg-white/20 rounded-full"
+        }
+      >
+        <MapPin size={18} color={!lightBackground ? "#86efac" : "#16a34a"} />
       </View>
 
       <View>
-        <Text className="text-sm text-primary-500 dark:text-primary-200">
+        <Text
+          className={
+            lightBackground
+              ? "text-xs text-primary-600"
+              : "text-xs text-white/80"
+          }
+        >
           Your Location
         </Text>
 
-        <Text className="text-sm font-semibold text-primary-900 dark:text-primary-100">
+        <Text
+          className={
+            lightBackground
+              ? "text-sm font-semibold text-primary-900"
+              : "text-sm font-semibold text-white"
+          }
+        >
           {loading
             ? "Updating location..."
             : location || "Tap to enable location"}

@@ -21,8 +21,8 @@ export default function LogoutButton() {
         onPress={handleLogout}
         disabled={logoutMutation.isPending}
         className={clsx(
-          "w-full h-16 rounded-3xl border-2 bg-primary-50 flex-row items-center justify-center mb-32",
-          "border-destructive",
+          "w-full h-16 rounded-3xl border-2 bg-primary-50 dark:bg-primary-900 flex-row items-center justify-center mb-32",
+          "border-accent-red dark:border-accent-redLight",
           "active:opacity-90",
           logoutMutation.isPending && "opacity-60",
         )}
@@ -31,8 +31,8 @@ export default function LogoutButton() {
           <ActivityIndicator />
         ) : (
           <View className="flex-row gap-2 items-center justify-center">
-            <LogOut size={20} color="#666" className=" mr-2" />
-            <Text className="font-semibold text-destructive text-base">
+            <LogOut size={20} color="#ef4444" />
+            <Text className="font-semibold text-accent-red text-base">
               Logout
             </Text>
           </View>

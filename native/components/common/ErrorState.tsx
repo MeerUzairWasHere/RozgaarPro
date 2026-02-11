@@ -15,8 +15,8 @@ export default function ErrorState({
   onPress,
 }: Props) {
   return (
-    <View className="flex-1 items-center justify-center   px-6">
-      <View className="  rounded-3xl p-8 items-center shadow-lg">
+    <View className="flex-1 items-center justify-center px-6 bg-primary dark:bg-primary-950">
+      <View className="rounded-3xl p-8 items-center shadow-lg bg-white dark:bg-primary-900 border border-primary-100 dark:border-primary-800">
         {/* Icon */}
         <View className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full items-center justify-center mb-4">
           <Text className="text-3xl">⚠️</Text>
@@ -36,7 +36,7 @@ export default function ErrorState({
         {onPress && (
           <TouchableOpacity
             onPress={onPress}
-            className="px-8 py-3.5 bg-primary-900 dark:bg-primary-700 rounded-full shadow-sm active:opacity-80"
+            className="px-8 py-3.5 bg-brand dark:bg-brand-500 rounded-full shadow-sm active:opacity-80"
           >
             <Text className="text-white font-semibold">{buttonText}</Text>
           </TouchableOpacity>

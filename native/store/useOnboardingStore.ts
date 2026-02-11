@@ -27,6 +27,6 @@ export const useOnboardingStore = create<OnboardingState>()(
           await AsyncStorage.removeItem(name);
         },
       },
-    }
-  )
+    },
+  ),
 );

@@ -87,7 +87,7 @@ export default function LoginScreen() {
                   {/* Toggle */}
                   <Animated.View
                     entering={FadeInDown.delay(100)}
-                    className="flex-row bg-primary-100 dark:bg-primary-800 rounded-xl p-1 mb-6"
+                    className="flex-row bg-brand/10 dark:bg-brand-500/20 rounded-xl p-1 mb-6 border border-brand/20 dark:border-brand-500/30"
                   >
                     {[LOGIN_METHOD.PHONE, LOGIN_METHOD.EMAIL].map((type) => (
                       <Pressable
@@ -96,11 +96,11 @@ export default function LoginScreen() {
                           Keyboard.dismiss();
                           setLoginMethod(type as any);
                         }}
-                        android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+                        android_ripple={{ color: "rgba(107,78,234,0.15)" }}
                         className={cn(
                           "flex-1 py-2 rounded-lg overflow-hidden items-center",
                           loginMethod === type
-                            ? "bg-white dark:bg-primary-700"
+                            ? "bg-brand dark:bg-brand-500"
                             : "",
                         )}
                       >
@@ -108,8 +108,8 @@ export default function LoginScreen() {
                           className={cn(
                             "text-sm",
                             loginMethod === type
-                              ? "text-primary-900 dark:text-primary-50 font-semibold"
-                              : "text-primary-500 dark:text-primary-400 font-medium",
+                              ? "text-white font-semibold"
+                              : "text-primary-600 dark:text-primary-400 font-medium",
                           )}
                         >
                           {type === LOGIN_METHOD.PHONE
@@ -131,12 +131,12 @@ export default function LoginScreen() {
                         loginMethod === LOGIN_METHOD.EMAIL ? (
                           <Mail
                             size={15}
-                            color={colourScheme === "dark" ? "#fff" : "#000"}
+                            color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
                           />
                         ) : (
                           <Phone
                             size={15}
-                            color={colourScheme === "dark" ? "#fff" : "#000"}
+                            color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
                           />
                         )
                       }
@@ -167,7 +167,7 @@ export default function LoginScreen() {
                       icon={
                         <Lock
                           size={15}
-                          color={colourScheme === "dark" ? "#fff" : "#000"}
+                          color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
                         />
                       }
                       placeholder="Password"

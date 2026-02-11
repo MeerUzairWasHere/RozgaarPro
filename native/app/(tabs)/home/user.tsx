@@ -8,7 +8,10 @@ import { ScrollView, View } from "react-native";
 
 const UserHomeScreen = () => {
   return (
-    <ScrollView>
+    <ScrollView
+      className="flex-1 bg-primary dark:bg-primary-950"
+      showsVerticalScrollIndicator={false}
+    >
       <View className="px-4 pt-4">
         <SearchBar />
         <SectionHeader title="What do you need?" />
