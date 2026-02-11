@@ -23,7 +23,7 @@ const FilterDrawer = ({ visible, onClose }: Props) => {
       <View
         style={{
           backgroundColor: colorScheme === "dark" ? "#121212" : "#F2F2F2",
-          padding: 20,
+          padding: 16,
           borderTopLeftRadius: 40,
           borderTopRightRadius: 40,
           minHeight: 500,
