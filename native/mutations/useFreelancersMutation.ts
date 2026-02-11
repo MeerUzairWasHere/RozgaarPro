@@ -74,7 +74,6 @@ export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
 
 export const useGetFilteredVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
-  console.log(JSON.stringify(query, null, 2));
 
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),

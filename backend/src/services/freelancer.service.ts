@@ -99,8 +99,6 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
-    console.log(JSON.stringify(query, null, 2));
-
     const defaultFilters: ListFilter[] = [
       {
         alias: "f",
@@ -111,8 +109,6 @@ export class FreelancerService implements IFreelancerService {
     ];
 
     const { latitude, longitude } = query.location ?? {};
-
-    console.log(this.prismaService.$queryRaw.toString());
 
     return executePaginatedRawQuery<NearbyFreelancer>({
       prisma: this.prismaService,
