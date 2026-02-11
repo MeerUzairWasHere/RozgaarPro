@@ -66,11 +66,13 @@ export default function ProfileMenu() {
         )}
       >
         <View className="flex-row items-center gap-3">
-          <View className="w-10 h-10 rounded-xl bg-amber-500 dark:bg-amber-400 flex items-center justify-center">
+          <View className="w-10 h-10 rounded-xl bg-brand dark:bg-brand-500 flex items-center justify-center">
             <Star size={20} color="#FFF" />
           </View>
 
-          <Text className="font-medium text-primary-950 dark:text-primary-50">Rate Us</Text>
+          <Text className="font-medium text-primary-950 dark:text-primary-50">
+            Rate Us
+          </Text>
         </View>
 
         <ChevronRight size={20} color={chevronColor} />

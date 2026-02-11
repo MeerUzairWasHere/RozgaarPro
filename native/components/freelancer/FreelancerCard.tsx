@@ -5,6 +5,7 @@ import { formatDistance } from "@/lib";
 import { router } from "expo-router";
 import { getFreelancerDetailsRoute } from "@/constants";
 import InitialAvatar from "../common/InitialAvatar";
+import { getExperienceLabel } from "@/utils";
 
 export default function FreelancerCard({
   freelancer,
@@ -26,7 +27,7 @@ export default function FreelancerCard({
         <View className="relative flex-shrink-0">
           <InitialAvatar
             name={freelancer.name}
-            className="bg-primary-500 dark:bg-primary-800 rounded-xl items-center
+            className="bg-brand/40 dark:bg-brand/40 rounded-xl items-center
           justify-center"
           />
           {freelancer.status === FREELANCER_STATUS.APPROVED && (
@@ -57,7 +58,7 @@ export default function FreelancerCard({
               </Text>
             </View>
             <Text className="text-xs text-primary-600 dark:text-primary-400">
-              {freelancer.experience} year{freelancer.experience > 1 ? "s" : ""}
+              {getExperienceLabel(freelancer.experience)}
             </Text>
           </View>
 

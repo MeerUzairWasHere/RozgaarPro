@@ -21,18 +21,22 @@ export default function LogoutButton() {
         onPress={handleLogout}
         disabled={logoutMutation.isPending}
         className={clsx(
-          "w-full h-16 rounded-3xl border-2 bg-primary-50 dark:bg-primary-900 flex-row items-center justify-center mb-32",
-          "border-accent-red dark:border-accent-redLight",
-          "active:opacity-90",
+          "w-full h-16 rounded-3xl border flex-row items-center justify-center mb-32 shadow-card",
+          // destructive styling with good contrast in both modes
+          "bg-accent-red/5 dark:bg-accent-red/10",
+          "border-accent-red/30 dark:border-accent-redLight/40",
           logoutMutation.isPending && "opacity-60",
         )}
+        style={({ pressed }) => [
+          pressed ? { transform: [{ scale: 0.98 }], opacity: 0.9 } : null,
+        ]}
       >
         {logoutMutation.isPending ? (
-          <ActivityIndicator />
+          <ActivityIndicator color="#dc2626" />
         ) : (
           <View className="flex-row gap-2 items-center justify-center">
-            <LogOut size={20} color="#ef4444" />
-            <Text className="font-semibold text-accent-red text-base">
+            <LogOut size={20} color="#dc2626" />
+            <Text className="font-semibold text-accent-red dark:text-accent-redLight text-base">
               Logout
             </Text>
           </View>

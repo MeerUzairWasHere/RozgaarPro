@@ -1,12 +1,6 @@
 import { router } from "expo-router";
 import { CustomInput, CustomTouchableOpacityButton } from "@/components";
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -274,7 +268,9 @@ export default function CompleteProfile() {
               </Text>
 
               <CustomInput
-                icon={<Clock size={15} color={isDark ? "#B3A5F5" : "#6B4EEA"} />}
+                icon={
+                  <Clock size={15} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
+                }
                 placeholder="e.g. 1.5"
                 value={experienceText}
                 keyboardType="decimal-pad"
