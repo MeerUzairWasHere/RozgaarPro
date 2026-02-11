@@ -11,6 +11,7 @@ import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import ErrorState from "../common/ErrorState";
+import { FilterOperator } from "@/types";
 
 export default function FreelancerDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -22,8 +23,10 @@ export default function FreelancerDetails() {
     isLoading,
     error,
   } = useGetSingleVisibleFreelancerDetail({
-    freelancerId: id,
-    query: { location: coordinates },
+    location: coordinates,
+    filters: [
+      { field: "freelancerId", operator: FilterOperator.EQUAL_TO, value: id },
+    ],
   });
 
   if (isLoading) {
@@ -42,7 +45,6 @@ export default function FreelancerDetails() {
   }
   return (
     <>
-
       <ScrollView
         className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pb-8 "
         showsVerticalScrollIndicator={false}

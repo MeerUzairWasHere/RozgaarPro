@@ -10,8 +10,3 @@ export interface ProfessionWithFreelancerCount {
   profession_name: string;
   count: number;
 }
-
-export interface ProfessionsFilterListInputDto {
-  latitude: number;
-  longitude: number;
-}

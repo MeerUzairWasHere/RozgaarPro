@@ -16,7 +16,6 @@ import {
   TokenUser,
 } from "@/types";
 import { authApiClient } from "@/api";
-import { getErrorMessage } from "@/utils";
 import { useAuthStore, useLocationStore } from "@/store";
 import { router } from "expo-router";
 import { QUERY_KEYS, ROUTES } from "@/constants";

@@ -1,26 +1,22 @@
 import { QUERY_KEYS } from "@/constants";
-import { Coordinates } from "@/types";
+import { ListQuery } from "@/types";
 import { locationApiClient } from "@/api";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 import { hasValidCoordinates } from "@/lib";
 
 export const useGetAddressFromCoordinates = (
-  coordinates: Coordinates,
+  query: ListQuery,
   options?: {
     enabled?: boolean;
   },
 ): UseQueryResult<string> => {
-  const hasValidCoords = hasValidCoordinates(coordinates);
+  const hasValidCoords = hasValidCoordinates(query?.location);
 
-  // Combine both conditions: coordinates must be valid AND external enabled flag
   const enabled = hasValidCoords && (options?.enabled ?? true);
 
   return useQuery({
-    queryKey: QUERY_KEYS.LOCATIONS.listByLocation(
-      coordinates?.latitude ?? 0,
-      coordinates?.longitude ?? 0,
-    ),
-    queryFn: () => locationApiClient.getAddressFromLatLng(coordinates),
+    queryKey: QUERY_KEYS.LOCATIONS.listQuery(query),
+    queryFn: () => locationApiClient.getAddressFromLatLng(query?.location!),
     enabled,
   });
 };

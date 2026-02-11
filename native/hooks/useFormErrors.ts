@@ -4,7 +4,7 @@ import {
   getValidationErrors,
   getErrorMessage,
   hasValidationErrors,
-} from "@/utils/error.message";
+} from "@/utils";
 import { UseMutationResult } from "@tanstack/react-query";
 
 interface UseFormErrorsReturn {

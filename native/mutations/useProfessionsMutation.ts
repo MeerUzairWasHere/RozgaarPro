@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from "@/constants";
-import { Profession, ProfessionsFilterListInputDto } from "@/types";
+import { ListQuery, Profession } from "@/types";
 import { professionApiClient } from "@/api";
 import { useQuery, UseQueryResult } from "@tanstack/react-query";
 
@@ -10,17 +10,13 @@ export const useGetProfessions = (): UseQueryResult<Profession[]> => {
   });
 };
 
-export const useGetProfessionsFilterList = (
-  body: ProfessionsFilterListInputDto,
-) => {
-  const hasValidLocation = body?.latitude !== 0 && body?.longitude !== 0;
+export const useGetProfessionsFilterList = (query: ListQuery) => {
+  const hasValidLocation =
+    query?.location?.latitude !== 0 && query?.location?.longitude !== 0;
 
   return useQuery({
-    queryKey: QUERY_KEYS.PROFESSIONS.listByLocation(
-      body.latitude,
-      body.longitude,
-    ),
-    queryFn: () => professionApiClient.getProfessionsFilterList(body),
+    queryKey: QUERY_KEYS.PROFESSIONS.listQuery(query),
+    queryFn: () => professionApiClient.getProfessionsFilterList(query),
     enabled: !!hasValidLocation, // prevent running without params
   });
 };

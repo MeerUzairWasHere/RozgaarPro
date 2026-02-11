@@ -14,8 +14,8 @@ export const useGetSkillsByProfession = (
   professionId: string,
 ): UseQueryResult<Skill[]> => {
   return useQuery({
-    queryKey: QUERY_KEYS.SKILLS.detail(professionId),
+    queryKey: QUERY_KEYS.SKILLS.byId(professionId),
     queryFn: () => skillsApiClient.getSkillsByProfession({ professionId }),
-    enabled: !!professionId, // prevents running with empty id
+    enabled: !!professionId,
   });
 };

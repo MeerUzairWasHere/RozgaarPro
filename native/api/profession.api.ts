@@ -1,9 +1,5 @@
 import { api } from "@/lib";
-import {
-  Profession,
-  ProfessionsFilterListInputDto,
-  ProfessionWithFreelancerCount,
-} from "@/types";
+import { ListQuery, Profession, ProfessionWithFreelancerCount } from "@/types";
 
 export const professionApiClient = {
   getAllProfessions: async (): Promise<Profession[]> => {
@@ -20,7 +16,7 @@ export const professionApiClient = {
   },
 
   getProfessionsFilterList: async (
-    body: ProfessionsFilterListInputDto,
+    body: ListQuery,
   ): Promise<ProfessionWithFreelancerCount[]> => {
     const { data } = await api.post<ProfessionWithFreelancerCount[]>(
       "/professions/filter-list",

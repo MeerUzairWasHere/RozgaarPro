@@ -20,6 +20,7 @@ export enum SortDirection {
 
 // single WHERE condition
 export interface ListFilter {
+  alias?: string;
   field: string;
   operator: FilterOperator;
   value: unknown;
@@ -27,6 +28,7 @@ export interface ListFilter {
 
 // ORDER BY
 export interface ListSort {
+  alias?: string;
   field: string;
   direction: SortDirection;
 }
@@ -41,6 +43,7 @@ export interface Pagination {
 export interface ListSearch {
   term: string;
   fields?: string[];
+  alias?: string;
 }
 
 // generic list query

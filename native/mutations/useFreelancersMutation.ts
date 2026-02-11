@@ -6,8 +6,6 @@ import {
   FREELANCER_STATUS,
   FreelancerProfileCompletedInput,
   ListQuery,
-  NearbyFreelancer,
-  PaginatedResponse,
 } from "@/types";
 
 import {
@@ -39,6 +37,7 @@ export const useGetFreelancerStatus = (
 
 export const useGetRandomVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
+
   return useQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
     queryFn: () => freelancerApiClient.getAllVisibleFreelancers(query),
@@ -82,23 +81,18 @@ export const useGetFilteredVisibleFreelancers = (query: ListQuery = {}) => {
   });
 };
 
-export const useGetSingleVisibleFreelancerDetail = ({
-  freelancerId,
-  query,
-}: {
-  freelancerId: string;
-  query: ListQuery;
-}) => {
-  const enabled = hasValidCoordinates(query.location) && Boolean(freelancerId);
+export const useGetSingleVisibleFreelancerDetail = (query: ListQuery) => {
+  const enabled =
+    hasValidCoordinates(query.location) &&
+    Boolean(query.filters?.some((f) => f.field === "freelancerId"));
 
   return useQuery({
-    queryKey: QUERY_KEYS.FREELANCERS.detailByLocation(
-      freelancerId!,
-      query.location?.latitude ?? 0,
-      query.location?.longitude ?? 0,
-    ),
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
     queryFn: () =>
-      freelancerApiClient.getSingleVisibleFreelancerDetail(freelancerId, query),
+      freelancerApiClient.getSingleVisibleFreelancerDetail(
+        query.filters?.find((f) => f.field === "freelancerId")?.value as string,
+        query,
+      ),
     enabled,
   });
 };
