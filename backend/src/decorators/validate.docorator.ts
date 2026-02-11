@@ -1,19 +1,38 @@
 import { NextFunction, Request, Response } from "express";
-import { ZodType } from "zod";
+import { ZodTypeAny } from "zod";
 import { BadRequestError } from "../errors";
 
-const isEmpty = (obj: object): boolean => {
-  return Object.keys(obj).length === 0;
+type ValidationSchemas = {
+  body?: ZodTypeAny;
+  params?: ZodTypeAny;
+  query?: ZodTypeAny;
 };
 
 export const validate =
-  <T>(schema: ZodType<T>) =>
+  (schemas: ValidationSchemas) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (isEmpty(req.body)) {
-        throw new BadRequestError("Please provide a valid request body");
+      // Validate body
+      if (schemas.body) {
+        if (!req.body || Object.keys(req.body).length === 0) {
+          throw new BadRequestError("Please provide a valid request body");
+        }
+
+        req.body = await schemas.body.parseAsync(req.body);
       }
-      await schema.parseAsync(req.body);
+
+      // Validate params
+      if (schemas.params) {
+        console.log(req.params);
+        const parsedParams = await schemas.params.parseAsync(req.params);
+        req.params = parsedParams as typeof req.params;
+      }
+
+      // Validate query
+      if (schemas.query) {
+        const parsedQuery = await schemas.query.parseAsync(req.query);
+        req.query = parsedQuery as typeof req.query;
+      }
 
       next();
     } catch (err) {

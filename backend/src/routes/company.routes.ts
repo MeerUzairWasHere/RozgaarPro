@@ -13,7 +13,7 @@ router
   .post(
     authGuard,
     rolesGuard(Role.ADMIN),
-    validate(validateCompanyCreateInput),
+    validate({ body: validateCompanyCreateInput }),
     companyController.createCompany,
   )
   .get(authGuard, rolesGuard(Role.ADMIN), companyController.getCompany)

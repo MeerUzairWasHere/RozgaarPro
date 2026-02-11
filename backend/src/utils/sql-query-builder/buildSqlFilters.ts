@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { ListFilter } from "../../dto";
+import { FilterOperator, ListFilter } from "../../dto";
 import { ENUM_FIELDS } from "../constants";
 
 export function buildSqlFilters(filters?: ListFilter[]) {
@@ -18,56 +18,66 @@ export function buildSqlFilters(filters?: ListFilter[]) {
       : Prisma.sql`${filter.value}`;
 
     switch (filter.operator) {
-      case "eq":
+      case FilterOperator.EQUAL_TO:
         conditions.push(Prisma.sql`${column} = ${value}`);
         break;
 
-      case "neq":
+      case FilterOperator.NOT_EQUAL_TO:
         conditions.push(Prisma.sql`${column} != ${value}`);
         break;
 
-      case "gt":
+      case FilterOperator.GREATER_THAN:
         conditions.push(Prisma.sql`${column} > ${filter.value}`);
         break;
 
-      case "gte":
+      case FilterOperator.GREATER_THAN_OR_EQUAL:
         conditions.push(Prisma.sql`${column} >= ${filter.value}`);
         break;
 
-      case "lt":
+      case FilterOperator.LESS_THAN:
         conditions.push(Prisma.sql`${column} < ${filter.value}`);
         break;
 
-      case "lte":
+      case FilterOperator.LESS_THAN_OR_EQUAL:
         conditions.push(Prisma.sql`${column} <= ${filter.value}`);
         break;
 
-      case "in":
+      case FilterOperator.IN:
         if (!Array.isArray(filter.value)) continue;
         conditions.push(
           Prisma.sql`${column} IN (${Prisma.join(filter.value)})`,
         );
         break;
 
-      case "nin":
+      case FilterOperator.NOT_IN:
         if (!Array.isArray(filter.value)) continue;
         conditions.push(
           Prisma.sql`${column} NOT IN (${Prisma.join(filter.value)})`,
         );
         break;
 
-      case "contains":
+      case FilterOperator.CONTAINS:
         conditions.push(
           Prisma.sql`${column} ILIKE ${"%" + filter.value + "%"}`,
         );
         break;
 
-      case "startsWith":
+      case FilterOperator.STARTS_WITH:
         conditions.push(Prisma.sql`${column} ILIKE ${filter.value + "%"}`);
         break;
 
-      case "endsWith":
+      case FilterOperator.ENDS_WITH:
         conditions.push(Prisma.sql`${column} ILIKE ${"%" + filter.value}`);
+        break;
+
+      case FilterOperator.BETWEEN:
+        if (!Array.isArray(filter.value) || filter.value.length !== 2) {
+          throw new Error("BETWEEN requires [min, max]");
+        }
+
+        conditions.push(
+          Prisma.sql`${column} BETWEEN ${filter.value[0]} AND ${filter.value[1]}`,
+        );
         break;
 
       default:

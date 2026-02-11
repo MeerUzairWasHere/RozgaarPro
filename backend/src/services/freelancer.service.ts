@@ -1,13 +1,14 @@
 import { Freelancer, FreelancerStatus, Prisma, Role } from "@prisma/client";
 import {
+  Coordinates,
+  FilterOperator,
   FreelancerProfileCompletedInput,
-  FreelancerWithAwayDistanceInput,
   ListFilter,
   ListQueryDto,
   ListSort,
   NearbyFreelancer,
   NearbyFreelancerDetail,
-  Pagination,
+  SortDirection,
 } from "../dto";
 import {
   IFreelancerService,
@@ -98,24 +99,19 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
-    const defaultPagination: Pagination = {
-      page: 1,
-      pageSize: 5,
-    };
-
     const defaultFilters: ListFilter[] = [
       {
         alias: "f",
         field: "status",
-        operator: "eq",
-        value: "APPROVED",
+        operator: FilterOperator.EQUAL_TO,
+        value: FreelancerStatus.APPROVED,
       },
     ];
 
     const defaultSort: ListSort[] = [
       {
         field: "distance_km",
-        direction: "desc",
+        direction: SortDirection.ASC,
       },
     ];
 
@@ -126,7 +122,6 @@ export class FreelancerService implements IFreelancerService {
       query,
       defaultFilters,
       defaultSort,
-      defaultPagination,
       baseQuery: (sqlFilters, sqlOrder, take, skip) => Prisma.sql`
       SELECT
         f.id AS freelancer_Id,
@@ -191,13 +186,16 @@ export class FreelancerService implements IFreelancerService {
     return rows.map((r) => r.id);
   }
 
-  async getSingleVisibleFreelancerDetail({
-    latitude,
-    longitude,
-    freelancerId,
-  }: FreelancerWithAwayDistanceInput): Promise<NearbyFreelancerDetail> {
+  async getSingleVisibleFreelancerDetail(
+    coords: Coordinates,
+    freelancerId: string,
+  ): Promise<NearbyFreelancerDetail> {
     // Ensure freelancer exists
-    await this.findFreelancerByIdOrThrowError({ id: freelancerId });
+    await this.findFreelancerByIdOrThrowError({
+      id: freelancerId,
+    });
+
+    const { latitude, longitude } = coords;
 
     if (latitude == null || longitude == null) {
       throw new Error("Location (latitude, longitude) is required");

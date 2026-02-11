@@ -1,26 +1,26 @@
-import { ListFilter } from "../../dto";
+import { FilterOperator, ListFilter } from "../../dto";
 
 function mapOperator(filter: ListFilter) {
   switch (filter.operator) {
-    case "eq":
+    case FilterOperator.EQUAL_TO:
       return filter.value;
-    case "neq":
+    case FilterOperator.NOT_EQUAL_TO:
       return { not: filter.value };
-    case "gt":
+    case FilterOperator.GREATER_THAN:
       return { gt: filter.value };
-    case "gte":
+    case FilterOperator.GREATER_THAN_OR_EQUAL:
       return { gte: filter.value };
-    case "lt":
+    case FilterOperator.LESS_THAN:
       return { lt: filter.value };
-    case "lte":
+    case FilterOperator.LESS_THAN_OR_EQUAL:
       return { lte: filter.value };
-    case "in":
+    case FilterOperator.IN:
       return { in: filter.value };
-    case "contains":
+    case FilterOperator.CONTAINS:
       return { contains: filter.value, mode: "insensitive" };
-    case "startsWith":
+    case FilterOperator.STARTS_WITH:
       return { startsWith: filter.value };
-    case "endsWith":
+    case FilterOperator.ENDS_WITH:
       return { endsWith: filter.value };
     default:
       throw new Error(`Unsupported operator: ${filter.operator}`);

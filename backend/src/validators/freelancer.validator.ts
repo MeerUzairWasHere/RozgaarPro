@@ -1,5 +1,9 @@
 import { z } from "zod";
-import { filterableFields, requiredFieldNumberSchema } from "./zod.schema";
+import {
+  filterableFields,
+  requiredFieldNumberSchema,
+  validatePaginationInput,
+} from "./zod.schema";
 
 export const validateFreelancerProfileCompletedInput = z.object({
   professionId: z.uuid({ message: "Invalid professionId" }),
@@ -28,7 +32,8 @@ export const validateGetAllVisibleFreelancersInput = z.object({
     },
     "location must be a valid object of latitude, longitude.",
   ),
-  filters: z.array(filterableFields(["primaryProfessionId"])),
+  filters: z.array(filterableFields(["primaryProfessionId"])).optional(),
+  pagination: validatePaginationInput.optional(),
 });
 
 export const validateGetSingleVisibleFreelancerDetailInput = z.object({
@@ -39,4 +44,8 @@ export const validateGetSingleVisibleFreelancerDetailInput = z.object({
     },
     "location must be a valid object of latitude, longitude.",
   ),
+});
+
+export const freelancerIdParamSchema = z.object({
+  freelancerId: z.uuid("freelancerId is required and must be a valid UUID"),
 });

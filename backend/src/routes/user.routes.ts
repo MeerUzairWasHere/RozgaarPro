@@ -17,14 +17,14 @@ router
   .route("/update-user")
   .patch(
     authGuard,
-    validate(validateUserUpdateInput),
+    validate({ body: validateUserUpdateInput }),
     userController.updateUser,
   );
 router
   .route("/update-user-password")
   .patch(
     authGuard,
-    validate(validateUpdatePasswordInput),
+    validate({ body: validateUpdatePasswordInput }),
     userController.updateUserPassword,
   );
 

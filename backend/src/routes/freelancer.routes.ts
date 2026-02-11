@@ -4,6 +4,7 @@ import { freelancerController } from "../container";
 import { Role } from "@prisma/client";
 import { validate } from "../decorators";
 import {
+  freelancerIdParamSchema,
   validateFreelancerProfileCompletedInput,
   validateGetAllVisibleFreelancersInput,
   validateGetSingleVisibleFreelancerDetailInput,
@@ -16,7 +17,7 @@ router
   .post(
     authGuard,
     rolesGuard(Role.FREELANCER),
-    validate(validateFreelancerProfileCompletedInput),
+    validate({ body: validateFreelancerProfileCompletedInput }),
     freelancerController.completeFreelancerProfile,
   );
 
@@ -25,7 +26,7 @@ router
   .post(
     authGuard,
     rolesGuard(Role.USER),
-    validate(validateGetAllVisibleFreelancersInput),
+    validate({ body: validateGetAllVisibleFreelancersInput }),
     freelancerController.getAllVisibleFreelancers,
   );
 
@@ -34,7 +35,10 @@ router
   .post(
     authGuard,
     rolesGuard(Role.USER),
-    validate(validateGetSingleVisibleFreelancerDetailInput),
+    validate({
+      body: validateGetSingleVisibleFreelancerDetailInput,
+      params: freelancerIdParamSchema,
+    }),
     freelancerController.getSingleVisibleFreelancerDetail,
   );
 

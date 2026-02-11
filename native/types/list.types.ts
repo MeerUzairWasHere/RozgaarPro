@@ -1,15 +1,22 @@
-// operators supported by backend
-export type FilterOperator =
-  | "eq"
-  | "neq"
-  | "gt"
-  | "gte"
-  | "lt"
-  | "lte"
-  | "in"
-  | "contains"
-  | "startsWith"
-  | "endsWith";
+export enum FilterOperator {
+  EQUAL_TO = 1,
+  NOT_EQUAL_TO = 2,
+  GREATER_THAN = 3,
+  GREATER_THAN_OR_EQUAL = 4,
+  LESS_THAN = 5,
+  LESS_THAN_OR_EQUAL = 6,
+  IN = 7,
+  NOT_IN = 8,
+  CONTAINS = 9,
+  STARTS_WITH = 10,
+  ENDS_WITH = 11,
+  BETWEEN = 12,
+}
+
+export enum SortDirection {
+  ASC = "asc",
+  DESC = "desc",
+}
 
 // single WHERE condition
 export interface ListFilter {
@@ -21,7 +28,7 @@ export interface ListFilter {
 // ORDER BY
 export interface ListSort {
   field: string;
-  direction: "asc" | "desc";
+  direction: SortDirection;
 }
 
 // pagination block

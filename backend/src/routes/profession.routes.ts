@@ -20,7 +20,7 @@ router
   .post(
     authGuard,
     rolesGuard(Role.USER),
-    validate(validateProfessionFilterListInput),
+    validate({ body: validateProfessionFilterListInput }),
     professionController.getProfessionsFilterList,
   );
 

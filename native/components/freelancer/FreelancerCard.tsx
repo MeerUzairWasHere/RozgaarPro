@@ -79,7 +79,7 @@ export default function FreelancerCard({
             <View className="flex-row items-center gap-1">
               <MapPin
                 size={14}
-                color={colourScheme === "dark" ? "#ff0000" : "#ff0000"}
+                color={colourScheme === "dark" ? "#86efac" : "#16a34a"}
               />
               <Text className="text-xs text-primary-600 dark:text-primary-400">
                 {formatDistance(freelancer.distance_km)}

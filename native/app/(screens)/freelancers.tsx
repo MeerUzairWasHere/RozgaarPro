@@ -1,3 +1,6 @@
+import { useGetAllVisibleFreelancers } from "@/mutations";
+import { useLocationStore } from "@/store";
+import { FilterOperator } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { View, Text } from "react-native";
 
@@ -6,8 +9,23 @@ export default function FreelancerFilterView() {
     professionId: string;
     professionName: string;
   }>();
+  const { coordinates } = useLocationStore();
 
-  console.log(professionId, professionName);
+  const { data: freelancers } = useGetAllVisibleFreelancers({
+    location: {
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+    },
+    filters: [
+      {
+        field: "primaryProfessionId",
+        operator: FilterOperator.EQUAL_TO,
+        value: professionId,
+      },
+    ],
+  });
+
+  
   return (
     <View className="flex-1 bg-primary dark:bg-primary-950 items-center justify-center px-6">
       <View className="bg-white dark:bg-primary-900 rounded-2xl p-8 border border-primary-100 dark:border-primary-800 shadow-lg items-center">

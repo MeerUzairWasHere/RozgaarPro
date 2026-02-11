@@ -1,27 +1,11 @@
-import {
-  Freelancer,
-  FreelancerLocation,
-  FreelancerStatus,
-} from "@prisma/client";
-import { validateGetSingleVisibleFreelancerDetailInput } from "../validators";
+import { FreelancerStatus } from "@prisma/client";
+
 import { z } from "zod";
+import { validateFreelancerProfileCompletedInput } from "../validators";
 
-export type FreelancerProfileCompletedInput = {
-  professionId: string;
-  skillIds: string[]; // max 3 (enforced)
-  experience: Freelancer["experience"];
-  location: {
-    latitude: FreelancerLocation["latitude"];
-    longitude: FreelancerLocation["longitude"];
-    accuracy: FreelancerLocation["accuracy"];
-  };
-};
-
-export type FreelancerWithAwayDistanceInput = {
-  freelancerId: string;
-  latitude: FreelancerLocation["latitude"];
-  longitude: FreelancerLocation["longitude"];
-};
+export type FreelancerProfileCompletedInput = z.infer<
+  typeof validateFreelancerProfileCompletedInput
+>;
 
 export interface NearbyFreelancer {
   freelancer_id: string;

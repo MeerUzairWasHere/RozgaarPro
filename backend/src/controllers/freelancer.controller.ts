@@ -11,7 +11,7 @@ export class FreelancerController {
     res: Response,
   ): Promise<void> => {
     const id = currentUser(req).id;
-    console.log(id);
+
     await this.freelancerService.createAndCompleteFreelancerProfile({
       id,
       params: req.body,
@@ -47,15 +47,11 @@ export class FreelancerController {
     req: Request<{ freelancerId: string }>,
     res: Response,
   ): Promise<void> => {
-    const { freelancerId } = req.params;
-    const { latitude, longitude } = req.body.location;
-
     const freelancer =
-      await this.freelancerService.getSingleVisibleFreelancerDetail({
-        latitude,
-        longitude,
-        freelancerId,
-      });
+      await this.freelancerService.getSingleVisibleFreelancerDetail(
+        req.body.location,
+        req.params.freelancerId,
+      );
 
     res.status(StatusCodes.OK).json(freelancer);
   };

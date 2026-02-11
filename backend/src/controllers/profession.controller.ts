@@ -1,7 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { IProfessionService } from "../interfaces";
-import { getBody } from "../decorators";
 import { ProfessionWithFreelancerCountInputDto } from "../dto";
 
 export class ProfessionController {

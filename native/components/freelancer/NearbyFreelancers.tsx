@@ -1,6 +1,5 @@
 import { View, FlatList } from "react-native";
 import SectionHeader from "../SectionHeader";
-import { useQueryClient } from "@tanstack/react-query";
 import { useLocationStore } from "@/store";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -14,6 +13,10 @@ export default function NearbyFreelancers() {
     location: {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
+    },
+    pagination: {
+      page: 1,
+      pageSize: 5,
     },
   });
 

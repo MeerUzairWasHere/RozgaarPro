@@ -17,11 +17,15 @@ const router = Router();
 
 router.post(
   "/sign-up",
-  validate(validateRegisterInput),
+  validate({ body: validateRegisterInput }),
   authController.registerUser,
 );
 
-router.post("/sign-in", validate(validateLoginInput), authController.login);
+router.post(
+  "/sign-in",
+  validate({ body: validateLoginInput }),
+  authController.login,
+);
 
 router.post("/refresh-token", authController.refreshToken);
 
@@ -29,31 +33,31 @@ router.post("/sign-out", authGuard, authController.logout);
 
 router.post(
   "/request-otp",
-  validate(validateRequestOtpInput),
+  validate({ body: validateRequestOtpInput }),
   authController.requestOtp,
 );
 
 router.post(
   "/verify-otp",
-  validate(validateVerifyOtpInput),
+  validate({ body: validateVerifyOtpInput }),
   authController.verifyOtp,
 );
 
 router.post(
   "/verify-email",
-  validate(validateVerifyEmailInput),
+  validate({ body: validateVerifyEmailInput }),
   authController.verifyEmail,
 );
 
 router.post(
   "/forgot-password",
-  validate(validateForgotPasswordInput),
+  validate({ body: validateForgotPasswordInput }),
   authController.forgotPassword,
 );
 
 router.post(
   "/reset-password",
-  validate(validateResetPasswordInput),
+  validate({ body: validateResetPasswordInput }),
   authController.resetPassword,
 );
 
