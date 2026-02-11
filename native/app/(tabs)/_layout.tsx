@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
 import { useColorScheme } from "react-native";
-import { Header } from "@/components";
+import { AppHeader } from "@/components";
 import { useAuthStore } from "@/store";
 
 export default function TabsLayout() {
@@ -43,7 +43,7 @@ export default function TabsLayout() {
         },
         headerShown: true,
         // Default header component
-        header: () => <Header showLocation={true} showNotification={true} />,
+        header: () => <AppHeader showLocation={true} showNotification={true} />,
         tabBarStyle: {
           display: user?.profileCompleted ? "flex" : "none",
           borderTopLeftRadius: 50,
@@ -92,7 +92,7 @@ export default function TabsLayout() {
               strokeWidth={focused ? 2.5 : 2}
             />
           ),
-          header: () => <Header title="Find Jobs" showNotification={true} />,
+          header: () => <AppHeader title="Find Jobs" showNotification={true} />,
         }}
       />
       <Tabs.Screen
@@ -106,7 +106,7 @@ export default function TabsLayout() {
               strokeWidth={focused ? 2.5 : 2}
             />
           ),
-          header: () => <Header title="Messages" showNotification={true} />,
+          header: () => <AppHeader title="Messages" showNotification={true} />,
         }}
       />
       <Tabs.Screen
@@ -117,7 +117,7 @@ export default function TabsLayout() {
             <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
           // Custom header for Profile tab
-          header: () => <Header title="Profile" showNotification={true} />,
+          header: () => <AppHeader title="Profile" showNotification={true} />,
         }}
       />
       <Tabs.Screen

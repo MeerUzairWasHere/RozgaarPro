@@ -159,24 +159,27 @@ export const FreelancerDetailSkeleton = () => {
 
 export const FreelancerFilterHeaderSkeleton = () => {
   return (
-    <View className="px-6 h-16 flex-row items-center justify-between border-b border-primary-800 bg-primary-950">
+    <View className="px-6 h-16 flex-row items-center justify-between bg-primary-200 dark:bg-primary-800 animate-pulse">
       {/* Count skeleton */}
-      <View className="h-5 w-32 rounded bg-primary-800" />
+      <View className="h-5 w-32 rounded bg-primary-300 dark:bg-primary-600 animate-pulse" />
 
       {/* Filter button skeleton */}
-      <View className="h-9 w-24 rounded-full bg-primary-800" />
+      <View className="h-9 w-24 rounded-full  bg-primary-300 dark:bg-primary-600 animate-pulse" />
     </View>
   );
 };
 
 export const FreelancerListSkeleton = ({
-  professionName = "Profession",
+  professionName = "",
 }: {
   professionName?: string;
 }) => {
   return (
     <>
-      <AppHeader showBack={true} title={`${professionName}s Nearby`} />
+      <AppHeader
+        showBack={true}
+        title={professionName ? `${professionName}s Nearby` : ""}
+      />
       <FreelancerFilterHeaderSkeleton />
       <View className="px-4 pt-4">
         {[...Array(5)].map((_, i) => (

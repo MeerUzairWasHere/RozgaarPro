@@ -7,7 +7,7 @@ export default function ActionButtons() {
   const isDark = useColorScheme() === "dark";
 
   return (
-    <Animated.View entering={FadeInDown.delay(700)} className="mb-32">
+    <Animated.View entering={FadeInDown.delay(700)} className="mb-8">
       <View className="flex-row gap-3">
         <TouchableOpacity className="flex-1 bg-brand-600 dark:bg-brand-500 rounded-2xl py-4 items-center shadow-lg">
           <View className="flex-row items-center gap-2">

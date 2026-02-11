@@ -16,9 +16,11 @@ export const ROUTES = {
   HELP_SUPPORT: "/(screens)/help-support",
   SETTINGS: "/(screens)/settings",
   FILTERED_FREELANCERS: "/(screens)/filtered-freelancers",
+  FREELANCER_DETAILS: "/(screens)/freelancer-details",
+  ALL_VISIBLE_FREELANCERS: "/(screens)/all-visible-freelancers",
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
 } as const;
 
 export const getFreelancerDetailsRoute = (id: string): Href =>
-  `${ROUTES.FREELANCER_HOME}/${id}`;
+  `${ROUTES.FREELANCER_DETAILS}/${id}`;

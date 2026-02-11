@@ -52,7 +52,7 @@ app.set("trust proxy", 1);
 app.use(
   rateLimiter({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 1000,
     handler: (req, res, next, options) => {
       // Pass a custom error object to the next middleware
       const err = new Error("Too many requests. Please try again later.");

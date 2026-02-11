@@ -2,7 +2,6 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Briefcase } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import BackButton from "../common/BackButton";
 import InitialAvatar from "../common/InitialAvatar";
 
 type Props = {
@@ -14,7 +13,6 @@ export default function ProfileHeader({ name, profession }: Props) {
   return (
     <View className="relative my-4">
       <View>
-        <BackButton />
 
         <Animated.View
           entering={FadeInDown.delay(100)}

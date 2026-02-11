@@ -9,7 +9,6 @@ import ActionButtons from "./ActionButtons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
-
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import ErrorState from "../common/ErrorState";
 
@@ -42,39 +41,42 @@ export default function FreelancerDetails() {
     );
   }
   return (
-    <ScrollView
-      className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pb-8"
-      showsVerticalScrollIndicator={false}
-    >
-      <ProfileHeader
-        name={freelancer.name}
-        profession={freelancer.primary_profession_name}
-      />
-      <QuickStats
-        rating={freelancer.rating}
-        experience={freelancer.experience}
-        distance={freelancer.distance_km}
-      />
+    <>
 
-      <VerificationBadges
-        status={freelancer.status}
-        rating={freelancer.rating}
-      />
+      <ScrollView
+        className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pb-8 "
+        showsVerticalScrollIndicator={false}
+      >
+        <ProfileHeader
+          name={freelancer.name}
+          profession={freelancer.primary_profession_name}
+        />
+        <QuickStats
+          rating={freelancer.rating}
+          experience={freelancer.experience}
+          distance={freelancer.distance_km}
+        />
 
-      <AboutSection
-        description={freelancer.description}
-        profession={freelancer.primary_profession_name}
-        experience={freelancer.experience}
-      />
+        <VerificationBadges
+          status={freelancer.status}
+          rating={freelancer.rating}
+        />
 
-      <LocationSection
-        location={freelancer.location}
-        distance={freelancer.distance_km}
-      />
+        <AboutSection
+          description={freelancer.description}
+          profession={freelancer.primary_profession_name}
+          experience={freelancer.experience}
+        />
 
-      <ReviewsSection />
+        <LocationSection
+          location={freelancer.location}
+          distance={freelancer.distance_km}
+        />
 
-      <ActionButtons />
-    </ScrollView>
+        <ReviewsSection />
+
+        <ActionButtons />
+      </ScrollView>
+    </>
   );
 }

@@ -8,9 +8,7 @@ export interface LocationHeaderProps {
   lightBackground?: boolean;
 }
 
-const LocationHeader: React.FC<LocationHeaderProps> = ({
-  lightBackground = false,
-}) => {
+export default function LocationHeader({ lightBackground = false }) {
   const { location, loading, getCurrentLocation } = useLocationStore();
 
   useEffect(() => {
@@ -59,6 +57,4 @@ const LocationHeader: React.FC<LocationHeaderProps> = ({
       </View>
     </TouchableOpacity>
   );
-};
-
-export default LocationHeader;
+}

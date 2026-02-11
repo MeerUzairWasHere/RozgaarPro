@@ -5,6 +5,8 @@ import { useGetAllVisibleFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
 import { NearbyWorkersSkeletonList } from "../Skeletons";
+import { router } from "expo-router";
+import { ROUTES } from "@/constants";
 
 export default function NearbyFreelancers() {
   const { coordinates } = useLocationStore();
@@ -27,7 +29,7 @@ export default function NearbyFreelancers() {
       <View className="px-4">
         <SectionHeader
           title="Nearby Freelancers"
-          onActionPress={() => console.log("See all pressed")}
+          onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
         />
         <NearbyWorkersSkeletonList />
       </View>
@@ -41,7 +43,7 @@ export default function NearbyFreelancers() {
       ListHeaderComponent={
         <SectionHeader
           title="Nearby Freelancers"
-          onActionPress={() => console.log("See all pressed")}
+          onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
         />
       }
       scrollEnabled={false}

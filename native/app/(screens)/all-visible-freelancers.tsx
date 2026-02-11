@@ -1,17 +1,15 @@
-import { FreelancerCard, ListFilterHeader } from "@/components";
-import AppHeader from "@/components/common/AppHeader";
+import {
+  AppHeader,
+  CustomTouchableOpacityButton,
+  FreelancerCard,
+  ListFilterHeader,
+} from "@/components";
 import { FreelancerListSkeleton } from "@/components/Skeletons";
 import { useGetFilteredVisibleFreelancers } from "@/mutations";
 import { useLocationStore } from "@/store";
-import { FilterOperator } from "@/types";
-import { useLocalSearchParams } from "expo-router";
-import { FlatList } from "react-native";
-
-export default function FreelancerFilterView() {
-  const { professionId, professionName } = useLocalSearchParams<{
-    professionId: string;
-    professionName: string;
-  }>();
+import { Filter } from "lucide-react-native";
+import { View, Text, FlatList } from "react-native";
+const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
 
   const { data: freelancers } = useGetFilteredVisibleFreelancers({
@@ -19,29 +17,23 @@ export default function FreelancerFilterView() {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
     },
-    filters: [
-      {
-        field: "primaryProfessionId",
-        operator: FilterOperator.EQUAL_TO,
-        value: professionId,
-      },
-    ],
+    pagination: {
+      page: 1,
+      pageSize: 5,
+    },
   });
 
-  if (!freelancers)
-    return <FreelancerListSkeleton professionName={professionName} />;
+  if (!freelancers) return <FreelancerListSkeleton />;
 
   return (
     <>
-      <AppHeader showBack={true} title={`${professionName}s Nearby`} />
-
+      <AppHeader showBack={true} title="All visible freelancers" />
       <ListFilterHeader freelancersCount={freelancers?.meta.totalItems || 0} />
-
       <FlatList
         data={freelancers?.data}
         keyExtractor={(item) => item.freelancer_id}
         renderItem={({ item }) => <FreelancerCard freelancer={item} />}
-        scrollEnabled={false}
+        scrollEnabled={true}
         contentContainerStyle={{
           padding: 16,
           paddingBottom: 20,
@@ -50,4 +42,5 @@ export default function FreelancerFilterView() {
       />
     </>
   );
-}
+};
+export default AllVisibleFreelancers;
