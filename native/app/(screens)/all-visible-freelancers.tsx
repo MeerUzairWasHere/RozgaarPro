@@ -1,12 +1,20 @@
-import { AppHeader, FreelancerCard, ListFilterHeader } from "@/components";
-import { FreelancerListSkeleton } from "@/components/Skeletons";
+import {
+  AppHeader,
+  FreelancerCard,
+  ListFilterHeader,
+  FreelancerListSkeleton,
+  FilterDrawer,
+} from "@/components";
+
 import { useLocationStore } from "@/store";
 import { FlatList, ActivityIndicator } from "react-native";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { extractInfiniteList } from "@/utils";
+import { useState } from "react";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetAllVisibleFreelancers({
@@ -25,7 +33,11 @@ const AllVisibleFreelancers = () => {
   return (
     <>
       <AppHeader showBack title="All visible freelancers" />
-      <ListFilterHeader freelancersCount={totalItems} />
+
+      <ListFilterHeader
+        freelancersCount={totalItems}
+        onFilterPress={() => setIsFilterOpen(true)}
+      />
 
       <FlatList
         data={items}
@@ -45,6 +57,11 @@ const AllVisibleFreelancers = () => {
           paddingBottom: 20,
           flexGrow: 1, // add this
         }}
+      />
+
+      <FilterDrawer
+        visible={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
       />
     </>
   );

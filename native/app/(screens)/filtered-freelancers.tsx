@@ -1,14 +1,20 @@
-import { FreelancerCard, ListFilterHeader } from "@/components";
-import AppHeader from "@/components/common/AppHeader";
-import { FreelancerListSkeleton } from "@/components/Skeletons";
+import {
+  AppHeader,
+  FilterDrawer,
+  FreelancerCard,
+  FreelancerListSkeleton,
+  ListFilterHeader,
+} from "@/components";
 import { useGetFilteredVisibleFreelancers } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FilterOperator } from "@/types";
 import { useLocalSearchParams } from "expo-router";
 import { FlatList, ActivityIndicator } from "react-native";
 import { extractInfiniteList } from "@/utils";
+import { useState } from "react";
 
 export default function FreelancerFilterView() {
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { professionId, professionName } = useLocalSearchParams<{
     professionId: string;
     professionName: string;
@@ -41,7 +47,11 @@ export default function FreelancerFilterView() {
     <>
       <AppHeader showBack title={`${professionName}s Nearby`} />
 
-      <ListFilterHeader freelancersCount={totalItems} />
+      <ListFilterHeader
+        freelancersCount={totalItems}
+        onFilterPress={() => setIsFilterOpen(true)}
+        label={professionName}
+      />
 
       <FlatList
         data={items}
@@ -64,6 +74,11 @@ export default function FreelancerFilterView() {
           flexGrow: 1,
         }}
         showsVerticalScrollIndicator={false}
+      />
+
+      <FilterDrawer
+        visible={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
       />
     </>
   );
