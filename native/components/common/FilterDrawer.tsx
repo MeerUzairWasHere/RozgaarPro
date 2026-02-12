@@ -21,7 +21,8 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
   // Filter states
   const [selectedSort, setSelectedSort] = useState<SortOption>("rating");
   const [selectedRating, setSelectedRating] = useState<RatingOption>("any");
-  const [selectedDistance, setSelectedDistance] = useState<DistanceOption>("5");
+  const [selectedDistance, setSelectedDistance] =
+    useState<DistanceOption>("any");
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceOption>("any");
 
@@ -42,7 +43,7 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
     }
 
     // Add distance filter (in kilometers)
-    if (selectedDistance !== "any" && selectedDistance !== "5") {
+    if (selectedDistance !== "any") {
       filters.push({
         field: "distance_km",
         operator: FilterOperator.LESS_THAN_OR_EQUAL,
@@ -167,7 +168,7 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
             >
               <MapPin
                 size={14}
-                color={selectedSort === "distance_km" ? "#fff" : "#111"}
+                color={selectedSort === "distance_km" ? "#86efac" : "#16a34a"}
               />
               <Text
                 className={`text-sm font-medium ${
@@ -190,7 +191,7 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
             >
               <ShieldCheck
                 size={14}
-                color={selectedSort === "experience" ? "#fff" : "#111"}
+                color={selectedSort === "experience" ? "#86efac" : "#16a34a"}
               />
               <Text
                 className={`text-sm font-medium ${
