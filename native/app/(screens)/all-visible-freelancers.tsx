@@ -29,7 +29,7 @@ const AllVisibleFreelancers = () => {
       sort: activeSort,
     });
 
-  const { items, totalItems } = extractInfiniteList(data);
+  const { items } = extractInfiniteList(data);
 
   const handleApplyFilters = (filters: ListFilter[], sort: ListSort[]) => {
     setActiveFilters(filters);
@@ -40,6 +40,9 @@ const AllVisibleFreelancers = () => {
     return <FreelancerListSkeleton />;
   }
 
+  // Calculate active filter count
+  const activeFilterCount = activeFilters.length + activeSort.length;
+
   return (
     <>
       <AppHeader showBack title="All visible freelancers" />
@@ -47,6 +50,7 @@ const AllVisibleFreelancers = () => {
       <ListFilterHeader
         freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
+        activeFilterCount={activeFilterCount} // Pass the count
       />
 
       <FlatList

@@ -37,7 +37,6 @@ export const useGetFreelancerStatus = (
 
 export const useGetRandomVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
-  console.log(JSON.stringify(query, null, 2));
 
   return useQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),

@@ -70,6 +70,9 @@ export default function FreelancerFilterView() {
     return <FreelancerListSkeleton professionName={professionName} />;
   }
 
+  // Calculate active filter count
+  const activeFilterCount = additionalFilters.length + activeSort.length;
+
   return (
     <>
       <AppHeader showBack title={`${professionName}s Nearby`} />
@@ -78,6 +81,7 @@ export default function FreelancerFilterView() {
         freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
         label={professionName}
+        activeFilterCount={activeFilterCount} // Pass the count
       />
 
       <FlatList

@@ -3,6 +3,7 @@ import BackButton from "./BackButton";
 import { Star, MapPin, ShieldCheck } from "lucide-react-native";
 import { useState } from "react";
 import { ListFilter, ListSort, FilterOperator, SortDirection } from "@/types";
+import CustomTouchableOpacityButton from "./CustomTouchableOpacityButton";
 
 type SortOption = "rating" | "distance_km" | "experience";
 type RatingOption = "any" | "3" | "4" | "4.8";
@@ -16,6 +17,8 @@ type Props = {
 };
 
 const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
+  // Add this function to count active filters
+
   const colorScheme = useColorScheme();
 
   // Filter states
@@ -324,23 +327,16 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
 
         {/* ACTION BUTTONS */}
         <View className="flex-row gap-3 mt-8">
-          <Pressable
+          <CustomTouchableOpacityButton
             onPress={handleClearAll}
-            className="flex-1 py-3 rounded-xl border border-primary-300 dark:border-primary-700"
-          >
-            <Text className="text-center text-sm font-medium dark:text-primary-50 text-primary-900">
-              Clear All
-            </Text>
-          </Pressable>
-
-          <Pressable
+            className="flex-1 py-2 rounded-xl bg-primary-600 dark:bg-primary-700"
+            title="Clear All"
+          />
+          <CustomTouchableOpacityButton
             onPress={handleApplyFilters}
-            className="flex-1 py-3 rounded-xl bg-brand"
-          >
-            <Text className="text-center text-sm font-semibold text-white">
-              Apply Filters
-            </Text>
-          </Pressable>
+            className="flex-1 py-2 rounded-xl bg-brand-600 dark:bg-brand-500"
+            title="Apply Filters"
+          />
         </View>
       </View>
     </Modal>

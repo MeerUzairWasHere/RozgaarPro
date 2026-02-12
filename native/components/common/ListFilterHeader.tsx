@@ -1,32 +1,44 @@
+import { Text, View } from "react-native";
 import CustomTouchableOpacityButton from "./CustomTouchableOpacityButton";
-import { View, Text } from "react-native";
 import { Filter } from "lucide-react-native";
 
-const ListFilterHeader = ({
-  freelancersCount = 0,
-  onFilterPress,
-  label,
-}: {
+type Props = {
   freelancersCount: number;
   onFilterPress: () => void;
   label?: string;
-}) => {
+  activeFilterCount?: number; // Add this
+};
+
+const ListFilterHeader = ({
+  freelancersCount,
+  onFilterPress,
+  label = "freelancer",
+  activeFilterCount = 0, // Default to 0
+}: Props) => {
   return (
-    <View className="px-6 h-16 flex-row items-center justify-between border-b border-primary-200 dark:border-primary-800 dark:bg-primary-950">
-      <Text className="text-xl text-brand-400">
-        {freelancersCount}{" "}
-        {label
-          ? `${label}${freelancersCount > 1 ? "s" : ""}`
-          : `freelancer${freelancersCount > 1 ? "s" : ""}`}{" "}
-        found
+    <View className="flex-row items-center justify-between px-4 py-3 bg-white dark:bg-primary-900">
+      <Text className="text-sm font-pmedium text-primary-700 dark:text-primary-300">
+        {freelancersCount} {label}
+        {freelancersCount !== 1 ? "s" : ""} found
       </Text>
 
-      <CustomTouchableOpacityButton
-        onPress={onFilterPress}
-        className="flex-row items-center gap-2 px-4 h-9 py-1 rounded-full bg-brand/80 dark:bg-brand/40 relative"
-        leftIcon={<Filter size={20} color="#fff" />}
-        title="Filter"
-      />
+      <View className="relative">
+        <CustomTouchableOpacityButton
+          onPress={onFilterPress}
+          className="flex-row items-center gap-2 px-4 h-9 py-1 rounded-full bg-brand/80 dark:bg-brand/40"
+          leftIcon={<Filter size={20} color="#fff" />}
+          title="Filter"
+        />
+
+        {/* Badge - only show when filters are active */}
+        {activeFilterCount > 0 && (
+          <View className="absolute -top-1 -right-1 bg-red-500 rounded-full min-w-[20px] h-5 items-center justify-center px-1.5">
+            <Text className="text-white text-xs font-pbold">
+              {activeFilterCount}
+            </Text>
+          </View>
+        )}
+      </View>
     </View>
   );
 };

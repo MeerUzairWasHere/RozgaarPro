@@ -38,10 +38,10 @@ export default function ProfessionsFilter() {
               }
               activeOpacity={0.7}
             >
-              <Text className="text-sm font-medium text-center mb-1 text-primary-900 dark:text-primary-50">
+              <Text className="text-md font-medium text-center mb-1 text-primary-900 dark:text-primary-50">
                 {profession_name}
               </Text>
-              <Text className="text-xs text-brand-600 dark:text-brand-400 text-center">
+              <Text className="text-sm text-brand-600 dark:text-brand-400 text-center">
                 {count} nearby
               </Text>
             </TouchableOpacity>
