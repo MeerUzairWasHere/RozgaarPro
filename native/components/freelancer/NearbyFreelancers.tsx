@@ -7,6 +7,7 @@ import FreelancerCard from "./FreelancerCard";
 import { NearbyWorkersSkeletonList } from "../Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
+import { FilterOperator, SortDirection } from "@/types";
 
 export default function NearbyFreelancers() {
   const { coordinates } = useLocationStore();
@@ -20,6 +21,19 @@ export default function NearbyFreelancers() {
       page: 1,
       pageSize: 5,
     },
+    filters: [
+      {
+        field: "distance_km",
+        operator: FilterOperator.LESS_THAN_OR_EQUAL,
+        value: 5,
+      },
+    ],
+    sort: [
+      {
+        field: "rating",
+        direction: SortDirection.DESC,
+      },
+    ],
   });
 
   const tabBarHeight = useBottomTabBarHeight();

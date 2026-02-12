@@ -13,6 +13,7 @@ export default function ProfessionsFilter() {
 
   const { data } = useGetProfessionsFilterList({
     location: { latitude, longitude },
+    
   });
 
   if (!data) {

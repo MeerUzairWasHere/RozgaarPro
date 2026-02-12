@@ -25,14 +25,28 @@ export default function FreelancerFilterView() {
 
   const { coordinates } = useLocationStore();
 
-  // Combine profession filter with additional filters
   const allFilters = useMemo(() => {
     const professionFilter: ListFilter = {
       field: "primaryProfessionId",
       operator: FilterOperator.EQUAL_TO,
       value: professionId,
     };
-    return [professionFilter, ...additionalFilters];
+
+    const hasDistanceFilter = additionalFilters.some(
+      (f) => f.field === "distance_km",
+    );
+
+    const distanceFilter: ListFilter = {
+      field: "distance_km",
+      operator: FilterOperator.LESS_THAN_OR_EQUAL,
+      value: 5,
+    };
+
+    return [
+      professionFilter,
+      ...(hasDistanceFilter ? [] : [distanceFilter]),
+      ...additionalFilters,
+    ];
   }, [professionId, additionalFilters]);
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -45,7 +59,7 @@ export default function FreelancerFilterView() {
       sort: activeSort,
     });
 
-  const { items, totalItems } = extractInfiniteList(data);
+  const { items } = extractInfiniteList(data);
 
   const handleApplyFilters = (filters: ListFilter[], sort: ListSort[]) => {
     setAdditionalFilters(filters);
