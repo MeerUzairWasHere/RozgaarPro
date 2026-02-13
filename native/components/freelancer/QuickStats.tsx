@@ -54,11 +54,11 @@ export default function QuickStats({ rating, experience, distance }: Props) {
           <View className="flex-row items-center gap-1 mb-1">
             <MapPin size={18} color={isDark ? "#86efac" : "#16a34a"} />
             <Text className="text-2xl font-bold text-primary-950 dark:text-primary-50">
-              {parseFloat(formatDistance(distance))}
+              {formatDistance(distance)}
             </Text>
           </View>
           <Text className="text-xs font-medium text-primary-500 dark:text-primary-400">
-            km away
+            away from you
           </Text>
         </View>
       </View>
