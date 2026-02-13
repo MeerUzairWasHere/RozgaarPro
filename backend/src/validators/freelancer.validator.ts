@@ -4,6 +4,7 @@ import {
   locationSchema,
   locationWithAccuracySchema,
   requiredFieldNumberSchema,
+  searchSchema,
   sortableFields,
   validatePaginationInput,
 } from "./zod.schema";
@@ -36,6 +37,7 @@ export const validateGetAllVisibleFreelancersInput = z.object({
   sort: z
     .array(sortableFields(["rating", "distance_km", "experience"]))
     .optional(),
+  search: searchSchema.optional(),
 });
 
 export const validateGetSingleVisibleFreelancerDetailInput = z.object({

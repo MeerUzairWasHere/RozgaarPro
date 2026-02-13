@@ -31,10 +31,14 @@ export interface ListSort {
   alias?: string;
 }
 
+export interface ListSearchField {
+  alias?: string;
+  field: string;
+}
+
 export interface ListSearch {
   term: string;
-  fields?: string[];
-  alias?: string;
+  fields: ListSearchField[];
 }
 
 export interface Pagination {

@@ -5,10 +5,8 @@ import {
   FreelancerProfileCompletedInput,
   ListFilter,
   ListQueryDto,
-  ListSort,
   NearbyFreelancer,
   NearbyFreelancerDetail,
-  SortDirection,
 } from "../dto";
 import {
   IFreelancerService,
@@ -114,7 +112,7 @@ export class FreelancerService implements IFreelancerService {
       prisma: this.prismaService,
       query,
       defaultFilters,
-      baseQuery: (sqlFilters, sqlOrder, take, skip) => Prisma.sql`
+      baseQuery: (sqlFilters, sqlOrder, sqlSearch, take, skip) => Prisma.sql`
       SELECT
         f.id AS freelancer_Id,
         u.id AS user_Id,
@@ -143,6 +141,7 @@ export class FreelancerService implements IFreelancerService {
       JOIN "Profession" p
         ON f."primaryProfessionId" = p."id"
       ${sqlFilters}
+      ${sqlSearch}
       ${sqlOrder}
       LIMIT ${take}
       OFFSET ${skip}

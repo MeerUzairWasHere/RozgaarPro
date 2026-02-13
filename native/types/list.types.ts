@@ -39,11 +39,14 @@ export interface Pagination {
   pageSize: number;
 }
 
-// search block (optional)
+export interface ListSearchField {
+  alias?: string;
+  field: string;
+}
+
 export interface ListSearch {
   term: string;
-  fields?: string[];
-  alias?: string;
+  fields: ListSearchField[];
 }
 
 // generic list query

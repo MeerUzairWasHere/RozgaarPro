@@ -9,7 +9,7 @@ export function buildSearch(search?: ListSearch) {
 
   return {
     OR: fields.map((field) => ({
-      [field]: {
+      [field.field]: {
         contains: search.term,
         mode: "insensitive",
       },

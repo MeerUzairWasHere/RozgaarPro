@@ -4,6 +4,7 @@ import { buildPagination } from "../prisma-query-buildder/buildPrismaPagination"
 import { buildSqlFilters } from "./buildSqlFilters";
 import { buildSqlOrderBy } from "./buildSqlOrderBy";
 import { PaginatedResponse } from "../../types";
+import { buildSqlSearch } from "./buildSqlSearch";
 
 export async function executePaginatedRawQuery<T>({
   prisma,
@@ -18,6 +19,7 @@ export async function executePaginatedRawQuery<T>({
   baseQuery: (
     sqlFilters: Prisma.Sql,
     sqlOrder: Prisma.Sql,
+    sqlSearch: Prisma.Sql,
     take: number,
     skip: number,
   ) => Prisma.Sql;
@@ -39,10 +41,14 @@ export async function executePaginatedRawQuery<T>({
     },
   );
 
+  console.log({ sqlFilters });
+
   const sqlOrder = buildSqlOrderBy([...defaultSort, ...(query.sort ?? [])]);
 
+  const sqlSearch = buildSqlSearch(query.search);
+  console.log({ sqlSearch });
   const data = await prisma.$queryRaw<T[]>(
-    baseQuery(sqlFilters, sqlOrder, take, skip),
+    baseQuery(sqlFilters, sqlOrder, sqlSearch, take, skip),
   );
 
   const countResult = await prisma.$queryRaw<{ count: number }[]>(

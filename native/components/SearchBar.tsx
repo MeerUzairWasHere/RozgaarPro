@@ -1,15 +1,44 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, TextInput, useColorScheme } from "react-native";
 import { Search } from "lucide-react-native";
+import { useLocationStore } from "@/store";
+import { useGetAllVisibleFreelancers } from "@/mutations";
 
 export default function SearchBar() {
+  const { coordinates } = useLocationStore();
   const [query, setQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const isDark = useColorScheme() === "dark";
+
+  // debounce input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const { data, isLoading } = useGetAllVisibleFreelancers({
+    location: coordinates,
+    search: debouncedQuery
+      ? {
+          term: debouncedQuery,
+          fields: [
+            { alias: "p", field: "name" },
+            { alias: "u", field: "name" },
+          ],
+        }
+      : undefined,
+    pagination: {
+      pageSize: 15,
+      page: 1,
+    },
+  });
 
   return (
     <View className="mb-4">
       <View style={{ position: "relative" }}>
-        {/* Search Icon */}
         <Search
           size={20}
           color={isDark ? "#B3A5F5" : "#6B4EEA"}
@@ -21,7 +50,6 @@ export default function SearchBar() {
           }}
         />
 
-        {/* Input */}
         <TextInput
           value={query}
           onChangeText={setQuery}

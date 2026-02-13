@@ -136,3 +136,10 @@ export const sortableFields = <T extends readonly string[]>(fields: T) =>
     field: z.enum(fields),
     direction: z.enum(["asc", "desc"]),
   });
+
+export const searchSchema = z.object({
+  term: z.string().min(1, { message: "term must be at least 1 long" }),
+  fields: z
+    .array(z.object({ field: z.string(), alias: z.string().optional() }))
+    .optional(),
+});
