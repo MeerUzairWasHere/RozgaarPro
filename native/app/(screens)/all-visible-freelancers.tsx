@@ -46,7 +46,7 @@ const AllVisibleFreelancers = () => {
 
   return (
     <>
-      <AppHeader showBack title="All visible freelancers" />
+      <AppHeader showBack title="All Visible Freelancers" />
 
       <ListFilterHeader
         freelancersCount={items.length}

@@ -18,8 +18,9 @@ const ListFilterHeader = ({
   return (
     <View className="flex-row items-center justify-between px-4 py-3 bg-white dark:bg-primary-900">
       <Text className="text-sm font-pmedium text-primary-700 dark:text-primary-300">
-        {freelancersCount} {label}
-        {freelancersCount !== 1 ? "s" : ""} found
+        {freelancersCount === 0
+          ? `No ${label}s found`
+          : `${freelancersCount} ${label}${freelancersCount === 1 ? "" : "s"} found`}
       </Text>
 
       <View className="relative">

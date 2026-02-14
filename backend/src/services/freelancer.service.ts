@@ -98,7 +98,7 @@ export class FreelancerService implements IFreelancerService {
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
 
-    console.log(JSON.stringify(query, null, 2));
+    // console.log(JSON.stringify(query, null, 2));
 
     const defaultFilters: ListFilter[] = [
       {
