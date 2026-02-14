@@ -41,7 +41,7 @@ export default function FreelancerCard({
           )}
         </View>
 
-        {/* Worker Info */}
+        {/* Freelancer Info */}
         <View className="flex-1 min-w-0">
           {/* Name */}
           <View className="flex-row items-center gap-2 mb-2">

@@ -22,7 +22,7 @@ export const ProfessionsFilterFilterSkeleton = () => {
   );
 };
 
-export const NearbyWorkerSkeleton = () => {
+export const NearbyFreelancerSkeleton = () => {
   const scheme = useColorScheme();
   const base = scheme === "dark" ? "bg-primary-800" : "bg-primary-100";
 
@@ -54,11 +54,11 @@ export const NearbyWorkerSkeleton = () => {
   );
 };
 
-export const NearbyWorkersSkeletonList = () => {
+export const NearbyFreelancersSkeletonList = () => {
   return (
     <View className="flex flex-col gap-3 pb-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <NearbyWorkerSkeleton key={i} />
+        <NearbyFreelancerSkeleton key={i} />
       ))}
     </View>
   );

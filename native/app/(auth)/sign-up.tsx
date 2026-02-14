@@ -86,8 +86,8 @@ export default function SignupScreen() {
                     </Text>
                     <Text className="dark:text-primary-300 text-primary-700 mb-8">
                       {userRole === USER_ROLE.FREELANCER
-                        ? "Join as a skilled worker and get discovered"
-                        : "Sign up to find trusted workers near you"}
+                        ? "Join as a skilled freelancer and get discovered"
+                        : "Sign up to find trusted freelancers near you"}
                     </Text>
                     <Animated.View
                       entering={FadeInDown.delay(100)}

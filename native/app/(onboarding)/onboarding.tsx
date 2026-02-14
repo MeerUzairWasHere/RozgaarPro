@@ -12,7 +12,7 @@ import { cn } from "@/utils";
 const slides = [
   {
     icon: Search,
-    title: "Find Skilled Workers",
+    title: "Find Skilled Freelancers",
     description:
       "Search and connect with trusted local professionals — plumbers, electricians, carpenters, and more.",
   },
@@ -20,13 +20,13 @@ const slides = [
     icon: ShieldCheck,
     title: "Verified Professionals",
     description:
-      "Every worker is phone-verified. Hire with confidence knowing you're getting quality help.",
+      "Every freelancer is phone-verified. Hire with confidence knowing you're getting quality help.",
   },
   {
     icon: Briefcase,
     title: "Work Opportunities",
     description:
-      "Workers: Get discovered by customers in your area. No middlemen, direct connections.",
+      "Freelancers: Get discovered by customers in your area. No middlemen, direct connections.",
   },
 ];
 

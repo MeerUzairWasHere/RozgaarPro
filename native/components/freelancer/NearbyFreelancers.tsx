@@ -4,7 +4,7 @@ import { useLocationStore } from "@/store";
 import { useGetRandomVisibleFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
-import { NearbyWorkersSkeletonList } from "../Skeletons";
+import { NearbyFreelancersSkeletonList } from "../Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 import { FilterOperator, SortDirection } from "@/types";
@@ -45,7 +45,7 @@ export default function NearbyFreelancers() {
           title="Nearby Freelancers"
           onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
         />
-        <NearbyWorkersSkeletonList />
+        <NearbyFreelancersSkeletonList />
       </View>
     );
 
