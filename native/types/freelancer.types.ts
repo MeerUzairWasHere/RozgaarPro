@@ -34,6 +34,7 @@ export interface Freelancer {
 export interface NearbyFreelancer {
   freelancer_id: string;
   user_id: string;
+  profile_image_url: string | null;
   primary_profession_name: string;
   name: string;
   experience: number;

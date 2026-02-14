@@ -13,7 +13,6 @@ import { getFreelancerDetailsRoute } from "@/constants";
 import InitialAvatar from "../common/InitialAvatar";
 import { getExperienceLabel } from "@/utils";
 import Animated, { FadeInUp } from "react-native-reanimated";
-import { rashid, shahid } from "@/assets";
 
 export default function FreelancerCard({
   freelancer,
@@ -34,15 +33,19 @@ export default function FreelancerCard({
         <View className="flex-row items-start gap-3">
           {/* Profile Image */}
           <View className="relative flex-shrink-0">
-            <InitialAvatar
-              name={freelancer.name}
-              className="bg-brand/40 dark:bg-brand/40 rounded-xl items-center
+            {freelancer.profile_image_url !== null ? (
+              <Image
+                source={{ uri: freelancer.profile_image_url }}
+                alt={freelancer.name}
+                className="w-16 h-16 rounded-md bg-brand/40 dark:bg-brand/40"
+              />
+            ) : (
+              <InitialAvatar
+                name={freelancer.name}
+                className="bg-brand/40 dark:bg-brand/40 rounded-xl items-center
           justify-center"
-            />
-            {/* <Image
-              source={shahid}
-              className="w-16 h-16 rounded-md bg-brand/40 dark:bg-brand/40"
-            /> */}
+              />
+            )}
 
             {freelancer.status === FREELANCER_STATUS.APPROVED && (
               <View

@@ -9,11 +9,14 @@ import {
   NearbyFreelancerDetail,
 } from "../dto";
 import {
+  BucketType,
   IFreelancerService,
   ILocationService,
   IPrismaService,
   IRekognitionService,
+  IStorageService,
   IUserService,
+  StorageUploadResult,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
@@ -26,6 +29,7 @@ export class FreelancerService implements IFreelancerService {
     private userService: IUserService,
     private locationService: ILocationService,
     private rekognitionService: IRekognitionService,
+    private storageService: IStorageService,
   ) {}
 
   async createAndCompleteFreelancerProfile({
@@ -40,66 +44,108 @@ export class FreelancerService implements IFreelancerService {
     const profileImage = files.profileImage?.[0];
     const idImage = files.idImage?.[0];
 
-    if (profileImage) {
-      await this.rekognitionService.verifyFace(profileImage.buffer);
+    if (!idImage) {
+      throw new BadRequestError("ID image is required");
     }
 
-    throw new Error("test");
+    let profileImageResult: StorageUploadResult | undefined;
+    let idImageResult: StorageUploadResult | undefined;
 
-    const user = await this.userService.findUserByIdOrThrowError({ id });
+    try {
+      // Verify and upload profile image (optional)
+      if (profileImage) {
+        await this.rekognitionService.verifyFace(profileImage.buffer);
 
-    if (user.role !== Role.FREELANCER) {
-      throw new ForbiddenError("Only freelancers can complete this profile");
-    }
+        const profileExt = profileImage.mimetype.split("/")[1];
 
-    if (
-      params.skillIds.length === 0 ||
-      params.skillIds.length > MAX_NUMBER_OF_SKILLS
-    ) {
-      throw new BadRequestError(`Select up to ${MAX_NUMBER_OF_SKILLS} skills`);
-    }
+        profileImageResult = await this.storageService.upload(
+          profileImage.buffer,
+          `profiles/${id}${new Date().getTime()}.${profileExt}`,
+          profileImage.mimetype,
+          BucketType.PUBLIC,
+        );
+      }
 
-    // 🔐 Validate skills belong to profession
-    const skillsCount = await this.prismaService.skill.count({
-      where: {
-        id: { in: params.skillIds },
-        professionId: params.professionId,
-      },
-    });
+      // Upload ID image (required)
+      const idExt = idImage.mimetype.split("/")[1];
 
-    if (skillsCount !== params.skillIds.length) {
-      throw new BadRequestError("Invalid skills for selected profession");
-    }
+      idImageResult = await this.storageService.upload(
+        idImage.buffer,
+        `ids/${id}${new Date().getTime()}.${idExt}`,
+        idImage.mimetype,
+        BucketType.PRIVATE,
+      );
 
-    await this.prismaService.$transaction(async (tx) => {
-      await tx.freelancer.create({
-        data: {
-          userId: id,
-          experience: params.experience,
-          phone: user.phone,
-          primaryProfessionId: params.professionId,
+      const user = await this.userService.findUserByIdOrThrowError({ id });
 
-          locations: {
-            create: {
-              latitude: params.location.latitude,
-              longitude: params.location.longitude,
-              accuracy: params.location.accuracy,
-            },
-          },
+      if (user.role !== Role.FREELANCER) {
+        throw new ForbiddenError("Only freelancers can complete this profile");
+      }
 
-          skills: {
-            create: params.skillIds.map((skillId) => ({
-              skillId,
-            })),
-          },
+      if (
+        params.skillIds.length === 0 ||
+        params.skillIds.length > MAX_NUMBER_OF_SKILLS
+      ) {
+        throw new BadRequestError(
+          `Select up to ${MAX_NUMBER_OF_SKILLS} skills`,
+        );
+      }
+
+      const skillsCount = await this.prismaService.skill.count({
+        where: {
+          id: { in: params.skillIds },
+          professionId: params.professionId,
         },
       });
 
-      await tx.user.update({
-        where: { id: user.id },
-        data: { profileCompleted: true },
+      if (skillsCount !== params.skillIds.length) {
+        throw new BadRequestError("Invalid skills for selected profession");
+      }
+
+      await this.prismaService.$transaction(async (tx) => {
+        await tx.freelancer.create({
+          data: {
+            userId: id,
+            experience: params.experience,
+            phone: user.phone,
+            primaryProfessionId: params.professionId,
+            locations: {
+              create: {
+                latitude: params.location.latitude,
+                longitude: params.location.longitude,
+                accuracy: params.location.accuracy,
+              },
+            },
+            skills: {
+              create: params.skillIds.map((skillId) => ({
+                skillId,
+              })),
+            },
+          },
+        });
+
+        await tx.user.update({
+          where: { id: user.id },
+          data: {
+            profileImage: profileImageResult?.key ?? null,
+            idImage: idImageResult!.key,
+            profileCompleted: true,
+          },
+        });
       });
-    });
+    } catch (error) {
+      // Cleanup orphan files
+      if (profileImageResult) {
+        await this.storageService.delete(
+          profileImageResult.key,
+          BucketType.PUBLIC,
+        );
+      }
+      if (idImageResult) {
+        await this.storageService.delete(idImageResult.key, BucketType.PRIVATE);
+      }
+      throw error;
+    }
   }
 
   async getFreelancerStatus(id: string): Promise<FreelancerStatus> {
@@ -123,7 +169,7 @@ export class FreelancerService implements IFreelancerService {
 
     const { latitude, longitude } = query.location ?? {};
 
-    return executePaginatedRawQuery<NearbyFreelancer>({
+    const response = await executePaginatedRawQuery<NearbyFreelancer>({
       prisma: this.prismaService,
       query,
       defaultFilters,
@@ -132,6 +178,7 @@ export class FreelancerService implements IFreelancerService {
         f.id AS freelancer_Id,
         u.id AS user_Id,
         u.name AS name,
+        u."profileImage" AS profile_image_key,
         f.experience AS experience,
         f.status AS status,
         f.rating AS rating,
@@ -164,34 +211,16 @@ export class FreelancerService implements IFreelancerService {
       countQuery: (sqlFilters) => Prisma.sql`
         SELECT COUNT(*)::int AS count FROM "Freelancer"`,
     });
-  }
 
-  async findFreelancerByIdOrThrowError({
-    id,
-  }: {
-    id: string;
-  }): Promise<Freelancer> {
-    const freelancer = await this.prismaService.freelancer.findUnique({
-      where: { id },
-    });
+    // map avatar keys to URLs
+    response.data = response.data.map((item) => ({
+      ...item,
+      profile_image_url: item.profile_image_key
+        ? this.storageService.getPublicUrl(item.profile_image_key)
+        : null,
+    }));
 
-    if (!freelancer) {
-      throw new NotFoundError(`Freelancer with id ${id} not found`);
-    }
-
-    return freelancer;
-  }
-
-  async getRandomFreelancerIds(count: number): Promise<string[]> {
-    const rows = await this.prismaService.$queryRaw<Array<{ id: string }>>`
-    SELECT f."id"
-    FROM "Freelancer" f
-    WHERE f."status" = 'APPROVED'
-    ORDER BY RANDOM()
-    LIMIT ${count}
-  `;
-
-    return rows.map((r) => r.id);
+    return response;
   }
 
   async getSingleVisibleFreelancerDetail(
@@ -213,6 +242,7 @@ export class FreelancerService implements IFreelancerService {
       f.id::TEXT AS freelancer_id,
       u.id::TEXT AS user_id,
       u.name AS name,
+      u."profileImage" AS profile_image_key,
       f.experience AS experience,
       f.status AS status,
       f.rating AS rating,
@@ -250,8 +280,39 @@ export class FreelancerService implements IFreelancerService {
     const freelancerDetails = {
       ...result[0],
       location,
+      profile_image_url: result[0].profile_image_key
+        ? this.storageService.getPublicUrl(result[0].profile_image_key)
+        : null,
     };
 
     return freelancerDetails;
+  }
+
+  async findFreelancerByIdOrThrowError({
+    id,
+  }: {
+    id: string;
+  }): Promise<Freelancer> {
+    const freelancer = await this.prismaService.freelancer.findUnique({
+      where: { id },
+    });
+
+    if (!freelancer) {
+      throw new NotFoundError(`Freelancer with id ${id} not found`);
+    }
+
+    return freelancer;
+  }
+
+  async getRandomFreelancerIds(count: number): Promise<string[]> {
+    const rows = await this.prismaService.$queryRaw<Array<{ id: string }>>`
+    SELECT f."id"
+    FROM "Freelancer" f
+    WHERE f."status" = 'APPROVED'
+    ORDER BY RANDOM()
+    LIMIT ${count}
+  `;
+
+    return rows.map((r) => r.id);
   }
 }

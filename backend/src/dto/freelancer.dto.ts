@@ -17,6 +17,10 @@ export interface NearbyFreelancer {
   status: FreelancerStatus;
   rating: number;
   distance_km: number;
+  profile_image_key: string | null;
+  profile_image_url: string | null;
+  id_image_key: string | null;
+  id_image_url: string | null;
 }
 
 export interface NearbyFreelancerDetail extends NearbyFreelancer {

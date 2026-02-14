@@ -1,11 +1,23 @@
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
-import { CustomInput, CustomTouchableOpacityButton } from "@/components";
-import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
+import {
+  CustomInput,
+  CustomTouchableOpacityButton,
+  ErrorBanner,
+} from "@/components";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Keyboard,
+} from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
 import { ROUTES } from "@/constants";
+import { useFormErrors } from "@/hooks";
 import {
   useAuthStore,
   useCompleteProfileStore,
@@ -23,11 +35,13 @@ import {
   takePhotoWithCamera,
 } from "@/utils";
 import { useEffect, useState } from "react";
+import RequiredLabel from "@/components/common/RequiredLabel";
 
 export default function CompleteProfile() {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const mutationCompleteProfile = useCompleteFreelancerProfile();
+  const { generalError, clearErrors } = useFormErrors(mutationCompleteProfile);
   const { setProfileCompleted } = useAuthStore();
   const {
     step,
@@ -89,6 +103,9 @@ export default function CompleteProfile() {
       return;
     }
 
+    Keyboard.dismiss();
+    clearErrors();
+
     setLoading(true);
 
     try {
@@ -107,7 +124,6 @@ export default function CompleteProfile() {
         }),
       );
 
-      // Profile image (optional)
       if (formData.profileImage) {
         form.append("profileImage", {
           uri: formData.profileImage,
@@ -116,7 +132,6 @@ export default function CompleteProfile() {
         } as any);
       }
 
-      // ID image (required)
       if (formData.idImage) {
         form.append("idImage", {
           uri: formData.idImage,
@@ -130,6 +145,9 @@ export default function CompleteProfile() {
       setProfileCompleted(true);
       resetProfile();
       router.replace(ROUTES.HOME);
+    } catch (error) {
+      // ❗ Prevent uncaught promise error
+      console.log("Profile completion error:", error);
     } finally {
       setLoading(false);
     }
@@ -156,6 +174,7 @@ export default function CompleteProfile() {
             Let's set up your freelancer profile
           </Text>
         </View>
+
         {/* Progress */}
         <View className="px-4 py-4">
           <View className="flex-row gap-2">
@@ -185,6 +204,11 @@ export default function CompleteProfile() {
             Step {step} of 4
           </Text>
         </View>
+        {generalError && (
+          <Animated.View entering={FadeInRight} className="px-4 mb-4">
+            <ErrorBanner message={generalError} onDismiss={clearErrors} />
+          </Animated.View>
+        )}
 
         <View className="px-4 pb-32">
           {/* Step 1: Profession */}
@@ -372,75 +396,12 @@ export default function CompleteProfile() {
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50">
                 Verify your identity
               </Text>
-
-              {/* Profile Photo Card */}
-              <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
-                <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  Profile Photo (optional)
-                </Text>
-
-                <View className="items-center gap-3">
-                  {formData.profileImage ? (
-                    <>
-                      <Image
-                        source={{ uri: formData.profileImage }}
-                        className="w-28 h-28 rounded-full"
-                      />
-                      <View className="flex-row gap-3">
-                        <TouchableOpacity
-                          onPress={() => setProfileImage(null)}
-                          className="px-4 py-2 bg-red-100 rounded-xl"
-                        >
-                          <Text className="text-sm font-medium text-red-600">
-                            Remove
-                          </Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          onPress={handleTakeProfilePhoto}
-                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
-                        >
-                          <Text className="text-sm font-medium">Retake</Text>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-                          onPress={handlePickProfileImage}
-                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
-                        >
-                          <Text className="text-sm font-medium">Gallery</Text>
-                        </TouchableOpacity>
-                      </View>
-                    </>
-                  ) : (
-                    <>
-                      <TouchableOpacity
-                        onPress={handleTakeProfilePhoto}
-                        className="w-28 h-28 rounded-full border-2 border-dashed border-primary-300 items-center justify-center"
-                      >
-                        <Camera
-                          size={32}
-                          color={isDark ? "#B3A5F5" : "#6B4EEA"}
-                        />
-                      </TouchableOpacity>
-
-                      <TouchableOpacity
-                        onPress={handlePickProfileImage}
-                        className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
-                      >
-                        <Text className="text-sm font-medium">
-                          Select from Gallery
-                        </Text>
-                      </TouchableOpacity>
-                    </>
-                  )}
-                </View>
-              </View>
-
               {/* ID Verification Card */}
               <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
                 <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  Government ID (required)
+                  <RequiredLabel label="Government ID" />
                 </Text>
+
                 <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
                   Aadhaar, PAN, or Voter ID
                 </Text>
@@ -492,6 +453,72 @@ export default function CompleteProfile() {
 
                       <TouchableOpacity
                         onPress={handlePickIdImage}
+                        className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                      >
+                        <Text className="text-sm font-medium">
+                          Select from Gallery
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
+              </View>
+              {/* Profile Photo Card */}
+              <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
+                <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
+                  Profile Photo (optional)
+                </Text>
+                <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
+                  Take a clear front-facing photo of your face or upload a
+                  photo.
+                </Text>
+
+                <View className="items-center gap-3">
+                  {formData.profileImage ? (
+                    <>
+                      <Image
+                        source={{ uri: formData.profileImage }}
+                        className="w-28 h-28 rounded-full"
+                      />
+                      <View className="flex-row gap-3">
+                        <TouchableOpacity
+                          onPress={() => setProfileImage(null)}
+                          className="px-4 py-2 bg-red-100 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium text-red-600">
+                            Remove
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handleTakeProfilePhoto}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Retake</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handlePickProfileImage}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Gallery</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={handleTakeProfilePhoto}
+                        className="w-28 h-28 rounded-full border-2 border-dashed border-primary-300 items-center justify-center"
+                      >
+                        <Camera
+                          size={32}
+                          color={isDark ? "#B3A5F5" : "#6B4EEA"}
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={handlePickProfileImage}
                         className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                       >
                         <Text className="text-sm font-medium">

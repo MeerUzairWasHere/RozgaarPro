@@ -8,9 +8,10 @@ import { rashid } from "@/assets";
 type Props = {
   name: string;
   profession: string;
+  imageUrl: string | null;
 };
 
-export default function ProfileHeader({ name, profession }: Props) {
+export default function ProfileHeader({ name, profession, imageUrl }: Props) {
   return (
     <View className="relative my-4">
       <View>
@@ -18,17 +19,19 @@ export default function ProfileHeader({ name, profession }: Props) {
           entering={FadeInDown.delay(100)}
           className="items-center"
         >
-          <View className="w-28 h-28 rounded-full overflow-hidden items-center justify-center mb-4 shadow-xl  bg-brand/40 dark:bg-brand/40">
-            {/* <Image
-              source={rashid}
-              className="w-full h-full"
-              resizeMode="cover"
-            /> */}
-            <InitialAvatar
-              name={name}
-              className="bg-brand/40 dark:bg-brand/40 rounded-xl items-center
-          justify-center"
-            />
+          <View className="w-28 h-28 rounded-full overflow-hidden items-center justify-center mb-4 shadow-xl bg-brand/40 dark:bg-brand/40">
+            {imageUrl ? (
+              <Image
+                source={{ uri: imageUrl }}
+                alt={name}
+                className="w-full h-full"
+              />
+            ) : (
+              <InitialAvatar
+                name={name}
+                className="w-full h-full rounded-full items-center justify-center"
+              />
+            )}
           </View>
 
           <Text className="text-3xl font-bold text-primary-950 dark:text-primary-50 mb-4 text-center">

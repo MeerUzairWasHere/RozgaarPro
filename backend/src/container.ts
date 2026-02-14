@@ -7,18 +7,18 @@ import {
   UserController,
 } from "./controllers";
 
-import { IStorageService, VerifyProvider } from "./interfaces";
+import { VerifyProvider } from "./interfaces";
 
 import {
   AuthService,
   CompanyService,
-  createStorageService,
   EmailService,
   FreelancerService,
   LocationService,
   PrismaService,
   ProfessionService,
   RekognitionService,
+  S3StorageService,
   SkillService,
   TwilioVerifyService,
   UserService,
@@ -32,7 +32,7 @@ class Container {
   // Services
   public emailService: EmailService;
   public rekognitionService: RekognitionService;
-  public storageService: IStorageService;
+  public storageService: S3StorageService;
   public verifyProvider: VerifyProvider;
   public authService: AuthService;
   public userService: UserService;
@@ -55,7 +55,7 @@ class Container {
     this.prismaService = new PrismaService();
     this.locationService = new LocationService();
     this.rekognitionService = new RekognitionService();
-    this.storageService = createStorageService();
+    this.storageService = new S3StorageService();
 
     // Initialize Services
     this.companyService = new CompanyService(this.prismaService);
@@ -81,6 +81,7 @@ class Container {
       this.userService,
       this.locationService,
       this.rekognitionService,
+      this.storageService,
     );
 
     // Initialize Controllers
