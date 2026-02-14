@@ -47,6 +47,35 @@ export const useGetRandomVisibleFreelancers = (query: ListQuery = {}) => {
 
 export const useGetAllVisibleFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
+  return useInfiniteQuery({
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) =>
+      freelancerApiClient.getAllVisibleFreelancers({
+        ...query,
+        pagination: {
+          page: pageParam,
+          pageSize: query.pagination?.pageSize ?? 15,
+        },
+      }),
+
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNext) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+
+    enabled,
+  });
+};
+
+export const useGetAllVisibleFreelancersBySearch = (query: ListQuery = {}) => {
+  const hasLocation = hasValidCoordinates(query.location);
+  const searchTerm = query.search?.term?.trim() ?? "";
+
+  const enabled = hasLocation && searchTerm.length >= 1;
 
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),

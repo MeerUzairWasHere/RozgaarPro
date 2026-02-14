@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, TextInput, useColorScheme } from "react-native";
 import { Search } from "lucide-react-native";
 import { useLocationStore } from "@/store";
-import { useGetAllVisibleFreelancers } from "@/mutations";
+import { useGetAllVisibleFreelancersBySearch } from "@/mutations";
 
 export default function SearchBar() {
   const { coordinates } = useLocationStore();
@@ -19,7 +19,7 @@ export default function SearchBar() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data, isLoading } = useGetAllVisibleFreelancers({
+  const { data, isLoading } = useGetAllVisibleFreelancersBySearch({
     location: coordinates,
     search: debouncedQuery
       ? {
@@ -53,7 +53,7 @@ export default function SearchBar() {
         <TextInput
           value={query}
           onChangeText={setQuery}
-          placeholder="Search plumber, electrician..."
+          placeholder="Search plumber, electrician or freelancer..."
           placeholderTextColor="#9CA3AF"
           className="w-full h-12 pl-12 pr-4 rounded-2xl bg-white dark:bg-primary-900 text-primary-900 dark:text-primary-50 border-2 border-primary-100 dark:border-primary-800 shadow-sm"
         />
