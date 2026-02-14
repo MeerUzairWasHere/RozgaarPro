@@ -6,15 +6,18 @@ import {
   NearbyFreelancer,
   NearbyFreelancerDetail,
 } from "../dto";
-import { PaginatedResponse } from "../types";
+import { FreelancerUploadFiles, PaginatedResponse } from "../types";
+import { Request } from "express";
 
 export interface IFreelancerService {
   createAndCompleteFreelancerProfile({
     id,
     params,
+    files,
   }: {
     id: string;
     params: FreelancerProfileCompletedInput;
+    files: FreelancerUploadFiles;
   }): Promise<void>;
 
   getFreelancerStatus(id: string): Promise<FreelancerStatus | null>;

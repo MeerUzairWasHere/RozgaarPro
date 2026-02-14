@@ -9,17 +9,20 @@ import {
   validateGetAllVisibleFreelancersInput,
   validateGetSingleVisibleFreelancerDetailInput,
 } from "../validators";
+import { upload } from "../middlewares/upload.middleware";
 
 const router = Router();
 
-router
-  .route("/complete-profile")
-  .post(
-    authGuard,
-    rolesGuard(Role.FREELANCER),
-    validate({ body: validateFreelancerProfileCompletedInput }),
-    freelancerController.completeFreelancerProfile,
-  );
+router.route("/complete-profile").post(
+  authGuard,
+  rolesGuard(Role.FREELANCER),
+  upload.fields([
+    { name: "profileImage", maxCount: 1 },
+    { name: "idImage", maxCount: 1 },
+  ]),
+  validate({ body: validateFreelancerProfileCompletedInput }),
+  freelancerController.completeFreelancerProfile,
+);
 
 router
   .route("/")

@@ -12,11 +12,12 @@ import {
   IFreelancerService,
   ILocationService,
   IPrismaService,
+  IRekognitionService,
   IUserService,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
-import { PaginatedResponse } from "../types";
+import { FreelancerUploadFiles, PaginatedResponse } from "../types";
 import { executePaginatedRawQuery } from "../utils";
 
 export class FreelancerService implements IFreelancerService {
@@ -24,15 +25,27 @@ export class FreelancerService implements IFreelancerService {
     private prismaService: IPrismaService,
     private userService: IUserService,
     private locationService: ILocationService,
+    private rekognitionService: IRekognitionService,
   ) {}
 
   async createAndCompleteFreelancerProfile({
     id,
     params,
+    files,
   }: {
     id: string;
     params: FreelancerProfileCompletedInput;
+    files: FreelancerUploadFiles;
   }) {
+    const profileImage = files.profileImage?.[0];
+    const idImage = files.idImage?.[0];
+
+    if (profileImage) {
+      await this.rekognitionService.verifyFace(profileImage.buffer);
+    }
+
+    throw new Error("test");
+
     const user = await this.userService.findUserByIdOrThrowError({ id });
 
     if (user.role !== Role.FREELANCER) {
@@ -97,7 +110,6 @@ export class FreelancerService implements IFreelancerService {
   async getAllVisibleFreelancers(
     query: ListQueryDto,
   ): Promise<PaginatedResponse<NearbyFreelancer>> {
-
     // console.log(JSON.stringify(query, null, 2));
 
     const defaultFilters: ListFilter[] = [

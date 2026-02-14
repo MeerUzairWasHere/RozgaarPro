@@ -9,3 +9,4 @@ export * from "./skill.interface";
 export * from "./freelancer.interface";
 export * from "./profession.interface";
 export * from "./location.interface";
+export * from "./rekognition.interface";

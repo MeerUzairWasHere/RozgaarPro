@@ -10,16 +10,31 @@ import {
 } from "./zod.schema";
 
 export const validateFreelancerProfileCompletedInput = z.object({
-  professionId: z.uuid({ message: "Invalid professionId" }),
+  professionId: z.string().uuid({ message: "Invalid professionId" }),
+
   skillIds: z
-    .array(z.uuid({ message: "Invalid skillId" }))
-    .min(1, {
-      message: "skillIds must be at least 1 long",
-    })
-    .max(3, { message: "skillIds must be at most 3 long" }),
-  experience: requiredFieldNumberSchema("experience", 0, 99),
-  location: locationWithAccuracySchema,
+    .string()
+    .transform((val) => JSON.parse(val))
+    .pipe(
+      z
+        .array(z.string().uuid({ message: "Invalid skillId" }))
+        .min(1, { message: "skillIds must be at least 1 long" })
+        .max(3, { message: "skillIds must be at most 3 long" }),
+    ),
+
+  experience: z
+    .string()
+    .transform((val) => Number(val))
+    .pipe(requiredFieldNumberSchema("experience", 0, 99)),
+
+  location: z
+    .string()
+    .transform((val) => JSON.parse(val))
+    .pipe(locationWithAccuracySchema),
 });
+
+
+
 
 export const validateGetAllVisibleFreelancersInput = z.object({
   location: locationSchema,

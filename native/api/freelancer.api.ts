@@ -1,7 +1,6 @@
 import { api } from "@/lib";
 import {
   FREELANCER_STATUS,
-  FreelancerProfileCompletedInput,
   ListQuery,
   NearbyFreelancer,
   NearbyFreelancerDetail,
@@ -10,12 +9,18 @@ import {
 
 export const freelancerApiClient = {
   createAndCompleteFreelancerProfile: async (
-    formData: FreelancerProfileCompletedInput,
+    formData: FormData,
   ): Promise<string> => {
     const { data } = await api.post<string>(
       "/freelancers/complete-profile",
       formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
     );
+
     return data;
   },
 

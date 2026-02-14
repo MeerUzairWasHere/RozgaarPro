@@ -18,6 +18,7 @@ import {
   LocationService,
   PrismaService,
   ProfessionService,
+  RekognitionService,
   SkillService,
   TwilioVerifyService,
   UserService,
@@ -30,6 +31,7 @@ class Container {
 
   // Services
   public emailService: EmailService;
+  public rekognitionService: RekognitionService;
   public storageService: IStorageService;
   public verifyProvider: VerifyProvider;
   public authService: AuthService;
@@ -52,6 +54,7 @@ class Container {
     // Initialize Database
     this.prismaService = new PrismaService();
     this.locationService = new LocationService();
+    this.rekognitionService = new RekognitionService();
     this.storageService = createStorageService();
 
     // Initialize Services
@@ -77,6 +80,7 @@ class Container {
       this.prismaService,
       this.userService,
       this.locationService,
+      this.rekognitionService,
     );
 
     // Initialize Controllers

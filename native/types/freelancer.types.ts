@@ -2,17 +2,6 @@ import { Profession } from "./profession.types";
 import { Skill } from "./skill.types";
 import { User } from "./user.types";
 
-export interface FreelancerProfileCompletedInput {
-  professionId: string;
-  skillIds: string[];
-  experience: number;
-  location: {
-    latitude: number;
-    longitude: number;
-    accuracy: number | null;
-  };
-}
-
 export enum FREELANCER_STATUS {
   PENDING = "PENDING",
   APPROVED = "APPROVED",

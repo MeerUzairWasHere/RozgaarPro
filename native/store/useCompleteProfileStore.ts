@@ -6,6 +6,8 @@ type ProfileFormData = {
   professionId: string | null;
   skills: string[];
   experience: number | null;
+  profileImage: string | null; // optional
+  idImage: string | null; // required
 };
 
 type CompleteProfileState = {
@@ -26,6 +28,9 @@ type CompleteProfileState = {
 
   setProfession: (professionId: string) => void;
   clearSkills: () => void;
+
+  setProfileImage: (uri: string | null) => void;
+  setIdImage: (uri: string | null) => void;
 };
 
 export const useCompleteProfileStore = create<CompleteProfileState>()(
@@ -37,7 +42,19 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
         professionId: null,
         skills: [],
         experience: null,
+        profileImage: null,
+        idImage: null,
       },
+
+      setProfileImage: (uri) =>
+        set((state) => ({
+          formData: { ...state.formData, profileImage: uri },
+        })),
+
+      setIdImage: (uri) =>
+        set((state) => ({
+          formData: { ...state.formData, idImage: uri },
+        })),
 
       setStep: (step) => set({ step }),
 
@@ -82,6 +99,8 @@ export const useCompleteProfileStore = create<CompleteProfileState>()(
             professionId: null,
             skills: [],
             experience: null,
+            profileImage: null,
+            idImage: null,
           },
         }),
 

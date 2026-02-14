@@ -1,6 +1,7 @@
+import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { CustomInput, CustomTouchableOpacityButton } from "@/components";
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Image } from "react-native";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -15,8 +16,12 @@ import {
   useGetProfessions,
   useGetSkillsByProfession,
 } from "@/mutations";
-import { cn, getExperienceLabel } from "@/utils";
-
+import {
+  cn,
+  getExperienceLabel,
+  pickImageFromGallery,
+  takePhotoWithCamera,
+} from "@/utils";
 import { useEffect, useState } from "react";
 
 export default function CompleteProfile() {
@@ -28,6 +33,8 @@ export default function CompleteProfile() {
     step,
     loading,
     formData,
+    setProfileImage,
+    setIdImage,
     setStep,
     nextStep,
     setLoading,
@@ -47,31 +54,78 @@ export default function CompleteProfile() {
       );
     }
   }, [step]);
-
   const { coordinates, permissionGranted } = useLocationStore();
+
   const { data: skills, isLoading: isLoadingSkills } = useGetSkillsByProfession(
     formData.professionId!,
   );
+
   const { data: professions, isLoading: isLoadingProfessions } =
     useGetProfessions();
+
+  const handlePickProfileImage = async () => {
+    const uri = await pickImageFromGallery();
+    if (uri) setProfileImage(uri);
+  };
+
+  const handleTakeProfilePhoto = async () => {
+    const uri = await takePhotoWithCamera(ImagePicker.CameraType.front);
+    if (uri) setProfileImage(uri);
+  };
+
+  const handlePickIdImage = async () => {
+    const uri = await pickImageFromGallery();
+    if (uri) setIdImage(uri);
+  };
+
+  const handleTakeIdPhoto = async () => {
+    const uri = await takePhotoWithCamera(ImagePicker.CameraType.back);
+    if (uri) setIdImage(uri);
+  };
 
   const handleNext = async () => {
     if (step < 4) {
       nextStep();
       return;
     }
+
     setLoading(true);
+
     try {
-      await mutationCompleteProfile.mutateAsync({
-        professionId: formData.professionId!,
-        skillIds: formData.skills,
-        experience: formData.experience!,
-        location: {
+      const form = new FormData();
+
+      form.append("professionId", formData.professionId!);
+      form.append("experience", String(formData.experience!));
+      form.append("skillIds", JSON.stringify(formData.skills));
+
+      form.append(
+        "location",
+        JSON.stringify({
           latitude: coordinates.latitude,
           longitude: coordinates.longitude,
           accuracy: coordinates.accuracy,
-        },
-      });
+        }),
+      );
+
+      // Profile image (optional)
+      if (formData.profileImage) {
+        form.append("profileImage", {
+          uri: formData.profileImage,
+          name: "profile.jpg",
+          type: "image/jpeg",
+        } as any);
+      }
+
+      // ID image (required)
+      if (formData.idImage) {
+        form.append("idImage", {
+          uri: formData.idImage,
+          name: "id.jpg",
+          type: "image/jpeg",
+        } as any);
+      }
+
+      await mutationCompleteProfile.mutateAsync(form);
 
       setProfileCompleted(true);
       resetProfile();
@@ -88,7 +142,7 @@ export default function CompleteProfile() {
       (formData.experience === null ||
         Number.isNaN(formData.experience) ||
         formData.experience <= 0)) ||
-    (step === 4 && !permissionGranted);
+    (step === 4 && (!permissionGranted || !formData.idImage));
 
   return (
     <View className="flex-1 bg-primary-50 dark:bg-primary-950">
@@ -314,75 +368,186 @@ export default function CompleteProfile() {
 
           {/* Step 4: Verification */}
           {step === 4 && (
-            <Animated.View entering={FadeInRight}>
-              <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
+            <Animated.View entering={FadeInRight} className="gap-5">
+              <Text className="text-xl font-bold text-primary-900 dark:text-primary-50">
                 Verify your identity
               </Text>
-              <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                Upload a photo ID to get verified
-              </Text>
 
-              <View className="gap-4">
-                <TouchableOpacity
-                  className="p-6 rounded-2xl border-2 border-dashed border-primary-300 dark:border-primary-700 bg-primary-50 dark:bg-primary-900 items-center"
-                  activeOpacity={0.7}
-                >
-                  <View className="w-16 h-16 bg-brand/10 dark:bg-brand-500/20 rounded-full items-center justify-center mb-3">
-                    <Camera size={28} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
-                  </View>
-                  <Text className="font-medium text-primary-900 dark:text-primary-50 mb-1">
-                    Upload ID Photo
-                  </Text>
-                  <Text className="text-sm text-primary-600 dark:text-primary-400">
-                    Aadhaar, PAN, or Voter ID
-                  </Text>
-                </TouchableOpacity>
+              {/* Profile Photo Card */}
+              <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
+                <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
+                  Profile Photo (optional)
+                </Text>
 
-                <View
-                  className={cn(
-                    "rounded-2xl p-4 border",
-                    permissionGranted
-                      ? "bg-green-500 border-green-500"
-                      : "bg-primary-50 border-primary-300 dark:bg-primary-900 dark:border-primary-700",
+                <View className="items-center gap-3">
+                  {formData.profileImage ? (
+                    <>
+                      <Image
+                        source={{ uri: formData.profileImage }}
+                        className="w-28 h-28 rounded-full"
+                      />
+                      <View className="flex-row gap-3">
+                        <TouchableOpacity
+                          onPress={() => setProfileImage(null)}
+                          className="px-4 py-2 bg-red-100 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium text-red-600">
+                            Remove
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handleTakeProfilePhoto}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Retake</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handlePickProfileImage}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Gallery</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={handleTakeProfilePhoto}
+                        className="w-28 h-28 rounded-full border-2 border-dashed border-primary-300 items-center justify-center"
+                      >
+                        <Camera
+                          size={32}
+                          color={isDark ? "#B3A5F5" : "#6B4EEA"}
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={handlePickProfileImage}
+                        className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                      >
+                        <Text className="text-sm font-medium">
+                          Select from Gallery
+                        </Text>
+                      </TouchableOpacity>
+                    </>
                   )}
-                >
-                  <View className="flex-row gap-3">
-                    <View
+                </View>
+              </View>
+
+              {/* ID Verification Card */}
+              <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
+                <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
+                  Government ID (required)
+                </Text>
+                <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
+                  Aadhaar, PAN, or Voter ID
+                </Text>
+
+                <View className="items-center gap-3">
+                  {formData.idImage ? (
+                    <>
+                      <Image
+                        source={{ uri: formData.idImage }}
+                        className="w-full h-40 rounded-xl"
+                        resizeMode="cover"
+                      />
+                      <View className="flex-row gap-3">
+                        <TouchableOpacity
+                          onPress={() => setIdImage(null)}
+                          className="px-4 py-2 bg-red-100 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium text-red-600">
+                            Remove
+                          </Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handleTakeIdPhoto}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Retake</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          onPress={handlePickIdImage}
+                          className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                        >
+                          <Text className="text-sm font-medium">Gallery</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity
+                        onPress={handleTakeIdPhoto}
+                        className="w-full h-40 rounded-xl border-2 border-dashed border-primary-300 items-center justify-center"
+                      >
+                        <Camera
+                          size={32}
+                          color={isDark ? "#B3A5F5" : "#6B4EEA"}
+                        />
+                      </TouchableOpacity>
+
+                      <TouchableOpacity
+                        onPress={handlePickIdImage}
+                        className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
+                      >
+                        <Text className="text-sm font-medium">
+                          Select from Gallery
+                        </Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
+              </View>
+
+              {/* Location Card */}
+              <View
+                className={cn(
+                  "rounded-2xl p-4 border",
+                  permissionGranted
+                    ? "bg-green-500 border-green-500"
+                    : "bg-primary-50 border-primary-300 dark:bg-primary-900 dark:border-primary-700",
+                )}
+              >
+                <View className="flex-row gap-3">
+                  <View
+                    className={cn(
+                      "w-8 h-8 rounded-full items-center justify-center mt-0.5",
+                      permissionGranted ? "bg-white" : "bg-green-500",
+                    )}
+                  >
+                    <MapPin
+                      size={16}
+                      color={permissionGranted ? "#16a34a" : "#FFFFFF"}
+                    />
+                  </View>
+
+                  <View className="flex-1">
+                    <Text
                       className={cn(
-                        "w-8 h-8 rounded-full items-center justify-center mt-0.5",
-                        permissionGranted ? "bg-white" : "bg-green-500",
+                        "font-medium mb-1",
+                        permissionGranted
+                          ? "text-white"
+                          : "text-primary-900 dark:text-primary-50",
                       )}
                     >
-                      <MapPin
-                        size={16}
-                        color={permissionGranted ? "#16a34a" : "#FFFFFF"}
-                      />
-                    </View>
-
-                    <View className="flex-1">
-                      <Text
-                        className={cn(
-                          "font-medium mb-1",
-                          permissionGranted
-                            ? "text-white"
-                            : "text-primary-900 dark:text-primary-50",
-                        )}
-                      >
-                        Location Access
-                      </Text>
-                      <Text
-                        className={cn(
-                          "text-sm",
-                          permissionGranted
-                            ? "text-green-100"
-                            : "text-primary-600 dark:text-primary-400",
-                        )}
-                      >
-                        {permissionGranted
-                          ? "Location access granted"
-                          : "Allow location access so customers can find you nearby"}
-                      </Text>
-                    </View>
+                      Location Access
+                    </Text>
+                    <Text
+                      className={cn(
+                        "text-sm",
+                        permissionGranted
+                          ? "text-green-100"
+                          : "text-primary-600 dark:text-primary-400",
+                      )}
+                    >
+                      {permissionGranted
+                        ? "Location access granted"
+                        : "Allow location access so customers can find you nearby"}
+                    </Text>
                   </View>
                 </View>
               </View>

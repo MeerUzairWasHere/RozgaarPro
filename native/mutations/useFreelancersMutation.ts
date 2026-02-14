@@ -2,11 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { freelancerApiClient } from "@/api";
 import { QUERY_KEYS } from "@/constants";
 import { hasValidCoordinates } from "@/lib";
-import {
-  FREELANCER_STATUS,
-  FreelancerProfileCompletedInput,
-  ListQuery,
-} from "@/types";
+import { FREELANCER_STATUS, ListQuery } from "@/types";
 
 import {
   useMutation,
@@ -18,7 +14,7 @@ import {
 export const useCompleteFreelancerProfile = (): UseMutationResult<
   string,
   Error,
-  FreelancerProfileCompletedInput
+  FormData
 > => {
   return useMutation({
     mutationFn: freelancerApiClient.createAndCompleteFreelancerProfile,

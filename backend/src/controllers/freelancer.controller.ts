@@ -2,6 +2,8 @@ import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { IFreelancerService } from "../interfaces";
 import { currentUser, getBody } from "../decorators";
+import { BadRequestError } from "../errors";
+import { FreelancerUploadFiles } from "../types";
 
 export class FreelancerController {
   constructor(private freelancerService: IFreelancerService) {}
@@ -12,9 +14,15 @@ export class FreelancerController {
   ): Promise<void> => {
     const id = currentUser(req).id;
 
+    // @ts-ignore
+    if (!req.files?.idImage) {
+      throw new BadRequestError("idImage is required");
+    }
+
     await this.freelancerService.createAndCompleteFreelancerProfile({
       id,
       params: req.body,
+      files: req.files as FreelancerUploadFiles,
     });
 
     res.status(StatusCodes.OK).json({
