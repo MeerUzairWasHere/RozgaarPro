@@ -27,13 +27,13 @@ const UserHomeScreen = () => {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setDebouncedQuery(query);
-  //   }, 400);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
+    }, 400);
 
-  //   return () => clearTimeout(timer);
-  // }, [query]);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -61,7 +61,11 @@ const UserHomeScreen = () => {
 
   const { items } = extractInfiniteList(data);
 
-  const isSearching = debouncedQuery.trim().length > 0;
+  const isSearching = debouncedQuery.trim().length >= 3;
+
+  const hasTyped = query.trim().length > 0;
+
+
   const height = useBottomTabBarHeight();
 
   return (
@@ -79,16 +83,25 @@ const UserHomeScreen = () => {
               {items.length} result{items.length > 1 ? "s" : ""} for "{query}"
             </Text>
           )}
-          {!isSearching && (
+
+          {!hasTyped && !isSearching && (
             <>
               <SectionHeader title="What do you need?" />
               <ProfessionsFilter />
               <TopRatedFreelancers />
             </>
           )}
+
+          {hasTyped && !isSearching && (
+            <EmptyState
+              title="Start typing to search"
+              message="Search by name or profession."
+            />
+          )}
+
           {isSearching && !isLoading && items.length === 0 && (
             <EmptyState
-              title="No freelancers found"
+              title={`No results for "${debouncedQuery}"`}
               message="Try a different name or profession."
             />
           )}

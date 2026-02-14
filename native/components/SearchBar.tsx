@@ -51,7 +51,7 @@ export default function SearchBar({ value, onChange }: Props) {
               zIndex: 1,
             }}
           >
-            <X size={18} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
+            <X size={20} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
           </TouchableOpacity>
         )}
       </View>
