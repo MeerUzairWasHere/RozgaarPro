@@ -170,21 +170,27 @@ export const FreelancerFilterHeaderSkeleton = () => {
 };
 
 export const FreelancerCardSkeleton = () => (
-  <View className="mb-4 p-4 rounded-2xl bg-primary-100 dark:bg-primary-900">
-    {/* Avatar + text row */}
-    <View className="flex-row items-center">
-      <View className="w-14 h-14 rounded-full bg-primary-200 dark:bg-primary-800" />
+  <View className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm mb-4">
+    <View className="flex-row items-start gap-3">
+      {/* Avatar */}
+      <View className="w-12 h-12 rounded-xl bg-primary-200 dark:bg-primary-800" />
 
-      <View className="ml-4 flex-1">
+      <View className="flex-1">
+        {/* Name */}
         <View className="h-4 w-1/2 rounded bg-primary-200 dark:bg-primary-800 mb-2" />
-        <View className="h-3 w-1/3 rounded bg-primary-200 dark:bg-primary-800" />
-      </View>
-    </View>
 
-    {/* Bottom stats */}
-    <View className="flex-row mt-4 justify-between">
-      <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
-      <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
+        {/* Profession + experience */}
+        <View className="flex-row items-center gap-2 mb-2">
+          <View className="h-6 w-20 rounded-md bg-primary-200 dark:bg-primary-800" />
+          <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
+        </View>
+
+        {/* Rating + distance */}
+        <View className="flex-row items-center gap-6">
+          <View className="h-3 w-12 rounded bg-primary-200 dark:bg-primary-800" />
+          <View className="h-3 w-14 rounded bg-primary-200 dark:bg-primary-800" />
+        </View>
+      </View>
     </View>
   </View>
 );

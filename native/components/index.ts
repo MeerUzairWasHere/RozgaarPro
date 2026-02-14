@@ -5,6 +5,7 @@ export { default as CustomInput } from "./common/CustomInput";
 export { default as CustomPressableButton } from "./common/CustomPressableButton";
 export { default as CustomTouchableOpacityButton } from "./common/CustomTouchableOpacityButton";
 export { default as AppHeader } from "./common/AppHeader";
+export { default as EmptyState } from "./common/EmptyState";
 export { default as ListFilterHeader } from "./common/ListFilterHeader";
 export { default as LocationHeader } from "./common/LocationHeader";
 export { default as FilterDrawer } from "./common/FilterDrawer";

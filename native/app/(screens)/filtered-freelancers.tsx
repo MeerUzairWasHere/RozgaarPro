@@ -1,5 +1,6 @@
 import {
   AppHeader,
+  EmptyState,
   FilterDrawer,
   FreelancerCard,
   FreelancerCardSkeleton,
@@ -101,6 +102,11 @@ export default function FreelancerFilterView() {
           ListFooterComponent={
             isFetchingNextPage ? (
               <ActivityIndicator style={{ marginVertical: 16 }} />
+            ) : null
+          }
+          ListEmptyComponent={
+            !isLoading ? (
+              <EmptyState title={`No ${professionName}s Found`} />
             ) : null
           }
           contentContainerStyle={{

@@ -5,6 +5,7 @@ import {
   FreelancerListSkeleton,
   FilterDrawer,
   FreelancerCardSkeleton,
+  EmptyState,
 } from "@/components";
 
 import { useLocationStore } from "@/store";
@@ -70,6 +71,11 @@ const AllVisibleFreelancers = () => {
           ListFooterComponent={
             isFetchingNextPage ? (
               <ActivityIndicator style={{ marginVertical: 16 }} />
+            ) : null
+          }
+          ListEmptyComponent={
+            !isLoading ? (
+              <EmptyState title="No visible freelancers found" />
             ) : null
           }
           contentContainerStyle={{
