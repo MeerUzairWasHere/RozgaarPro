@@ -4,7 +4,7 @@ import { IPrismaService } from "../interfaces";
 export class PrismaService extends PrismaClient implements IPrismaService {
   constructor() {
     super({
-      log: ["query"],
+      // log: ["query"],
     });
   }
 
