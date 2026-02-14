@@ -41,12 +41,10 @@ export async function executePaginatedRawQuery<T>({
     },
   );
 
-  console.log({ sqlFilters });
-
   const sqlOrder = buildSqlOrderBy([...defaultSort, ...(query.sort ?? [])]);
 
   const sqlSearch = buildSqlSearch(query.search);
-  console.log({ sqlSearch });
+
   const data = await prisma.$queryRaw<T[]>(
     baseQuery(sqlFilters, sqlOrder, sqlSearch, take, skip),
   );

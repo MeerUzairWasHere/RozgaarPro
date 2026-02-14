@@ -30,6 +30,6 @@ export { default as ProfileHeader } from "./freelancer/ProfileHeader";
 export { default as QuickStats } from "./freelancer/QuickStats";
 export { default as ReviewsSection } from "./freelancer/ReviewsSection";
 export { default as FreelancerCard } from "./freelancer/FreelancerCard";
-export { default as NearbyFreelancers } from "./freelancer/NearbyFreelancers";
+export { default as TopRatedFreelancers } from "./freelancer/TopRatedFreelancers";
 export { default as VerificationBadges } from "./freelancer/VerificationBadges";
 export { default as FreelancerProfileStats } from "./freelancer/FreelancerProfileStats";

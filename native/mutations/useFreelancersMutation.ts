@@ -35,7 +35,7 @@ export const useGetFreelancerStatus = (
   });
 };
 
-export const useGetRandomVisibleFreelancers = (query: ListQuery = {}) => {
+export const useGetTopRatedFreelancers = (query: ListQuery = {}) => {
   const enabled = hasValidCoordinates(query.location);
 
   return useQuery({
@@ -75,7 +75,7 @@ export const useGetAllVisibleFreelancersBySearch = (query: ListQuery = {}) => {
   const hasLocation = hasValidCoordinates(query.location);
   const searchTerm = query.search?.term?.trim() ?? "";
 
-  const enabled = hasLocation && searchTerm.length >= 1;
+  const enabled = hasLocation && searchTerm.length >= 3;
 
   return useInfiniteQuery({
     queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),

@@ -1,18 +1,18 @@
 import { View, FlatList } from "react-native";
 import SectionHeader from "../SectionHeader";
 import { useLocationStore } from "@/store";
-import { useGetRandomVisibleFreelancers } from "@/mutations";
+import { useGetTopRatedFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
-import { NearbyFreelancersSkeletonList } from "../Skeletons";
+import { TopRatedFreelancersSkeletonList } from "../Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 import { FilterOperator, SortDirection } from "@/types";
 
-export default function NearbyFreelancers() {
+export default function TopRatedFreelancers() {
   const { coordinates } = useLocationStore();
 
-  const { data: freelancers } = useGetRandomVisibleFreelancers({
+  const { data: freelancers } = useGetTopRatedFreelancers({
     location: {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
@@ -40,12 +40,12 @@ export default function NearbyFreelancers() {
 
   if (!freelancers)
     return (
-      <View className="px-4">
+      <View>
         <SectionHeader
-          title="Nearby Freelancers"
+          title="Top Rated Freelancers"
           onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
         />
-        <NearbyFreelancersSkeletonList />
+        <TopRatedFreelancersSkeletonList />
       </View>
     );
 

@@ -18,7 +18,7 @@ export default function FreelancerCard({
     <Animated.View entering={FadeInUp.duration(300).springify()}>
       <TouchableOpacity
         key={freelancer.freelancer_id}
-        className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm activer:opacity-90 mb-4"
+        className="w-full bg-white  dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm activer:opacity-90 mb-4"
         onPress={() =>
           router.push(getFreelancerDetailsRoute(freelancer.freelancer_id))
         }
