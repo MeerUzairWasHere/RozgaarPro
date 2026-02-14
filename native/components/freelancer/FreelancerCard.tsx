@@ -1,5 +1,11 @@
 import { FREELANCER_STATUS, NearbyFreelancer } from "@/types";
-import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  Image,
+} from "react-native";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import { formatDistance } from "@/lib";
 import { router } from "expo-router";
@@ -7,6 +13,7 @@ import { getFreelancerDetailsRoute } from "@/constants";
 import InitialAvatar from "../common/InitialAvatar";
 import { getExperienceLabel } from "@/utils";
 import Animated, { FadeInUp } from "react-native-reanimated";
+import { rashid, shahid } from "@/assets";
 
 export default function FreelancerCard({
   freelancer,
@@ -32,6 +39,11 @@ export default function FreelancerCard({
               className="bg-brand/40 dark:bg-brand/40 rounded-xl items-center
           justify-center"
             />
+            {/* <Image
+              source={shahid}
+              className="w-16 h-16 rounded-md bg-brand/40 dark:bg-brand/40"
+            /> */}
+
             {freelancer.status === FREELANCER_STATUS.APPROVED && (
               <View
                 className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full items-center justify-center
