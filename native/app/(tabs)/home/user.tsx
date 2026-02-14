@@ -1,72 +1,29 @@
-import {
-  SearchBar,
-  ProfessionsFilter,
-  SectionHeader,
-  FreelancerCard,
-  EmptyState,
-  TopRatedFreelancers,
-} from "@/components";
-import {
-  FlatList,
-  View,
-  RefreshControl,
-  ActivityIndicator,
-  Text,
-} from "react-native";
-import { useState, useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useLocationStore } from "@/store";
-import { useGetAllVisibleFreelancersBySearch } from "@/mutations";
-import { extractInfiniteList } from "@/utils";
+import { FlatList, RefreshControl, ActivityIndicator } from "react-native";
+import { useState } from "react";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { FreelancerCard, HomeHeader } from "@/components";
+import {
+  useDebouncedValue,
+  useFreelancerSearch,
+  usePullToRefresh,
+} from "@/hooks";
 
 const UserHomeScreen = () => {
-  const queryClient = useQueryClient();
-  const { coordinates } = useLocationStore();
-  const [refreshing, setRefreshing] = useState(false);
   const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const debouncedQuery = useDebouncedValue(query, 400);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedQuery(query);
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [query]);
-
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await queryClient.invalidateQueries();
-    setRefreshing(false);
-  };
-
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useGetAllVisibleFreelancersBySearch({
-      location: coordinates,
-      search: debouncedQuery
-        ? {
-            term: debouncedQuery,
-            fields: [
-              { alias: "p", field: "name" },
-              { alias: "u", field: "name" },
-            ],
-          }
-        : undefined,
-      pagination: {
-        pageSize: 15,
-        page: 1,
-      },
-    });
-
-  const { items } = extractInfiniteList(data);
-
-  const isSearching = debouncedQuery.trim().length >= 3;
-
-  const hasTyped = query.trim().length > 0;
-
+  const {
+    items,
+    isSearching,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFreelancerSearch(debouncedQuery);
 
   const height = useBottomTabBarHeight();
+
+  const { refreshing, onRefresh } = usePullToRefresh();
 
   return (
     <FlatList
@@ -76,39 +33,16 @@ const UserHomeScreen = () => {
         isSearching ? <FreelancerCard freelancer={item} /> : null
       }
       ListHeaderComponent={
-        <View className="pt-4">
-          <SearchBar value={query} onChange={setQuery} />
-          {isSearching && (
-            <Text className="text-md text-brand-400  mb-4">
-              {items.length} result{items.length > 1 ? "s" : ""} for "{query}"
-            </Text>
-          )}
-
-          {!hasTyped && !isSearching && (
-            <>
-              <SectionHeader title="What do you need?" />
-              <ProfessionsFilter />
-              <TopRatedFreelancers />
-            </>
-          )}
-
-          {hasTyped && !isSearching && (
-            <EmptyState
-              title="Start typing to search"
-              message="Search by name or profession."
-            />
-          )}
-
-          {isSearching && !isLoading && items.length === 0 && (
-            <EmptyState
-              title={`No results for "${debouncedQuery}"`}
-              message="Try a different name or profession."
-            />
-          )}
-        </View>
+        <HomeHeader
+          query={query}
+          setQuery={setQuery}
+          isSearching={isSearching}
+          isLoading={isLoading}
+          itemsLength={items.length}
+        />
       }
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       contentContainerStyle={{
         paddingBottom: 20 + height,

@@ -5,6 +5,8 @@ import { useLocationStore } from "@/store";
 import { ProfessionsFilterFilterSkeleton } from "./Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
+import EmptyState from "./common/EmptyState";
+import SectionHeader from "./SectionHeader";
 
 export default function ProfessionsFilter() {
   const {
@@ -13,15 +15,23 @@ export default function ProfessionsFilter() {
 
   const { data } = useGetProfessionsFilterList({
     location: { latitude, longitude },
-    
   });
 
   if (!data) {
-    return <ProfessionsFilterFilterSkeleton />;
+    return (
+      <>
+        <SectionHeader title="What do you need?" />
+        <ProfessionsFilterFilterSkeleton />
+      </>
+    );
   }
+
+  if (data.length === 0) return;
 
   return (
     <View>
+      <SectionHeader title="What do you need?" />
+
       <View className="flex-row flex-wrap -mx-1.5">
         {data?.map(({ profession_id, profession_name, count }) => (
           <View key={profession_id} className="w-1/3 px-1.5 mb-3">

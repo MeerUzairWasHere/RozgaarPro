@@ -7,7 +7,7 @@ import FreelancerCard from "./FreelancerCard";
 import { TopRatedFreelancersSkeletonList } from "../Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
-import { FilterOperator, SortDirection } from "@/types";
+import { SortDirection } from "@/types";
 
 export default function TopRatedFreelancers() {
   const { coordinates } = useLocationStore();
@@ -21,13 +21,6 @@ export default function TopRatedFreelancers() {
       page: 1,
       pageSize: 5,
     },
-    filters: [
-      {
-        field: "distance_km",
-        operator: FilterOperator.LESS_THAN_OR_EQUAL,
-        value: 5,
-      },
-    ],
     sort: [
       {
         field: "rating",

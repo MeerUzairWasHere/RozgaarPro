@@ -11,9 +11,10 @@ import { useGetFilteredVisibleFreelancers } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FilterOperator, ListFilter, ListSort } from "@/types";
 import { useLocalSearchParams } from "expo-router";
-import { FlatList, ActivityIndicator } from "react-native";
+import { FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { extractInfiniteList } from "@/utils";
 import { useState, useMemo } from "react";
+import { usePullToRefresh } from "@/hooks";
 
 export default function FreelancerFilterView() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -71,6 +72,8 @@ export default function FreelancerFilterView() {
   // Calculate active filter count
   const activeFilterCount = additionalFilters.length + activeSort.length;
 
+  const { refreshing, onRefresh } = usePullToRefresh();
+
   return (
     <>
       <AppHeader showBack title={`${professionName}s Nearby`} />
@@ -114,6 +117,9 @@ export default function FreelancerFilterView() {
             paddingBottom: 20,
             flexGrow: 1,
           }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
 

@@ -6,16 +6,18 @@ import LocationSection from "./LocationSection";
 import ReviewsSection from "./ReviewsSection";
 import ActionButtons from "./ActionButtons";
 import ErrorState from "../common/ErrorState";
-import { ScrollView } from "react-native";
+import { RefreshControl, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import { FilterOperator } from "@/types";
+import { usePullToRefresh } from "@/hooks";
 
 export default function FreelancerDetails() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { coordinates } = useLocationStore();
+  const { refreshing, onRefresh } = usePullToRefresh();
   const router = useRouter();
 
   const {
@@ -48,6 +50,9 @@ export default function FreelancerDetails() {
       <ScrollView
         className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pb-8 "
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       >
         <ProfileHeader
           name={freelancer.name}

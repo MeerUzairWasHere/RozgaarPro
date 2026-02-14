@@ -126,8 +126,14 @@ export default function LoginScreen() {
 
                   {/* General Error Banner */}
                   {generalError && (
-                    <Animated.View entering={FadeInDown.delay(200)} className="mb-4">
-                      <ErrorBanner message={generalError} onDismiss={clearErrors} />
+                    <Animated.View
+                      entering={FadeInDown.delay(200)}
+                      className="mb-4"
+                    >
+                      <ErrorBanner
+                        message={generalError}
+                        onDismiss={clearErrors}
+                      />
                     </Animated.View>
                   )}
 
@@ -142,12 +148,16 @@ export default function LoginScreen() {
                         loginMethod === LOGIN_METHOD.EMAIL ? (
                           <Mail
                             size={15}
-                            color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                            color={
+                              colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"
+                            }
                           />
                         ) : (
                           <Phone
                             size={15}
-                            color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                            color={
+                              colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"
+                            }
                           />
                         )
                       }
@@ -163,7 +173,10 @@ export default function LoginScreen() {
                           text,
                         );
                         // Clear error when user types
-                        const fieldName = loginMethod === LOGIN_METHOD.EMAIL ? "email" : "phone";
+                        const fieldName =
+                          loginMethod === LOGIN_METHOD.EMAIL
+                            ? "email"
+                            : "phone";
                         clearFieldError(fieldName);
                       }}
                       keyboardType={
@@ -186,7 +199,9 @@ export default function LoginScreen() {
                       icon={
                         <Lock
                           size={15}
-                          color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                          color={
+                            colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"
+                          }
                         />
                       }
                       placeholder="Password"

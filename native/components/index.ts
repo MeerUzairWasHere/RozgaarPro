@@ -29,6 +29,7 @@ export { default as LocationSection } from "./freelancer/LocationSection";
 export { default as ProfileHeader } from "./freelancer/ProfileHeader";
 export { default as QuickStats } from "./freelancer/QuickStats";
 export { default as ReviewsSection } from "./freelancer/ReviewsSection";
+export { default as HomeHeader } from "./HomeHeader";
 export { default as FreelancerCard } from "./freelancer/FreelancerCard";
 export { default as TopRatedFreelancers } from "./freelancer/TopRatedFreelancers";
 export { default as VerificationBadges } from "./freelancer/VerificationBadges";

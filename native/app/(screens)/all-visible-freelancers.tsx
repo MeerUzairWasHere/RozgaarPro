@@ -9,11 +9,12 @@ import {
 } from "@/components";
 
 import { useLocationStore } from "@/store";
-import { FlatList, ActivityIndicator } from "react-native";
+import { FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { useGetAllVisibleFreelancers } from "@/mutations";
 import { extractInfiniteList } from "@/utils";
 import { useState } from "react";
 import { ListFilter, ListSort } from "@/types";
+import { usePullToRefresh } from "@/hooks";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
@@ -40,6 +41,8 @@ const AllVisibleFreelancers = () => {
 
   // Calculate active filter count
   const activeFilterCount = activeFilters.length + activeSort.length;
+
+  const { refreshing, onRefresh } = usePullToRefresh();
 
   return (
     <>
@@ -83,6 +86,9 @@ const AllVisibleFreelancers = () => {
             paddingBottom: 20,
             flexGrow: 1,
           }}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
 
