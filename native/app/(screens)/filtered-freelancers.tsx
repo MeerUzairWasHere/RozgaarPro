@@ -2,6 +2,7 @@ import {
   AppHeader,
   FilterDrawer,
   FreelancerCard,
+  FreelancerCardSkeleton,
   FreelancerListSkeleton,
   ListFilterHeader,
 } from "@/components";
@@ -66,10 +67,6 @@ export default function FreelancerFilterView() {
     setActiveSort(sort);
   };
 
-  if (isLoading) {
-    return <FreelancerListSkeleton professionName={professionName} />;
-  }
-
   // Calculate active filter count
   const activeFilterCount = additionalFilters.length + activeSort.length;
 
@@ -84,28 +81,35 @@ export default function FreelancerFilterView() {
         activeFilterCount={activeFilterCount} // Pass the count
       />
 
-      <FlatList
-        data={items}
-        keyExtractor={(item) => item.freelancer_id}
-        renderItem={({ item }) => <FreelancerCard freelancer={item} />}
-        onEndReached={() => {
-          if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage();
+      {isLoading ? (
+        <FreelancerListSkeleton />
+      ) : (
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.freelancer_id}
+          renderItem={({ item }) =>
+            isLoading ? (
+              <FreelancerCardSkeleton />
+            ) : (
+              <FreelancerCard freelancer={item} />
+            )
           }
-        }}
-        onEndReachedThreshold={0.4}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <ActivityIndicator style={{ marginVertical: 16 }} />
-          ) : null
-        }
-        contentContainerStyle={{
-          padding: 16,
-          paddingBottom: 20,
-          flexGrow: 1,
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+          onEndReached={() => {
+            if (hasNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.4}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator style={{ marginVertical: 16 }} />
+            ) : null
+          }
+          contentContainerStyle={{
+            padding: 16,
+            paddingBottom: 20,
+            flexGrow: 1,
+          }}
+        />
+      )}
 
       <FilterDrawer
         visible={isFilterOpen}

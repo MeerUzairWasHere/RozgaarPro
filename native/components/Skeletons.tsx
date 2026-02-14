@@ -169,40 +169,32 @@ export const FreelancerFilterHeaderSkeleton = () => {
   );
 };
 
-export const FreelancerListSkeleton = ({
-  professionName = "",
-}: {
-  professionName?: string;
-}) => {
+export const FreelancerCardSkeleton = () => (
+  <View className="mb-4 p-4 rounded-2xl bg-primary-100 dark:bg-primary-900">
+    {/* Avatar + text row */}
+    <View className="flex-row items-center">
+      <View className="w-14 h-14 rounded-full bg-primary-200 dark:bg-primary-800" />
+
+      <View className="ml-4 flex-1">
+        <View className="h-4 w-1/2 rounded bg-primary-200 dark:bg-primary-800 mb-2" />
+        <View className="h-3 w-1/3 rounded bg-primary-200 dark:bg-primary-800" />
+      </View>
+    </View>
+
+    {/* Bottom stats */}
+    <View className="flex-row mt-4 justify-between">
+      <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
+      <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
+    </View>
+  </View>
+);
+
+export const FreelancerListSkeleton = () => {
   return (
     <>
-      <AppHeader
-        showBack={true}
-        title={professionName ? `${professionName}s Nearby` : ""}
-      />
-      <FreelancerFilterHeaderSkeleton />
       <View className="px-4 pt-4">
         {[...Array(5)].map((_, i) => (
-          <View
-            key={i}
-            className="mb-4 p-4 rounded-2xl bg-primary-100 dark:bg-primary-900"
-          >
-            {/* Avatar + text row */}
-            <View className="flex-row items-center">
-              <View className="w-14 h-14 rounded-full bg-primary-200 dark:bg-primary-800" />
-
-              <View className="ml-4 flex-1">
-                <View className="h-4 w-1/2 rounded bg-primary-200 dark:bg-primary-800 mb-2" />
-                <View className="h-3 w-1/3 rounded bg-primary-200 dark:bg-primary-800" />
-              </View>
-            </View>
-
-            {/* Bottom stats */}
-            <View className="flex-row mt-4 justify-between">
-              <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
-              <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
-            </View>
-          </View>
+          <FreelancerCardSkeleton key={i} />
         ))}
       </View>
     </>

@@ -4,6 +4,7 @@ import {
   ListFilterHeader,
   FreelancerListSkeleton,
   FilterDrawer,
+  FreelancerCardSkeleton,
 } from "@/components";
 
 import { useLocationStore } from "@/store";
@@ -36,10 +37,6 @@ const AllVisibleFreelancers = () => {
     setActiveSort(sort);
   };
 
-  if (isLoading) {
-    return <FreelancerListSkeleton />;
-  }
-
   // Calculate active filter count
   const activeFilterCount = activeFilters.length + activeSort.length;
 
@@ -50,28 +47,38 @@ const AllVisibleFreelancers = () => {
       <ListFilterHeader
         freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
-        activeFilterCount={activeFilterCount} // Pass the count
+        activeFilterCount={activeFilterCount}
       />
 
-      <FlatList
-        data={items}
-        keyExtractor={(item) => item.freelancer_id}
-        renderItem={({ item }) => <FreelancerCard freelancer={item} />}
-        onEndReached={() => {
-          if (hasNextPage) fetchNextPage();
-        }}
-        onEndReachedThreshold={0.4}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <ActivityIndicator style={{ marginVertical: 16 }} />
-          ) : null
-        }
-        contentContainerStyle={{
-          padding: 16,
-          paddingBottom: 20,
-          flexGrow: 1,
-        }}
-      />
+      {isLoading ? (
+        <FreelancerListSkeleton />
+      ) : (
+        <FlatList
+          data={items}
+          keyExtractor={(item) => item.freelancer_id}
+          renderItem={({ item }) =>
+            isLoading ? (
+              <FreelancerCardSkeleton />
+            ) : (
+              <FreelancerCard freelancer={item} />
+            )
+          }
+          onEndReached={() => {
+            if (hasNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.4}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator style={{ marginVertical: 16 }} />
+            ) : null
+          }
+          contentContainerStyle={{
+            padding: 16,
+            paddingBottom: 20,
+            flexGrow: 1,
+          }}
+        />
+      )}
 
       <FilterDrawer
         visible={isFilterOpen}
