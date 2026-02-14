@@ -1,5 +1,5 @@
 import { ScrollView, useColorScheme, View } from "react-native";
-import AppHeader from "./common/AppHeader";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 export const ProfessionsFilterFilterSkeleton = () => {
   return (
@@ -170,29 +170,31 @@ export const FreelancerFilterHeaderSkeleton = () => {
 };
 
 export const FreelancerCardSkeleton = () => (
-  <View className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm mb-4">
-    <View className="flex-row items-start gap-3">
-      {/* Avatar */}
-      <View className="w-12 h-12 rounded-xl bg-primary-200 dark:bg-primary-800" />
+  <Animated.View entering={FadeInUp.duration(300).springify()}>
+    <View className="w-full bg-white dark:bg-primary-900 rounded-xl p-3 border border-primary-100 dark:border-primary-800 shadow-sm mb-4">
+      <View className="flex-row items-start gap-3">
+        {/* Avatar */}
+        <View className="w-12 h-12 rounded-xl bg-primary-200 dark:bg-primary-800" />
 
-      <View className="flex-1">
-        {/* Name */}
-        <View className="h-4 w-1/2 rounded bg-primary-200 dark:bg-primary-800 mb-2" />
+        <View className="flex-1">
+          {/* Name */}
+          <View className="h-4 w-1/2 rounded bg-primary-200 dark:bg-primary-800 mb-2" />
 
-        {/* Profession + experience */}
-        <View className="flex-row items-center gap-2 mb-2">
-          <View className="h-6 w-20 rounded-md bg-primary-200 dark:bg-primary-800" />
-          <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
-        </View>
+          {/* Profession + experience */}
+          <View className="flex-row items-center gap-2 mb-2">
+            <View className="h-6 w-20 rounded-md bg-primary-200 dark:bg-primary-800" />
+            <View className="h-3 w-16 rounded bg-primary-200 dark:bg-primary-800" />
+          </View>
 
-        {/* Rating + distance */}
-        <View className="flex-row items-center gap-6">
-          <View className="h-3 w-12 rounded bg-primary-200 dark:bg-primary-800" />
-          <View className="h-3 w-14 rounded bg-primary-200 dark:bg-primary-800" />
+          {/* Rating + distance */}
+          <View className="flex-row items-center gap-6">
+            <View className="h-3 w-12 rounded bg-primary-200 dark:bg-primary-800" />
+            <View className="h-3 w-14 rounded bg-primary-200 dark:bg-primary-800" />
+          </View>
         </View>
       </View>
     </View>
-  </View>
+  </Animated.View>
 );
 
 export const FreelancerListSkeleton = () => {
