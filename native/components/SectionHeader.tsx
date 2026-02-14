@@ -23,7 +23,7 @@ const SectionHeader = ({
 
       {onActionPress && (
         <TouchableOpacity onPress={onActionPress} activeOpacity={0.7}>
-          <Text className="text-sm font-medium text-brand dark:text-brand-300">
+          <Text className="text-md font-medium text-brand dark:text-brand-300">
             {actionLabel}
           </Text>
         </TouchableOpacity>

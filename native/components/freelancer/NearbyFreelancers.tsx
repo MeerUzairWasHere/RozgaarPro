@@ -56,7 +56,7 @@ export default function NearbyFreelancers() {
       renderItem={({ item }) => <FreelancerCard freelancer={item} />}
       ListHeaderComponent={
         <SectionHeader
-          title="Nearby Freelancers"
+          title="Top Rated Freelancers"
           onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
         />
       }
