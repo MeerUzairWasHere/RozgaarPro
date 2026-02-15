@@ -15,6 +15,7 @@ import {
   CompanyService,
   EmailService,
   FreelancerService,
+  ImageService,
   LocationService,
   PrismaService,
   ProfessionService,
@@ -42,6 +43,7 @@ class Container {
   public professionService: ProfessionService;
   public freelancerService: FreelancerService;
   public locationService: LocationService;
+  public imageService: ImageService;
 
   // Controllers
   public authController: AuthController;
@@ -58,6 +60,7 @@ class Container {
     this.locationService = new LocationService();
     this.rekognitionService = new RekognitionService();
     this.storageService = new S3StorageService();
+    this.imageService = new ImageService(process.env.IMAGE_API_KEY!);
 
     // Initialize Services
     this.companyService = new CompanyService(this.prismaService);
@@ -84,6 +87,7 @@ class Container {
       this.locationService,
       this.rekognitionService,
       this.storageService,
+      this.imageService,
     );
 
     // Initialize Controllers

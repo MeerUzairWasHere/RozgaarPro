@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Coordinates } from "../dto";
 import { ILocationService } from "../interfaces";
 
@@ -10,20 +11,22 @@ export class LocationService implements ILocationService {
     longitude,
   }: Coordinates): Promise<string> {
     try {
-      const url = `${this.NOMINATIM_BASE_URL}/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`;
+      const url = `${this.NOMINATIM_BASE_URL}/reverse`;
 
-      const response = await fetch(url, {
+      const response = await axios.get(url, {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          format: "json",
+          addressdetails: 1,
+        },
         headers: {
           "User-Agent": this.USER_AGENT,
         },
+        timeout: 5000,
       });
 
-      if (!response.ok) {
-        throw new Error(`Nominatim API error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      const address = data.address;
+      const address = response.data.address;
 
       if (!address) {
         return `Unable to get location for lat: ${latitude}, lng: ${longitude}`;
@@ -35,8 +38,11 @@ export class LocationService implements ILocationService {
         address.pedestrian ||
         address.residential ||
         address.footway;
+
       const area = address.neighbourhood || address.suburb || address.village;
+
       const city = address.city || address.town || address.county;
+
       const postcode = address.postcode;
 
       const formattedAddress = [street, area, city, postcode]
@@ -44,8 +50,11 @@ export class LocationService implements ILocationService {
         .join(", ");
 
       return formattedAddress;
-    } catch (error) {
-      console.error("Reverse geocoding error:", error);
+    } catch (error: any) {
+      console.error(
+        "Reverse geocoding error:",
+        error?.response?.data || error.message,
+      );
 
       return `Unable to get location for lat: ${latitude}, lng: ${longitude}`;
     }

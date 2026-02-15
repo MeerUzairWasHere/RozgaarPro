@@ -10,3 +10,4 @@ export * from "./freelancer.interface";
 export * from "./profession.interface";
 export * from "./location.interface";
 export * from "./rekognition.interface";
+export * from "./image.interface";

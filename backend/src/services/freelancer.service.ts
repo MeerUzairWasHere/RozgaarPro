@@ -11,6 +11,7 @@ import {
 import {
   BucketType,
   IFreelancerService,
+  IImageService,
   ILocationService,
   IPrismaService,
   IRekognitionService,
@@ -30,6 +31,7 @@ export class FreelancerService implements IFreelancerService {
     private locationService: ILocationService,
     private rekognitionService: IRekognitionService,
     private storageService: IStorageService,
+    private imageService: IImageService,
   ) {}
 
   async createAndCompleteFreelancerProfile({
@@ -56,12 +58,18 @@ export class FreelancerService implements IFreelancerService {
       if (profileImage) {
         await this.rekognitionService.verifyFace(profileImage.buffer);
 
-        const profileExt = profileImage.mimetype.split("/")[1];
+        const profileImageWithoutBg =
+          await this.imageService.removeImageBackground(
+            profileImage.buffer,
+            profileImage.mimetype,
+          );
+
+        const profileExtension = profileImageWithoutBg.mimeType.split("/")[1];
 
         profileImageResult = await this.storageService.upload(
-          profileImage.buffer,
-          `profiles/${id}${new Date().getTime()}.${profileExt}`,
-          profileImage.mimetype,
+          profileImageWithoutBg.buffer,
+          `profiles/${id}-${new Date().getTime()}.${profileExtension}`,
+          profileImageWithoutBg.mimeType,
           BucketType.PUBLIC,
         );
       }
@@ -71,7 +79,7 @@ export class FreelancerService implements IFreelancerService {
 
       idImageResult = await this.storageService.upload(
         idImage.buffer,
-        `ids/${id}${new Date().getTime()}.${idExt}`,
+        `ids/${id}-${new Date().getTime()}.${idExt}`,
         idImage.mimetype,
         BucketType.PRIVATE,
       );
@@ -144,6 +152,7 @@ export class FreelancerService implements IFreelancerService {
       if (idImageResult) {
         await this.storageService.delete(idImageResult.key, BucketType.PRIVATE);
       }
+      console.log(error);
       throw error;
     }
   }

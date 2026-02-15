@@ -10,3 +10,4 @@ export * from "./profession.service";
 export * from "./freelancer.service";
 export * from "./location.service";
 export * from "./rekognition.service";
+export * from "./image.service";
