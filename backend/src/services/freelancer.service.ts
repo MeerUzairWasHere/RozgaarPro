@@ -240,6 +240,7 @@ export class FreelancerService implements IFreelancerService {
       u.id::TEXT AS user_id,
       u.name AS name,
       u."profileImage" AS profile_image_key,
+      f.availability AS availability,
       f.experience AS experience,
       f.status AS status,
       f.rating AS rating,

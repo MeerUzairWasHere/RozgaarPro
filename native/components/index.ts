@@ -12,6 +12,7 @@ export { default as FilterDrawer } from "./common/FilterDrawer";
 export { default as InitialAvatar } from "./common/InitialAvatar";
 export { default as ErrorState } from "./common/ErrorState";
 export { default as ErrorBanner } from "./common/ErrorBanner";
+export { default as AvailabilityStatus } from "./common/AvailabilityStatus";
 
 export { default as LogoutButton } from "./LogoutButton";
 export { default as ProfileApprovedCard } from "./ProfileApprovedCard";

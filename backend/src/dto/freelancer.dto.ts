@@ -1,6 +1,5 @@
-import { FreelancerStatus } from "@prisma/client";
-
 import { z } from "zod";
+import { AvailabilityStatus, FreelancerStatus } from "@prisma/client";
 import { validateFreelancerProfileCompletedInput } from "../validators";
 
 export type FreelancerProfileCompletedInput = z.infer<
@@ -28,4 +27,5 @@ export interface NearbyFreelancerDetail extends NearbyFreelancer {
   longitude: number;
   location: string;
   description: string | null;
+  availability: AvailabilityStatus;
 }

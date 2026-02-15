@@ -8,6 +8,12 @@ export enum FREELANCER_STATUS {
   REJECTED = "REJECTED",
 }
 
+export enum AVAILABILITY_STATUS {
+  AVAILABLE = "AVAILABLE",
+  BUSY = "BUSY",
+  UNAVAILABLE = "UNAVAILABLE",
+}
+
 export interface FreelancerSkill {
   skill: Skill;
 }
@@ -48,4 +54,5 @@ export interface NearbyFreelancerDetail extends NearbyFreelancer {
   longitude: number;
   location: string;
   description: string | null;
+  availability: AVAILABILITY_STATUS;
 }

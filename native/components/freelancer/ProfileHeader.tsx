@@ -3,15 +3,23 @@ import { View, Text, Image } from "react-native";
 import { Briefcase } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import InitialAvatar from "../common/InitialAvatar";
-import { rashid } from "@/assets";
+import { AVAILABILITY_STATUS } from "@/types";
+import clsx from "clsx";
+import AvailabilityStatus from "../common/AvailabilityStatus";
 
 type Props = {
   name: string;
   profession: string;
   imageUrl: string | null;
+  availability: AVAILABILITY_STATUS;
 };
 
-export default function ProfileHeader({ name, profession, imageUrl }: Props) {
+export default function ProfileHeader({
+  name,
+  profession,
+  imageUrl,
+  availability,
+}: Props) {
   return (
     <View className="relative my-4">
       <View>
@@ -34,13 +42,17 @@ export default function ProfileHeader({ name, profession, imageUrl }: Props) {
             )}
           </View>
 
-          <Text className="text-3xl font-bold text-primary-950 dark:text-primary-50 mb-4 text-center">
+          <Text className="text-3xl font-bold text-primary-950 dark:text-primary-50 mb-2 text-center">
             {name}
           </Text>
 
-          <View className="flex-row items-center gap-2 px-5 py-2.5 bg-brand dark:bg-brand-500 rounded-full border border-brand/20 dark:border-brand-500/30 shadow-card">
-            <Briefcase size={16} color="#fff" strokeWidth={2.5} />
-            <Text className="font-semibold text-white">{profession}</Text>
+          <View className="flex gap-2 flex-row">
+            <View className="flex-row items-center gap-2 px-5 py-2.5 bg-brand dark:bg-brand-500 rounded-full border border-brand/20 dark:border-brand-500/30 shadow-card">
+              <Briefcase size={16} color="#fff" strokeWidth={2.5} />
+              <Text className="font-semibold text-white">{profession}</Text>
+            </View>
+
+            <AvailabilityStatus availability={availability} />
           </View>
         </Animated.View>
       </View>

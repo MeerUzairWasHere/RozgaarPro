@@ -58,6 +58,7 @@ export default function FreelancerDetails() {
           name={freelancer.name}
           profession={freelancer.primary_profession_name}
           imageUrl={freelancer.profile_image_url}
+          availability={freelancer.availability}
         />
         <QuickStats
           rating={freelancer.rating}

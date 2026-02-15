@@ -78,8 +78,13 @@ export const FreelancerDetailSkeleton = () => {
             {/* Name */}
             <View className="w-44 h-7 rounded bg-primary-200 dark:bg-primary-800 animate-pulse mb-3" />
 
-            {/* Profession badge */}
-            <View className="w-32 h-9 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            <View className="flex flex-row gap-2">
+              {/* Profession badge */}
+              <View className="w-32 h-9 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+
+              {/* Availability badge */}
+              <View className="w-32 h-9 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse" />
+            </View>
           </View>
           {/* Stats Card */}
           <View className="bg-white dark:bg-primary-900 rounded-3xl p-5 mb-6">

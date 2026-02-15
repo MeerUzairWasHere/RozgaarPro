@@ -49,6 +49,7 @@ model Freelancer {
   id                  String               @id @default(uuid())
   userId              String               @unique
   experience          Decimal              @db.Decimal(4, 1)
+  availability        AvailabilityStatus  @default(AVAILABLE)
   phone               String
   description         String?              @db.VarChar(255)
   status              FreelancerStatus     @default(PENDING)
@@ -147,4 +148,10 @@ enum FreelancerStatus {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum AvailabilityStatus {
+  AVAILABLE
+  BUSY
+  UNAVAILABLE
 }
