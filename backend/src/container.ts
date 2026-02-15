@@ -2,6 +2,7 @@ import {
   AuthController,
   CompanyController,
   FreelancerController,
+  LocationController,
   ProfessionController,
   SkillController,
   UserController,
@@ -47,6 +48,7 @@ class Container {
   public userController: UserController;
   public companyController: CompanyController;
   public skillController: SkillController;
+  public locationController: LocationController;
   public professionController: ProfessionController;
   public freelancerController: FreelancerController;
 
@@ -95,6 +97,7 @@ class Container {
     this.freelancerController = new FreelancerController(
       this.freelancerService,
     );
+    this.locationController = new LocationController(this.locationService);
   }
 }
 
@@ -110,4 +113,5 @@ export const {
   skillController,
   freelancerController,
   professionController,
+  locationController,
 } = container;

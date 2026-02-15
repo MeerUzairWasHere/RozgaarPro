@@ -11,12 +11,11 @@ export const useGetAddressFromCoordinates = (
   },
 ): UseQueryResult<string> => {
   const hasValidCoords = hasValidCoordinates(query?.location);
-
   const enabled = hasValidCoords && (options?.enabled ?? true);
 
   return useQuery({
     queryKey: QUERY_KEYS.LOCATIONS.listQuery(query),
-    queryFn: () => locationApiClient.getAddressFromLatLng(query?.location!),
+    queryFn: () => locationApiClient.getAddressFromLatLng(query),
     enabled,
   });
 };

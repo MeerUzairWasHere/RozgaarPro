@@ -62,6 +62,7 @@ export interface ListQuery {
 export interface Coordinates {
   latitude: number;
   longitude: number;
+  accuracy: number | null;
 }
 
 export interface PaginatedResponse<T> {

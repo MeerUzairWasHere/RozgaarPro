@@ -13,6 +13,7 @@ import cors from "cors";
 // Routers
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
+import locationRoutes from "./routes/location.routes";
 import companyRoutes from "./routes/company.routes";
 import skillRoutes from "./routes/skill.routes";
 import professionRoutes from "./routes/profession.routes";
@@ -70,6 +71,7 @@ app.use(cors());
 // Routes
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/company", companyRoutes);
+app.use("/api/v1/location", locationRoutes);
 app.use("/api/v1/skills", skillRoutes);
 app.use("/api/v1/professions", professionRoutes);
 app.use("/api/v1/users", userRoutes);

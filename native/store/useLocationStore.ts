@@ -56,8 +56,11 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
       const { latitude, longitude, accuracy } = position.coords;
 
       const location = await locationApiClient.getAddressFromLatLng({
-        latitude,
-        longitude,
+        location: {
+          latitude,
+          longitude,
+          accuracy,
+        },
       });
 
       set({
@@ -82,14 +85,17 @@ export const useLocationStore = create<LocationState>()((set, get) => ({
     try {
       set({ loading: true, coordinates: coords });
 
-      const { latitude, longitude } = coords;
+      const { latitude, longitude, accuracy } = coords;
 
       // Convert coordinates to address text
 
       // Convert to address text using the API client directly
       const location = await locationApiClient.getAddressFromLatLng({
-        latitude,
-        longitude,
+        location: {
+          latitude,
+          longitude,
+          accuracy,
+        },
       });
 
       set({

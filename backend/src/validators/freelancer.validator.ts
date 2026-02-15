@@ -33,9 +33,6 @@ export const validateFreelancerProfileCompletedInput = z.object({
     .pipe(locationWithAccuracySchema),
 });
 
-
-
-
 export const validateGetAllVisibleFreelancersInput = z.object({
   location: locationSchema,
   filters: z
@@ -62,3 +59,5 @@ export const validateGetSingleVisibleFreelancerDetailInput = z.object({
 export const freelancerIdParamSchema = z.object({
   freelancerId: z.uuid("freelancerId is required and must be a valid UUID"),
 });
+
+

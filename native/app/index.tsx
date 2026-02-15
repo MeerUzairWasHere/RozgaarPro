@@ -7,7 +7,7 @@ export default function Index() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const onboardingCompleted = useOnboardingStore((s) => s.completed);
 
-  const { getCurrentLocation, location } = useLocationStore();
+  const { getCurrentLocation } = useLocationStore();
 
   useEffect(() => {
     getCurrentLocation();

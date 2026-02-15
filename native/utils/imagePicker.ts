@@ -5,7 +5,7 @@ export async function pickImageFromGallery(): Promise<string | null> {
   if (!permission.granted) return null;
 
   const result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    mediaTypes: ["images"],
     quality: 0.7,
     allowsEditing: true,
   });
@@ -17,14 +17,16 @@ export async function pickImageFromGallery(): Promise<string | null> {
   return null;
 }
 
-export async function takePhotoWithCamera(cameraType: ImagePicker.CameraType): Promise<string | null> {
+export async function takePhotoWithCamera(
+  cameraType: ImagePicker.CameraType,
+): Promise<string | null> {
   const permission = await ImagePicker.requestCameraPermissionsAsync();
   if (!permission.granted) return null;
 
   const result = await ImagePicker.launchCameraAsync({
     quality: 0.7,
     allowsEditing: true,
-    cameraType
+    cameraType,
   });
 
   if (!result.canceled) {
