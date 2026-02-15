@@ -14,9 +14,11 @@ import {
   IImageService,
   ILocationService,
   IPrismaService,
+  IProfileImageService,
   IRekognitionService,
   IStorageService,
   IUserService,
+  ProcessedImageResult,
   StorageUploadResult,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
@@ -29,9 +31,8 @@ export class FreelancerService implements IFreelancerService {
     private prismaService: IPrismaService,
     private userService: IUserService,
     private locationService: ILocationService,
-    private rekognitionService: IRekognitionService,
     private storageService: IStorageService,
-    private imageService: IImageService,
+    private profileImageService: IProfileImageService,
   ) {}
 
   async createAndCompleteFreelancerProfile({
@@ -43,6 +44,12 @@ export class FreelancerService implements IFreelancerService {
     params: FreelancerProfileCompletedInput;
     files: FreelancerUploadFiles;
   }) {
+    const user = await this.userService.findUserByIdOrThrowError({ id });
+
+    if (user.role !== Role.FREELANCER) {
+      throw new ForbiddenError("Only freelancers can complete this profile");
+    }
+
     const profileImage = files.profileImage?.[0];
     const idImage = files.idImage?.[0];
 
@@ -50,46 +57,28 @@ export class FreelancerService implements IFreelancerService {
       throw new BadRequestError("ID image is required");
     }
 
-    let profileImageResult: StorageUploadResult | undefined;
-    let idImageResult: StorageUploadResult | undefined;
+    let profileImageResult: ProcessedImageResult | undefined;
+    let idImageResult: ProcessedImageResult | undefined;
 
     try {
-      // Verify and upload profile image (optional)
+      // Process and upload profile image (optional)
       if (profileImage) {
-        await this.rekognitionService.verifyFace(profileImage.buffer);
-
-        const profileImageWithoutBg =
-          await this.imageService.removeImageBackground(
+        profileImageResult =
+          await this.profileImageService.processAndUploadProfileImage(
             profileImage.buffer,
             profileImage.mimetype,
+            id,
           );
-
-        const profileExtension = profileImageWithoutBg.mimeType.split("/")[1];
-
-        profileImageResult = await this.storageService.upload(
-          profileImageWithoutBg.buffer,
-          `profiles/${id}-${new Date().getTime()}.${profileExtension}`,
-          profileImageWithoutBg.mimeType,
-          BucketType.PUBLIC,
-        );
       }
 
       // Upload ID image (required)
-      const idExt = idImage.mimetype.split("/")[1];
-
-      idImageResult = await this.storageService.upload(
+      idImageResult = await this.profileImageService.uploadIdImage(
         idImage.buffer,
-        `ids/${id}-${new Date().getTime()}.${idExt}`,
         idImage.mimetype,
-        BucketType.PRIVATE,
+        id,
       );
 
-      const user = await this.userService.findUserByIdOrThrowError({ id });
-
-      if (user.role !== Role.FREELANCER) {
-        throw new ForbiddenError("Only freelancers can complete this profile");
-      }
-
+      // Validate skills
       if (
         params.skillIds.length === 0 ||
         params.skillIds.length > MAX_NUMBER_OF_SKILLS
@@ -110,6 +99,7 @@ export class FreelancerService implements IFreelancerService {
         throw new BadRequestError("Invalid skills for selected profession");
       }
 
+      // Create freelancer profile in transaction
       await this.prismaService.$transaction(async (tx) => {
         await tx.freelancer.create({
           data: {
@@ -135,24 +125,22 @@ export class FreelancerService implements IFreelancerService {
         await tx.user.update({
           where: { id: user.id },
           data: {
-            profileImage: profileImageResult?.key ?? null,
-            idImage: idImageResult!.key,
+            profileImage: profileImageResult?.storageResult.key ?? null,
+            idImage: idImageResult?.storageResult.key ?? "",
             profileCompleted: true,
           },
         });
       });
     } catch (error) {
-      // Cleanup orphan files
+      // Cleanup orphaned files on error
       if (profileImageResult) {
-        await this.storageService.delete(
-          profileImageResult.key,
-          BucketType.PUBLIC,
-        );
+        await profileImageResult.cleanup();
       }
       if (idImageResult) {
-        await this.storageService.delete(idImageResult.key, BucketType.PRIVATE);
+        await idImageResult.cleanup();
       }
-      console.log(error);
+
+      console.error("Failed to create freelancer profile:", error);
       throw error;
     }
   }

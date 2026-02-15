@@ -11,3 +11,4 @@ export * from "./profession.interface";
 export * from "./location.interface";
 export * from "./rekognition.interface";
 export * from "./image.interface";
+export * from "./profile.image.interface";

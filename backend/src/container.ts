@@ -19,6 +19,7 @@ import {
   LocationService,
   PrismaService,
   ProfessionService,
+  ProfileImageService,
   RekognitionService,
   S3StorageService,
   SkillService,
@@ -33,6 +34,7 @@ class Container {
 
   // Services
   public emailService: EmailService;
+  public profileImageService: ProfileImageService;
   public rekognitionService: RekognitionService;
   public storageService: S3StorageService;
   public verifyProvider: VerifyProvider;
@@ -61,6 +63,11 @@ class Container {
     this.rekognitionService = new RekognitionService();
     this.storageService = new S3StorageService();
     this.imageService = new ImageService(process.env.IMAGE_API_KEY!);
+    this.profileImageService = new ProfileImageService(
+      this.rekognitionService,
+      this.imageService,
+      this.storageService,
+    );
 
     // Initialize Services
     this.companyService = new CompanyService(this.prismaService);
@@ -85,9 +92,8 @@ class Container {
       this.prismaService,
       this.userService,
       this.locationService,
-      this.rekognitionService,
       this.storageService,
-      this.imageService,
+      this.profileImageService,
     );
 
     // Initialize Controllers
