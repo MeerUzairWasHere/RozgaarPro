@@ -6,7 +6,6 @@ import { useEffect } from "react";
 export default function Index() {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const onboardingCompleted = useOnboardingStore((s) => s.completed);
-
   const { getCurrentLocation } = useLocationStore();
 
   useEffect(() => {

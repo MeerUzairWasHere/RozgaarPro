@@ -6,13 +6,14 @@ import LocationSection from "./LocationSection";
 import ReviewsSection from "./ReviewsSection";
 import ActionButtons from "./ActionButtons";
 import ErrorState from "../common/ErrorState";
-import { RefreshControl, ScrollView } from "react-native";
+import { RefreshControl, ScrollView, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import { FilterOperator } from "@/types";
 import { usePullToRefresh } from "@/hooks";
+import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 export default function FreelancerDetails() {
   const { freelancerId } = useLocalSearchParams<{ freelancerId: string }>();
@@ -87,9 +88,13 @@ export default function FreelancerDetails() {
         />
 
         <ReviewsSection />
-
-        <ActionButtons freelancerId={freelancer.freelancer_id} />
       </ScrollView>
+      <Animated.View
+        entering={FadeInDown.delay(100)}
+        className="p-4 pb-6 bg-white dark:bg-primary-950 border-t border-primary-200 dark:border-primary-800"
+      >
+        <ActionButtons freelancerId={freelancer.freelancer_id} />
+      </Animated.View>
     </>
   );
 }

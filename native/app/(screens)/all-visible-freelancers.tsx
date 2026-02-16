@@ -15,7 +15,6 @@ import { extractInfiniteList } from "@/utils";
 import { useState } from "react";
 import { ListFilter, ListSort } from "@/types";
 import { usePullToRefresh } from "@/hooks";
-import Animated, { FadeInUp } from "react-native-reanimated";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
@@ -62,7 +61,7 @@ const AllVisibleFreelancers = () => {
         <FlatList
           data={items}
           keyExtractor={(item) => item.freelancer_id}
-          renderItem={({ item }) =>
+          renderItem={({ item, index }) =>
             isLoading ? (
               <FreelancerCardSkeleton key={item.freelancer_id} />
             ) : (
