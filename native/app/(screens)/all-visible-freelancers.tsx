@@ -15,6 +15,7 @@ import { extractInfiniteList } from "@/utils";
 import { useState } from "react";
 import { ListFilter, ListSort } from "@/types";
 import { usePullToRefresh } from "@/hooks";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
@@ -27,6 +28,7 @@ const AllVisibleFreelancers = () => {
       location: {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
+        accuracy: coordinates.accuracy,
       },
       filters: activeFilters,
       sort: activeSort,
@@ -62,7 +64,7 @@ const AllVisibleFreelancers = () => {
           keyExtractor={(item) => item.freelancer_id}
           renderItem={({ item }) =>
             isLoading ? (
-              <FreelancerCardSkeleton />
+              <FreelancerCardSkeleton key={item.freelancer_id} />
             ) : (
               <FreelancerCard freelancer={item} />
             )

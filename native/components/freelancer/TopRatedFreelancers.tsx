@@ -16,6 +16,7 @@ export default function TopRatedFreelancers() {
     location: {
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
+      accuracy: coordinates.accuracy,
     },
     pagination: {
       page: 1,

@@ -15,7 +15,7 @@ import { FilterOperator } from "@/types";
 import { usePullToRefresh } from "@/hooks";
 
 export default function FreelancerDetails() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { freelancerId } = useLocalSearchParams<{ freelancerId: string }>();
   const { coordinates } = useLocationStore();
   const { refreshing, onRefresh } = usePullToRefresh();
   const router = useRouter();
@@ -27,7 +27,11 @@ export default function FreelancerDetails() {
   } = useGetSingleVisibleFreelancerDetail({
     location: coordinates,
     filters: [
-      { field: "freelancerId", operator: FilterOperator.EQUAL_TO, value: id },
+      {
+        field: "freelancerId",
+        operator: FilterOperator.EQUAL_TO,
+        value: freelancerId,
+      },
     ],
   });
 
@@ -84,7 +88,7 @@ export default function FreelancerDetails() {
 
         <ReviewsSection />
 
-        <ActionButtons />
+        <ActionButtons freelancerId={freelancer.freelancer_id} />
       </ScrollView>
     </>
   );
