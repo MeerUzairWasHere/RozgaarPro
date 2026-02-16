@@ -11,8 +11,15 @@ import { useLocationStore } from "@/store";
 import { FilterOperator } from "@/types";
 import { router, useLocalSearchParams } from "expo-router";
 import { FileText, IndianRupee, MapPin } from "lucide-react-native";
-import { useState } from "react";
-import { ScrollView, useColorScheme, View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+  useColorScheme,
+  View,
+} from "react-native";
 import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
 
 export default function JobRequest() {
@@ -24,6 +31,12 @@ export default function JobRequest() {
   const [jobDescription, setJobDescription] = useState("");
   const [jobLocation, setJobLocation] = useState("");
   const [jobBudget, setJobBudget] = useState("");
+
+  // Create refs for each input
+  const titleInputRef = useRef<TextInput>(null);
+  const descriptionInputRef = useRef<TextInput>(null);
+  const locationInputRef = useRef<TextInput>(null);
+  const budgetInputRef = useRef<TextInput>(null);
 
   const { data: freelancer, error } = useGetSingleVisibleFreelancerDetail({
     location: coordinates,
@@ -50,91 +63,112 @@ export default function JobRequest() {
   return (
     <>
       <AppHeader showBack={true} title="Job Request" />
-
-      <View className="flex-1">
-        <ScrollView className="p-4">
-          <Animated.View entering={FadeInUp.delay(100)}>
-            <JobRequestHeader {...freelancer} />
-          </Animated.View>
-
-          <View className="flex-col gap-4 mt-4">
-            {/* Job Title */}
-            <Animated.View entering={FadeInUp.delay(200)}>
-              <CustomInput
-                icon={
-                  <FileText
-                    size={15}
-                    color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
-                  />
-                }
-                placeholder="e.g. Fix bathroom leakage"
-                value={jobTitle}
-                label={"Job Title"}
-                onChangeText={(text) => {
-                  setJobTitle(text);
-                }}
-              />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+      >
+        <View className="flex-1">
+          <ScrollView className="p-4">
+            <Animated.View entering={FadeInUp.delay(100)}>
+              <JobRequestHeader {...freelancer} />
             </Animated.View>
 
-            {/* Job Description */}
-            <Animated.View entering={FadeInUp.delay(300)}>
-              <CustomTextArea
-                placeholder="Describe the work you need done..."
-                value={jobDescription}
-                label="Description"
-                onChangeText={(text) => {
-                  setJobDescription(text);
-                }}
-                maxLength={1000}
-              />
-            </Animated.View>
+            <View className="flex-col gap-4 mt-4">
+              {/* Job Title */}
+              <Animated.View entering={FadeInUp.delay(200)}>
+                <CustomInput
+                  ref={titleInputRef}
+                  icon={
+                    <FileText
+                      size={15}
+                      color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                    />
+                  }
+                  placeholder="e.g. Fix bathroom leakage"
+                  value={jobTitle}
+                  label={"Job Title"}
+                  onChangeText={(text) => {
+                    setJobTitle(text);
+                  }}
+                  returnKeyType="next"
+                  onSubmitEditing={() => descriptionInputRef.current?.focus()}
+                />
+              </Animated.View>
 
-            {/* Job Location */}
-            <Animated.View entering={FadeInUp.delay(400)}>
-              <CustomInput
-                icon={
-                  <MapPin
-                    size={15}
-                    color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
-                  />
-                }
-                placeholder="e.g. 123 Main Street, City"
-                value={jobLocation}
-                label="Location"
-                onChangeText={(text) => {
-                  setJobLocation(text);
-                }}
-              />
-            </Animated.View>
+              {/* Job Description */}
+              <Animated.View entering={FadeInUp.delay(300)}>
+                <CustomTextArea
+                  ref={descriptionInputRef}
+                  placeholder="Describe the work you need done..."
+                  value={jobDescription}
+                  label="Description"
+                  onChangeText={(text) => {
+                    setJobDescription(text);
+                  }}
+                  maxLength={1000}
+                  returnKeyType="next"
+                  onSubmitEditing={() => locationInputRef.current?.focus()}
+                />
+              </Animated.View>
 
-            {/* Job Budget */}
-            <Animated.View entering={FadeInUp.delay(500)}>
-              <CustomInput
-                icon={
-                  <IndianRupee
-                    size={15}
-                    color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
-                  />
-                }
-                placeholder="e.g. 5000"
-                value={jobBudget}
-                label="Budget (Optional)"
-                onChangeText={(text) => {
-                  setJobBudget(text);
-                }}
-              />
-            </Animated.View>
-          </View>
-        </ScrollView>
+              {/* Job Location */}
+              <Animated.View entering={FadeInUp.delay(400)}>
+                <CustomInput
+                  ref={locationInputRef}
+                  icon={
+                    <MapPin
+                      size={15}
+                      color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                    />
+                  }
+                  placeholder="e.g. 123 Main Street, City"
+                  value={jobLocation}
+                  label="Location"
+                  onChangeText={(text) => {
+                    setJobLocation(text);
+                  }}
+                  returnKeyType="next"
+                  onSubmitEditing={() => budgetInputRef.current?.focus()}
+                />
+              </Animated.View>
 
-        {/* Fixed button at bottom */}
-        <Animated.View
-          entering={FadeInDown.delay(100)}
-          className="p-4 pb-6 bg-white dark:bg-primary-950 border-t border-primary-200 dark:border-primary-800"
-        >
-          <CustomTouchableOpacityButton title="Request Job" />
-        </Animated.View>
-      </View>
+              {/* Job Budget */}
+              <Animated.View entering={FadeInUp.delay(500)}>
+                <CustomInput
+                  ref={budgetInputRef}
+                  icon={
+                    <IndianRupee
+                      size={15}
+                      color={colourScheme === "dark" ? "#B3A5F5" : "#6B4EEA"}
+                    />
+                  }
+                  placeholder="e.g. 5000"
+                  value={jobBudget}
+                  label="Budget (Optional)"
+                  onChangeText={(text) => {
+                    setJobBudget(text);
+                  }}
+                  keyboardType="numeric"
+                  returnKeyType="done"
+                  onSubmitEditing={() => {
+                    // Dismiss keyboard and optionally trigger submit
+                    budgetInputRef.current?.blur();
+                  }}
+                />
+              </Animated.View>
+            </View>
+          </ScrollView>
+
+          {/* Fixed button at bottom */}
+        </View>
+      </KeyboardAvoidingView>
+      <Animated.View
+        entering={FadeInDown.delay(100)}
+        className="p-4 pb-6 bg-white dark:bg-primary-950 border-t border-primary-200 dark:border-primary-800"
+      >
+        <CustomTouchableOpacityButton title="Request Job" />
+      </Animated.View>
     </>
   );
 }
