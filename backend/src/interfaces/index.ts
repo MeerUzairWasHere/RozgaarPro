@@ -12,3 +12,4 @@ export * from "./location.interface";
 export * from "./rekognition.interface";
 export * from "./image.interface";
 export * from "./profile.image.interface";
+export * from "./job.interface";

@@ -2,6 +2,7 @@ import {
   AuthController,
   CompanyController,
   FreelancerController,
+  JobController,
   LocationController,
   ProfessionController,
   SkillController,
@@ -16,6 +17,7 @@ import {
   EmailService,
   FreelancerService,
   ImageService,
+  JobService,
   LocationService,
   PrismaService,
   ProfessionService,
@@ -46,6 +48,7 @@ class Container {
   public freelancerService: FreelancerService;
   public locationService: LocationService;
   public imageService: ImageService;
+  public jobService: JobService;
 
   // Controllers
   public authController: AuthController;
@@ -55,6 +58,7 @@ class Container {
   public locationController: LocationController;
   public professionController: ProfessionController;
   public freelancerController: FreelancerController;
+  public jobController: JobController;
 
   constructor() {
     // Initialize Database
@@ -95,6 +99,11 @@ class Container {
       this.storageService,
       this.profileImageService,
     );
+    this.jobService = new JobService(
+      this.prismaService,
+      this.userService,
+      this.freelancerService,
+    );
 
     // Initialize Controllers
     this.authController = new AuthController(this.authService);
@@ -108,6 +117,7 @@ class Container {
       this.freelancerService,
     );
     this.locationController = new LocationController(this.locationService);
+    this.jobController = new JobController(this.jobService);
   }
 }
 
@@ -124,4 +134,5 @@ export const {
   freelancerController,
   professionController,
   locationController,
+  jobController,
 } = container;

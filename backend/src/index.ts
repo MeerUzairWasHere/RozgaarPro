@@ -18,6 +18,7 @@ import companyRoutes from "./routes/company.routes";
 import skillRoutes from "./routes/skill.routes";
 import professionRoutes from "./routes/profession.routes";
 import freelancerRoutes from "./routes/freelancer.routes";
+import jobRoutes from "./routes/job.routes";
 
 // Middleware
 import { prismaService } from "./container";
@@ -76,16 +77,7 @@ app.use("/api/v1/skills", skillRoutes);
 app.use("/api/v1/professions", professionRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/freelancers", freelancerRoutes);
-
-// app.get("*", (req, res) => {
-//   // res.redirect("/documentation"); // comment out this route when starting
-// });
-
-// Serve static files in production
-// Uncomment the below line if you have a frontend to serve in production
-// app.get("*", (req: Request, res: Response) => {
-//     res.sendFile(resolve(__dirname, "./client/dist", "index.html"));
-// });
+app.use("/api/v1/jobs", jobRoutes);
 
 // The error handler must be registered before any other error middleware and after all controllers
 Sentry.setupExpressErrorHandler(app);

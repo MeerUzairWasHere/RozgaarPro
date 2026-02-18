@@ -27,10 +27,12 @@ export default function JobRequest() {
   const { coordinates } = useLocationStore();
   const colourScheme = useColorScheme();
 
-  const [jobTitle, setJobTitle] = useState("");
-  const [jobDescription, setJobDescription] = useState("");
-  const [jobLocation, setJobLocation] = useState("");
-  const [jobBudget, setJobBudget] = useState("");
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    jobDescription: "",
+    jobLocation: "",
+    jobBudget: "",
+  });
 
   // Create refs for each input
   const titleInputRef = useRef<TextInput>(null);
@@ -86,11 +88,11 @@ export default function JobRequest() {
                     />
                   }
                   placeholder="e.g. Fix bathroom leakage"
-                  value={jobTitle}
+                  value={formData.jobTitle}
                   label={"Job Title"}
-                  onChangeText={(text) => {
-                    setJobTitle(text);
-                  }}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, jobTitle: text }))
+                  }
                   returnKeyType="next"
                   onSubmitEditing={() => descriptionInputRef.current?.focus()}
                 />
@@ -101,12 +103,12 @@ export default function JobRequest() {
                 <CustomTextArea
                   ref={descriptionInputRef}
                   placeholder="Describe the work you need done..."
-                  value={jobDescription}
+                  value={formData.jobDescription}
                   label="Description"
-                  onChangeText={(text) => {
-                    setJobDescription(text);
-                  }}
-                  maxLength={1000}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, jobDescription: text }))
+                  }
+                  maxLength={500}
                   returnKeyType="next"
                   onSubmitEditing={() => locationInputRef.current?.focus()}
                 />
@@ -123,11 +125,11 @@ export default function JobRequest() {
                     />
                   }
                   placeholder="e.g. 123 Main Street, City"
-                  value={jobLocation}
+                  value={formData.jobLocation}
                   label="Location"
-                  onChangeText={(text) => {
-                    setJobLocation(text);
-                  }}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, jobLocation: text }))
+                  }
                   returnKeyType="next"
                   onSubmitEditing={() => budgetInputRef.current?.focus()}
                 />
@@ -144,17 +146,14 @@ export default function JobRequest() {
                     />
                   }
                   placeholder="e.g. 5000"
-                  value={jobBudget}
+                  value={formData.jobBudget}
                   label="Budget (Optional)"
-                  onChangeText={(text) => {
-                    setJobBudget(text);
-                  }}
+                  onChangeText={(text) =>
+                    setFormData((prev) => ({ ...prev, jobBudget: text }))
+                  }
                   keyboardType="numeric"
                   returnKeyType="done"
-                  onSubmitEditing={() => {
-                    // Dismiss keyboard and optionally trigger submit
-                    budgetInputRef.current?.blur();
-                  }}
+                  onSubmitEditing={() => budgetInputRef.current?.blur()}
                 />
               </Animated.View>
             </View>
