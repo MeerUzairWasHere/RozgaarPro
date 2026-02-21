@@ -145,5 +145,14 @@
   "community_guidelines": "کمیونٹی گائیڈ لائنز",
   "support_footer": "روزگار پرو سپورٹ · 9 AM – 9 PM IST",
   "what_do_you_need": "تہِ کیہہ چاہیے؟",
-  "count_nearby": "{{count}} قریب"
+  "count_nearby": "{{count}} قریب",
+  "message": "پیغام",
+  "conversation": "بات چیت",
+  "no_conversations": "ہن تہِ کوٚن بات چیت نہٕہ",
+  "no_messages_yet": "ہن تہِ کوٚن پیغام نہٕہ",
+  "type_a_message": "پیغام لیکھیو…",
+  "send": "بھیجو",
+  "wait_for_freelancer_reply": "زیادہ پیغام بھیجنَس پتہٕ فری لانسر ژوابَس انتظار کرو۔",
+  "start_conversation": "بات چیت شروع کرو",
+  "send_first_message_to_start": "چیٹ شروع کرن خاطرہ اکھ پیغام بھیجو۔ فری لانسر ژواب دیٚتھ سگتھ، پتہٕ تہِ بات جاری رکھ سگتھ۔"
 }

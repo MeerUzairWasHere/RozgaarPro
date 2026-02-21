@@ -145,5 +145,14 @@
   "community_guidelines": "کمیونٹی گائیڈ لائنز",
   "support_footer": "روزگار پرو سپورٹ · دستیاب صبح 9 بجے – شام 9 بجے IST",
   "what_do_you_need": "آپ کو کیا چاہیے؟",
-  "count_nearby": "{{count}} قریب"
+  "count_nearby": "{{count}} قریب",
+  "message": "پیغام",
+  "conversation": "بات چیت",
+  "no_conversations": "ابھی کوئی بات چیت نہیں",
+  "no_messages_yet": "ابھی کوئی پیغام نہیں",
+  "type_a_message": "پیغام لکھیں…",
+  "send": "بھیجیں",
+  "wait_for_freelancer_reply": "مزید پیغام بھیجنے سے پہلے فری لانسر کے جواب کا انتظار کریں۔",
+  "start_conversation": "بات چیت شروع کریں",
+  "send_first_message_to_start": "چیٹ شروع کرنے کے لیے ایک پیغام بھیجیں۔ فری لانسر جواب دے سکتا ہے، پھر آپ بات جاری رکھ سکتے ہیں۔"
 }

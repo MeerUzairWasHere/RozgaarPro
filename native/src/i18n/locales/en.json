@@ -145,5 +145,14 @@
   "community_guidelines": "Community Guidelines",
   "support_footer": "RozgaarPro Support · Available 9 AM – 9 PM IST",
   "what_do_you_need": "What do you need?",
-  "count_nearby": "{{count}} nearby"
+  "count_nearby": "{{count}} nearby",
+  "message": "Message",
+  "conversation": "Conversation",
+  "no_conversations": "No conversations yet",
+  "no_messages_yet": "No messages yet",
+  "type_a_message": "Type a message…",
+  "send": "Send",
+  "wait_for_freelancer_reply": "Wait for the freelancer to reply before sending more messages.",
+  "start_conversation": "Start conversation",
+  "send_first_message_to_start": "Send one message to start the chat. The freelancer can then reply and you can continue the conversation."
 }

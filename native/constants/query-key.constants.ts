@@ -28,4 +28,11 @@ export const QUERY_KEYS = {
     listQuery: (query: ListQuery) =>
       [...QUERY_KEYS.LOCATIONS.all, JSON.stringify(query)] as const,
   },
+  CONVERSATIONS: {
+    all: ["conversations"] as const,
+    byFreelancer: (freelancerId: string) =>
+      [...QUERY_KEYS.CONVERSATIONS.all, "byFreelancer", freelancerId] as const,
+    messages: (conversationId: string) =>
+      [...QUERY_KEYS.CONVERSATIONS.all, "messages", conversationId] as const,
+  },
 } as const;

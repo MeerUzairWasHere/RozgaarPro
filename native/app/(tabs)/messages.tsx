@@ -1,21 +1,113 @@
-import { View, Text } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import { useTranslation } from "react-i18next";
+import { RelativePathString, router } from "expo-router";
+import { useGetConversations } from "@/mutations";
+import { usePullToRefresh } from "@/hooks";
+import { QUERY_KEYS } from "@/constants";
+import { getConversationRoute } from "@/constants/routes.constants";
+import { Conversation } from "@/types/conversation.types";
+import InitialAvatar from "@/components/common/InitialAvatar";
+import { EmptyState } from "@/components";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+
+function formatConversationTime(isoDate: string): string {
+  const date = new Date(isoDate);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  if (diffMins < 1) return "Just now";
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString();
+}
+
+function ConversationRow({ item }: { item: Conversation }) {
+  const preview = item.lastMessage?.body?.slice(0, 50) ?? "";
+  const previewText =
+    preview.length < (item.lastMessage?.body?.length ?? 0)
+      ? `${preview}…`
+      : preview;
+  return (
+    <TouchableOpacity
+      className="flex-row items-center gap-3 bg-white dark:bg-primary-900 rounded-xl p-4 border border-primary-100 dark:border-primary-800 mb-2"
+      onPress={() =>
+        router.push({
+          pathname: getConversationRoute(item.id) as RelativePathString,
+          params: { otherPartyName: item.otherParty.name },
+        })
+      }
+      activeOpacity={0.7}
+    >
+      <InitialAvatar
+        name={item.otherParty.name}
+        size={48}
+        className="rounded-full bg-brand/40 dark:bg-brand/40 items-center justify-center"
+      />
+      <View className="flex-1 min-w-0">
+        <View className="flex-row justify-between items-center gap-2">
+          <Text
+            className="text-base font-semibold text-primary-950 dark:text-primary-50"
+            numberOfLines={1}
+          >
+            {item.otherParty.name}
+          </Text>
+          <Text className="text-xs text-primary-500 dark:text-primary-400 flex-shrink-0">
+            {formatConversationTime(item.updatedAt)}
+          </Text>
+        </View>
+        {item.lastMessage && (
+          <Text
+            className="text-sm text-primary-600 dark:text-primary-400 mt-0.5"
+            numberOfLines={1}
+          >
+            {previewText}
+          </Text>
+        )}
+      </View>
+    </TouchableOpacity>
+  );
+}
 
 export default function MessagesScreen() {
   const { t } = useTranslation();
+  const { data: conversations = [], isLoading } = useGetConversations();
+  const { refreshing, onRefresh } = usePullToRefresh({
+    queryKey: QUERY_KEYS.CONVERSATIONS.all,
+  });
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
-    <View className="flex-1 bg-primary dark:bg-primary-950 items-center justify-center px-6">
-      <View className="bg-white dark:bg-primary-900 rounded-2xl p-8 border border-primary-100 dark:border-primary-800 shadow-lg items-center">
-        <View className="w-16 h-16 rounded-2xl bg-brand dark:bg-brand-500 items-center justify-center mb-4">
-          <Text className="text-3xl">💬</Text>
-        </View>
-        <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
-          {t("messages")}
-        </Text>
-        <Text className="text-primary-600 dark:text-primary-400 text-center mt-2">
-          {t("your_conversations")}
-        </Text>
-      </View>
+    <View className="flex-1 bg-primary-50 dark:bg-primary-950">
+      <FlatList
+        data={conversations}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ConversationRow item={item} />}
+        contentContainerStyle={{
+          padding: 16,
+          paddingBottom: 20 + tabBarHeight,
+          flexGrow: 1,
+        }}
+        ListEmptyComponent={
+          !isLoading ? (
+            <EmptyState
+              title={t("no_conversations")}
+              message={t("your_conversations")}
+            />
+          ) : null
+        }
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      />
     </View>
   );
 }

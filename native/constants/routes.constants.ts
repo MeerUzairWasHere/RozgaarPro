@@ -20,7 +20,15 @@ export const ROUTES = {
   ALL_VISIBLE_FREELANCERS: "/(tabs)/all-visible-freelancers",
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
+  CONVERSATION: "/(screens)/conversation",
+  CONVERSATION_START: "/(screens)/conversation/start",
 } as const;
 
 export const getFreelancerDetailsRoute = (freelancerId: string): Href =>
   `${ROUTES.FREELANCER_DETAILS}/${freelancerId}`;
+
+export const getConversationRoute = (conversationId: string): Href =>
+  `${ROUTES.CONVERSATION}/${conversationId}` as Href;
+
+export const getStartConversationRoute = (freelancerId: string): Href =>
+  `${ROUTES.CONVERSATION_START}/${freelancerId}` as Href;

@@ -9,12 +9,14 @@ import {
 import { useColorScheme } from "react-native";
 import { AppHeader } from "@/components";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "@/store";
+import { USER_ROLE } from "@/types";
 
 export default function TabsLayout() {
   const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
-
+  const user = useAuthStore((state) => state.user);
   const colors = {
     light: {
       background: "#F5F5F7",
@@ -87,18 +89,21 @@ export default function TabsLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="explore-freelancers"
-        options={{
-          title: t("search"),
-          tabBarIcon: ({ color, focused }) => (
-            <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
-          ),
-          header: () => (
-            <AppHeader showNotification={true} showLocation={true} />
-          ),
-        }}
-      />
+      {user?.role === USER_ROLE.FREELANCER && (
+        <Tabs.Screen
+          name="explore-freelancers"
+          options={{
+            href: user?.role === USER_ROLE.FREELANCER ? null : undefined,
+            title: t("search"),
+            tabBarIcon: ({ color, focused }) => (
+              <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+            ),
+            header: () => (
+              <AppHeader showNotification={true} showLocation={true} />
+            ),
+          }}
+        />
+      )}
       <Tabs.Screen
         name="messages"
         options={{

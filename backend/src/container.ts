@@ -1,6 +1,7 @@
 import {
   AuthController,
   CompanyController,
+  ConversationController,
   FreelancerController,
   LocationController,
   ProfessionController,
@@ -13,6 +14,7 @@ import { VerifyProvider } from "./interfaces";
 import {
   AuthService,
   CompanyService,
+  ConversationService,
   EmailService,
   FreelancerService,
   ImageService,
@@ -46,6 +48,7 @@ class Container {
   public freelancerService: FreelancerService;
   public locationService: LocationService;
   public imageService: ImageService;
+  public conversationService: ConversationService;
 
   // Controllers
   public authController: AuthController;
@@ -55,6 +58,7 @@ class Container {
   public locationController: LocationController;
   public professionController: ProfessionController;
   public freelancerController: FreelancerController;
+  public conversationController: ConversationController;
 
   constructor() {
     // Initialize Database
@@ -95,6 +99,7 @@ class Container {
       this.storageService,
       this.profileImageService,
     );
+    this.conversationService = new ConversationService(this.prismaService);
 
     // Initialize Controllers
     this.authController = new AuthController(this.authService);
@@ -108,6 +113,9 @@ class Container {
       this.freelancerService,
     );
     this.locationController = new LocationController(this.locationService);
+    this.conversationController = new ConversationController(
+      this.conversationService,
+    );
   }
 }
 
@@ -124,4 +132,5 @@ export const {
   freelancerController,
   professionController,
   locationController,
+  conversationController,
 } = container;
