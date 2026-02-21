@@ -1,5 +1,4 @@
 import { Modal, View, Pressable, useColorScheme, Text } from "react-native";
-import BackButton from "./BackButton";
 import { Star, MapPin, ShieldCheck } from "lucide-react-native";
 import { useState } from "react";
 import { ListFilter, ListSort, FilterOperator, SortDirection } from "@/types";
@@ -130,7 +129,6 @@ const FilterDrawer = ({ visible, onClose, onApplyFilters }: Props) => {
           <Text className="text-2xl font-semibold dark:text-primary-50 text-primary-900">
             Filters
           </Text>
-          <BackButton />
         </View>
 
         {/* SORT BY */}
