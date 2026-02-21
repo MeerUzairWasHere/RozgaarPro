@@ -1,5 +1,6 @@
 import { Search } from "lucide-react-native";
 import { View, Text } from "react-native";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   title: string;
@@ -8,8 +9,10 @@ type Props = {
 
 export default function EmptyState({
   title,
-  message = "Try changing your filters or search in another location.",
+  message,
 }: Props) {
+  const { t } = useTranslation();
+  const displayMessage = message ?? t("empty_state_message");
   return (
     <View className="flex-1 items-center py-20 px-6">
       <View className="w-16 h-16 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/30 mb-4">
@@ -21,7 +24,7 @@ export default function EmptyState({
       </Text>
 
       <Text className="text-sm text-primary-600 dark:text-primary-300 text-center mt-2">
-        {message}
+        {displayMessage}
       </Text>
     </View>
   );

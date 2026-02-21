@@ -4,8 +4,10 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { LogOut } from "lucide-react-native";
 import clsx from "clsx";
 import { useLogout } from "@/mutations";
+import { useTranslation } from "react-i18next";
 
 export default function LogoutButton() {
+  const { t } = useTranslation();
   const logoutMutation = useLogout();
 
   const handleLogout = () => {
@@ -37,7 +39,7 @@ export default function LogoutButton() {
           <View className="flex-row gap-2 items-center justify-center">
             <LogOut size={20} color="#dc2626" />
             <Text className="font-semibold text-accent-red dark:text-accent-redLight text-base">
-              Logout
+              {t("logout")}
             </Text>
           </View>
         )}

@@ -36,8 +36,10 @@ import {
 } from "@/utils";
 import { useEffect, useState } from "react";
 import RequiredLabel from "@/components/common/RequiredLabel";
+import { useTranslation } from "react-i18next";
 
 export default function CompleteProfile() {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const mutationCompleteProfile = useCompleteFreelancerProfile();
@@ -168,10 +170,10 @@ export default function CompleteProfile() {
         {/* Header */}
         <View className="p-4 pt-16">
           <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50">
-            Complete Your Profile
+            {t("complete_your_profile")}
           </Text>
           <Text className="text-sm text-primary-600 dark:text-primary-400 mt-1">
-            Let's set up your freelancer profile
+            {t("setup_freelancer_profile")}
           </Text>
         </View>
 
@@ -201,7 +203,7 @@ export default function CompleteProfile() {
             ))}
           </View>
           <Text className="text-sm text-primary-600 dark:text-primary-400 mt-2">
-            Step {step} of 4
+            {t("step_of", { current: step })}
           </Text>
         </View>
         {generalError && (
@@ -215,10 +217,10 @@ export default function CompleteProfile() {
           {step === 1 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                Choose your profession
+                {t("choose_profession")}
               </Text>
               <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                Select your main profession
+                {t("select_main_profession")}
               </Text>
 
               {isLoadingProfessions ? (
@@ -278,7 +280,7 @@ export default function CompleteProfile() {
           {step === 2 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                Select up to 3 skills
+                {t("select_up_to_3_skills")}
               </Text>
 
               {isLoadingSkills ? (
@@ -330,7 +332,7 @@ export default function CompleteProfile() {
               )}
 
               <Text className="text-sm mt-2 text-primary-600 dark:text-primary-400">
-                {formData.skills.length}/3 selected
+                {t("selected_count", { count: formData.skills.length })}
               </Text>
             </Animated.View>
           )}
@@ -339,17 +341,17 @@ export default function CompleteProfile() {
           {step === 3 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                Your experience
+                {t("your_experience")}
               </Text>
               <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                Enter total experience in years (decimals allowed, e.g. 1.5)
+                {t("experience_placeholder")}
               </Text>
 
               <CustomInput
                 icon={
                   <Clock size={15} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
                 }
-                placeholder="e.g. 1.5"
+                placeholder={t("experience_eg")}
                 value={experienceText}
                 keyboardType="decimal-pad"
                 returnKeyType="done"
@@ -394,16 +396,16 @@ export default function CompleteProfile() {
           {step === 4 && (
             <Animated.View entering={FadeInRight} className="gap-5">
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50">
-                Verify your identity
+                {t("verify_identity")}
               </Text>
               {/* ID Verification Card */}
               <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
                 <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  <RequiredLabel label="Government ID" />
+                  <RequiredLabel label={t("government_id")} />
                 </Text>
 
                 <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
-                  Aadhaar, PAN, or Voter ID
+                  {t("id_types")}
                 </Text>
 
                 <View className="items-center gap-3">
@@ -420,7 +422,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-red-100 rounded-xl"
                         >
                           <Text className="text-sm font-medium text-red-600">
-                            Remove
+                            {t("remove")}
                           </Text>
                         </TouchableOpacity>
 
@@ -428,14 +430,14 @@ export default function CompleteProfile() {
                           onPress={handleTakeIdPhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">Retake</Text>
+                          <Text className="text-sm font-medium">{t("retake")}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickIdImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">Gallery</Text>
+                          <Text className="text-sm font-medium">{t("gallery")}</Text>
                         </TouchableOpacity>
                       </View>
                     </>
@@ -456,7 +458,7 @@ export default function CompleteProfile() {
                         className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                       >
                         <Text className="text-sm font-medium">
-                          Select from Gallery
+                          {t("select_from_gallery")}
                         </Text>
                       </TouchableOpacity>
                     </>
@@ -466,11 +468,10 @@ export default function CompleteProfile() {
               {/* Profile Photo Card */}
               <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
                 <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  Profile Photo (optional)
+                  {t("profile_photo_optional")}
                 </Text>
                 <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
-                  Take a clear front-facing photo of your face or upload a
-                  photo.
+                  {t("profile_photo_hint")}
                 </Text>
 
                 <View className="items-center gap-3">
@@ -486,7 +487,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-red-100 rounded-xl"
                         >
                           <Text className="text-sm font-medium text-red-600">
-                            Remove
+                            {t("remove")}
                           </Text>
                         </TouchableOpacity>
 
@@ -494,14 +495,14 @@ export default function CompleteProfile() {
                           onPress={handleTakeProfilePhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">Retake</Text>
+                          <Text className="text-sm font-medium">{t("retake")}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickProfileImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">Gallery</Text>
+                          <Text className="text-sm font-medium">{t("gallery")}</Text>
                         </TouchableOpacity>
                       </View>
                     </>
@@ -522,7 +523,7 @@ export default function CompleteProfile() {
                         className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                       >
                         <Text className="text-sm font-medium">
-                          Select from Gallery
+                          {t("select_from_gallery")}
                         </Text>
                       </TouchableOpacity>
                     </>
@@ -561,7 +562,7 @@ export default function CompleteProfile() {
                           : "text-primary-900 dark:text-primary-50",
                       )}
                     >
-                      Location Access
+                      {t("location_access")}
                     </Text>
                     <Text
                       className={cn(
@@ -572,8 +573,8 @@ export default function CompleteProfile() {
                       )}
                     >
                       {permissionGranted
-                        ? "Location access granted"
-                        : "Allow location access so customers can find you nearby"}
+                        ? t("location_granted")
+                        : t("location_allow_hint")}
                     </Text>
                   </View>
                 </View>
@@ -590,12 +591,12 @@ export default function CompleteProfile() {
           disabled={isNextDisabled || loading}
           title={
             loading
-              ? "Saving..."
+              ? t("saving")
               : step === 4 && !permissionGranted
-                ? "Enable Location to Continue"
+                ? t("enable_location_to_continue")
                 : step === 4
-                  ? "Complete Profile"
-                  : "Continue"
+                  ? t("complete_profile")
+                  : t("continue")
           }
         />
       </View>

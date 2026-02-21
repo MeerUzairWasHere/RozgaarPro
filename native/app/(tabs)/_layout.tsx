@@ -8,8 +8,10 @@ import {
 } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import { AppHeader } from "@/components";
+import { useTranslation } from "react-i18next";
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
 
@@ -79,7 +81,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: "Home",
+          title: t("home"),
           tabBarIcon: ({ color, focused }) => (
             <Home size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
@@ -88,7 +90,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="explore-freelancers"
         options={{
-          title: "Search",
+          title: t("search"),
           tabBarIcon: ({ color, focused }) => (
             <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
@@ -100,7 +102,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="messages"
         options={{
-          title: "Messages",
+          title: t("messages"),
           tabBarIcon: ({ color, focused }) => (
             <MessageCircle
               size={24}
@@ -108,18 +110,21 @@ export default function TabsLayout() {
               strokeWidth={focused ? 2.5 : 2}
             />
           ),
-          header: () => <AppHeader title="Messages" showNotification={true} />,
+          header: () => (
+            <AppHeader title={t("messages")} showNotification={true} />
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: t("profile"),
           tabBarIcon: ({ color, focused }) => (
             <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
-          // Custom header for Profile tab
-          header: () => <AppHeader title="Profile" showNotification={true} />,
+          header: () => (
+            <AppHeader title={t("profile")} showNotification={true} />
+          ),
         }}
       />
     </Tabs>

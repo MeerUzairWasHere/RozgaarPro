@@ -6,6 +6,9 @@ import { Redirect } from "expo-router";
 export default function index() {
   const { user, isAuthenticated } = useAuthStore();
 
+
+
+
   if (
     isAuthenticated &&
     !user?.profileCompleted &&

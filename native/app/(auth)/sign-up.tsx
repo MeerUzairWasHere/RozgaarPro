@@ -26,8 +26,10 @@ import {
 import { useRef } from "react";
 import { cn } from "@/utils";
 import { useFormErrors } from "@/hooks";
+import { useTranslation } from "react-i18next";
 
 export default function SignupScreen() {
+  const { t } = useTranslation();
   const { name, phone, password, userRole, setField, signupStep, setUserRole } =
     useAuthStore();
 
@@ -78,16 +80,14 @@ export default function SignupScreen() {
                   {/* Title */}
                   <Animated.View entering={FadeInDown.duration(400)}>
                     <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-2">
-                      Create{" "}
                       {userRole === USER_ROLE.FREELANCER
-                        ? "freelancer"
-                        : "user"}{" "}
-                      account
+                        ? t("create_freelancer_account")
+                        : t("create_user_account")}
                     </Text>
                     <Text className="dark:text-primary-300 text-primary-700 mb-8">
                       {userRole === USER_ROLE.FREELANCER
-                        ? "Join as a skilled freelancer and get discovered"
-                        : "Sign up to find trusted freelancers near you"}
+                        ? t("join_freelancer")
+                        : t("signup_find_freelancers")}
                     </Text>
                     <Animated.View
                       entering={FadeInDown.delay(100)}
@@ -117,8 +117,8 @@ export default function SignupScreen() {
                             )}
                           >
                             {type === USER_ROLE.USER
-                              ? "User Account"
-                              : "Freelancer Account"}
+                              ? t("user_account")
+                              : t("freelancer_account")}
                           </Text>
                         </Pressable>
                       ))}
@@ -147,7 +147,7 @@ export default function SignupScreen() {
                     {/* Name */}
                     <CustomInput
                       icon={<User size={15} color="#6B4EEA" />}
-                      placeholder="Full Name"
+                      placeholder={t("full_name")}
                       value={name}
                       onChangeText={(text) => {
                         setField("name", text);
@@ -163,7 +163,7 @@ export default function SignupScreen() {
                     <CustomInput
                       ref={phoneInputRef}
                       icon={<Phone size={15} color="#6B4EEA" />}
-                      placeholder="Phone Number"
+                      placeholder={t("phone_number")}
                       value={phone}
                       onChangeText={(text) => {
                         setField("phone", text);
@@ -179,7 +179,7 @@ export default function SignupScreen() {
                     <CustomInput
                       ref={passwordInputRef}
                       icon={<Lock size={15} color="#6B4EEA" />}
-                      placeholder="Password"
+                      placeholder={t("password")}
                       value={password}
                       onChangeText={(text) => {
                         setField("password", text);
@@ -201,7 +201,9 @@ export default function SignupScreen() {
                   >
                     <CustomTouchableOpacityButton
                       title={
-                        registerMutation.isPending ? "Signing up..." : "Sign Up"
+                        registerMutation.isPending
+                          ? t("signing_up")
+                          : t("sign_up")
                       }
                       onPress={handleSignup}
                       isLoading={registerMutation.isPending}
@@ -214,30 +216,17 @@ export default function SignupScreen() {
                     entering={FadeInDown.delay(400)}
                     className="text-center text-sm dark:text-primary-300 text-primary-700 mt-6 px-4"
                   >
-                    By signing up, you agree to our{" "}
-                    <Text
-                      className="text-primary-600 dark:text-primary-400 font-medium"
-                      // onPress={() => router.push(ROUTES.TERMS)}
-                    >
-                      Terms
-                    </Text>{" "}
-                    and{" "}
-                    <Text
-                      className="text-primary-600 dark:text-primary-400 font-medium"
-                      // onPress={() => router.push(ROUTES.PRIVACY_POLICY)}
-                    >
-                      Privacy Policy
-                    </Text>
+                    {t("terms_and_privacy")}
                   </Animated.Text>
                 </View>
 
                 {/* Footer */}
                 <View className="flex flex-row items-baseline justify-center pb-6 pt-8">
                   <Text className="text-sm dark:text-primary-300 text-primary-700">
-                    Already have an account?{" "}
+                    {t("already_have_account")}{" "}
                   </Text>
                   <CustomPressableButton
-                    title="Login"
+                    title={t("login")}
                     onPress={() => router.replace(ROUTES.SIGN_IN)}
                   />
                 </View>

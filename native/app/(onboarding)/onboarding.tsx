@@ -8,29 +8,29 @@ import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomTouchableOpacityButton } from "@/components";
 import { cn } from "@/utils";
+import { useTranslation } from "react-i18next";
 
-const slides = [
+const getSlides = (t: (key: string) => string) => [
   {
     icon: Search,
-    title: "Find Skilled Freelancers",
-    description:
-      "Search and connect with trusted local professionals — plumbers, electricians, carpenters, and more.",
+    titleKey: "find_skilled_freelancers" as const,
+    descriptionKey: "find_freelancers_desc" as const,
   },
   {
     icon: ShieldCheck,
-    title: "Verified Professionals",
-    description:
-      "Every freelancer is phone-verified. Hire with confidence knowing you're getting quality help.",
+    titleKey: "verified_professionals" as const,
+    descriptionKey: "verified_professionals_desc" as const,
   },
   {
     icon: Briefcase,
-    title: "Work Opportunities",
-    description:
-      "Freelancers: Get discovered by customers in your area. No middlemen, direct connections.",
+    titleKey: "work_opportunities" as const,
+    descriptionKey: "work_opportunities_desc" as const,
   },
 ];
 
 export default function OnboardingScreen() {
+  const { t } = useTranslation();
+  const slides = getSlides(t);
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
   const completeOnboarding = useOnboardingStore((s) => s.completeOnboarding);
@@ -57,7 +57,7 @@ export default function OnboardingScreen() {
           className="rounded-full px-4 py-2 overflow-hidden"
         >
           <Text className="text-primary-500 dark:text-primary-400 font-medium">
-            Skip
+            {t("skip")}
           </Text>
         </Pressable>
       </View>
@@ -75,11 +75,11 @@ export default function OnboardingScreen() {
           </View>
 
           <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">
-            {slide.title}
+            {t(slide.titleKey)}
           </Text>
 
           <Text className="text-base text-primary-600 dark:text-primary-200 text-center leading-6 max-w-[280px]">
-            {slide.description}
+            {t(slide.descriptionKey)}
           </Text>
         </Animated.View>
       </View>
@@ -109,7 +109,9 @@ export default function OnboardingScreen() {
               ? handleFinish()
               : setCurrentSlide((p) => p + 1)
           }
-          title={currentSlide === slides.length - 1 ? "Get Started" : "Next"}
+          title={
+            currentSlide === slides.length - 1 ? t("get_started") : t("next")
+          }
         />
       </View>
     </SafeAreaView>

@@ -14,8 +14,10 @@ import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import { FilterOperator } from "@/types";
 import { usePullToRefresh } from "@/hooks";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 
 export default function FreelancerDetails() {
+  const { t } = useTranslation();
   const { freelancerId } = useLocalSearchParams<{
     freelancerId: string;
   }>();
@@ -45,9 +47,9 @@ export default function FreelancerDetails() {
   if (error || !freelancer) {
     return (
       <ErrorState
-        title="Something went wrong"
-        message="We couldn't load this freelancer's profile"
-        buttonText="Go Back"
+        title={t("something_went_wrong")}
+        message={t("couldnt_load_freelancer")}
+        buttonText={t("go_back")}
         onPress={() => router.back()}
       />
     );

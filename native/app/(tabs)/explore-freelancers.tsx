@@ -15,8 +15,10 @@ import { useState } from "react";
 import { ListFilter, ListSort } from "@/types";
 import { usePullToRefresh } from "@/hooks";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useTranslation } from "react-i18next";
 
 const AllVisibleFreelancers = () => {
+  const { t } = useTranslation();
   const { coordinates } = useLocationStore();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [activeFilters, setActiveFilters] = useState<ListFilter[]>([]);
@@ -78,7 +80,7 @@ const AllVisibleFreelancers = () => {
           }
           ListEmptyComponent={
             !isLoading ? (
-              <EmptyState title="No visible freelancers found" />
+              <EmptyState title={t("no_freelancers_found")} />
             ) : null
           }
           contentContainerStyle={{

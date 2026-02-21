@@ -2,14 +2,16 @@ import { CustomTouchableOpacityButton } from "@/components";
 import { ROUTES } from "@/constants";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPasswordScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>This is Forgot Password Screen</Text>
+      <Text style={styles.title}>{t("forgot_password_title")}</Text>
       <CustomTouchableOpacityButton
-        title="Back"
+        title={t("back")}
         onPress={() => router.replace(ROUTES.SIGN_IN)}
         className="w-96"
       />

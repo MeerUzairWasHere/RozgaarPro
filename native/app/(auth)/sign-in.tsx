@@ -28,8 +28,10 @@ import {
   CustomInput,
   StatusBanner,
 } from "@/components";
+import { useTranslation } from "react-i18next";
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   const colourScheme = useColorScheme();
   const { loginMethod, setLoginMethod, setField, phone, email, password } =
     useAuthStore();
@@ -81,10 +83,10 @@ export default function LoginScreen() {
                 <View>
                   <Animated.View entering={FadeInDown}>
                     <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-1">
-                      Welcome back
+                      {t("welcome_back")}
                     </Text>
                     <Text className="text-sm dark:text-primary-50 text-primary-950 mb-8">
-                      Login to your account to continue
+                      {t("login_subtitle")}
                     </Text>
                   </Animated.View>
 
@@ -116,9 +118,7 @@ export default function LoginScreen() {
                               : "text-primary-600 dark:text-primary-400 font-medium",
                           )}
                         >
-                          {type === LOGIN_METHOD.PHONE
-                            ? LOGIN_METHOD.PHONE
-                            : LOGIN_METHOD.EMAIL}
+                          {t(type.toLowerCase())}
                         </Text>
                       </Pressable>
                     ))}
@@ -163,7 +163,9 @@ export default function LoginScreen() {
                         )
                       }
                       placeholder={
-                        loginMethod === LOGIN_METHOD.EMAIL ? "Email" : "Phone"
+                        loginMethod === LOGIN_METHOD.EMAIL
+                          ? t("email")
+                          : t("phone")
                       }
                       value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
                       onChangeText={(text) => {
@@ -205,7 +207,7 @@ export default function LoginScreen() {
                           }
                         />
                       }
-                      placeholder="Password"
+                      placeholder={t("password")}
                       value={password}
                       onChangeText={(text) => {
                         setField("password", text);
@@ -220,7 +222,7 @@ export default function LoginScreen() {
                     {/* Forgot Password */}
                     <View className="flex flex-row self-end mb-6">
                       <CustomPressableButton
-                        title="Forgot password?"
+                        title={t("forgot_password")}
                         onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
                       />
                     </View>
@@ -232,7 +234,7 @@ export default function LoginScreen() {
                     className="mt-2"
                   >
                     <CustomTouchableOpacityButton
-                      title="Sign In"
+                      title={t("sign_in")}
                       onPress={handleLogin}
                       isLoading={loginMutation.isPending}
                       disabled={
@@ -247,10 +249,10 @@ export default function LoginScreen() {
                 {/* Footer */}
                 <View className="flex flex-row items-baseline justify-center pb-6 pt-8">
                   <Text className="text-sm dark:text-primary-300 text-primary-700">
-                    Don't have an account?{" "}
+                    {t("dont_have_account")}{" "}
                   </Text>
                   <CustomPressableButton
-                    title="Create account"
+                    title={t("create_account_link")}
                     onPress={() => router.replace(ROUTES.SIGN_UP)}
                   />
                 </View>
