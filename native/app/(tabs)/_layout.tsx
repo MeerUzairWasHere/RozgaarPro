@@ -88,7 +88,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="explore-freelancers"
         options={{
-          title: "Explore",
+          title: "Search",
           tabBarIcon: ({ color, focused }) => (
             <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
