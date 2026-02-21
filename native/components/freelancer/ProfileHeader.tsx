@@ -4,7 +4,6 @@ import { Briefcase } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import InitialAvatar from "../common/InitialAvatar";
 import { AVAILABILITY_STATUS } from "@/types";
-import clsx from "clsx";
 import AvailabilityStatus from "../common/AvailabilityStatus";
 
 type Props = {

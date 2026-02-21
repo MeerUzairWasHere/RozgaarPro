@@ -57,6 +57,7 @@ export default function FreelancerFilterView() {
       location: {
         latitude: coordinates.latitude,
         longitude: coordinates.longitude,
+        accuracy: coordinates.accuracy,
       },
       filters: allFilters,
       sort: activeSort,

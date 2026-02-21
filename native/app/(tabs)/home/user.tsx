@@ -29,7 +29,7 @@ const UserHomeScreen = () => {
     <FlatList
       data={isSearching ? items : []}
       keyExtractor={(item, index) => item?.freelancer_id ?? index.toString()}
-      renderItem={({ item }) =>
+      renderItem={({ item, index }) =>
         isSearching ? <FreelancerCard freelancer={item} /> : null
       }
       ListHeaderComponent={

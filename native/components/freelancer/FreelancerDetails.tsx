@@ -13,10 +13,12 @@ import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
 import { FilterOperator } from "@/types";
 import { usePullToRefresh } from "@/hooks";
-import Animated, { FadeInDown, FadeInUp } from "react-native-reanimated";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function FreelancerDetails() {
-  const { freelancerId } = useLocalSearchParams<{ freelancerId: string }>();
+  const { freelancerId } = useLocalSearchParams<{
+    freelancerId: string;
+  }>();
   const { coordinates } = useLocationStore();
   const { refreshing, onRefresh } = usePullToRefresh();
   const router = useRouter();
@@ -93,7 +95,7 @@ export default function FreelancerDetails() {
         entering={FadeInDown.delay(100)}
         className="p-4 pb-6 bg-white dark:bg-primary-950 border-t border-primary-200 dark:border-primary-800"
       >
-        <ActionButtons freelancerId={freelancer.freelancer_id} />
+        <ActionButtons freelancerId={freelancer.freelancer_id} phone={freelancer.phone} />
       </Animated.View>
     </>
   );

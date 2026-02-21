@@ -21,7 +21,7 @@ import {
   BackButton,
   CustomPressableButton,
   CustomTouchableOpacityButton,
-  ErrorBanner,
+  StatusBanner,
 } from "@/components";
 import { useRef } from "react";
 import { cn } from "@/utils";
@@ -131,8 +131,9 @@ export default function SignupScreen() {
                       entering={FadeInDown.delay(200)}
                       className="mb-4"
                     >
-                      <ErrorBanner
+                      <StatusBanner
                         message={generalError}
+                        variant="error"
                         onDismiss={clearErrors}
                       />
                     </Animated.View>

@@ -1,9 +1,4 @@
-import {
-  createTokenUser,
-  comparePassword,
-  hashPassword,
-  createTokenUserWithFreelancer,
-} from "../utils";
+import { createTokenUser, comparePassword, hashPassword } from "../utils";
 import {
   TokenUserDto,
   UserUpdateInputDto,
@@ -33,7 +28,7 @@ export class UserService implements IUserService {
       return createTokenUser(user);
     }
 
-    return createTokenUserWithFreelancer(user, freelancer.id);
+    return createTokenUser(user, freelancer.id);
   }
 
   async updateUser(

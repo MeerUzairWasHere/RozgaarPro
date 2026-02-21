@@ -1,5 +1,4 @@
 import {
-  AppHeader,
   FreelancerCard,
   ListFilterHeader,
   FreelancerListSkeleton,
@@ -15,6 +14,7 @@ import { extractInfiniteList } from "@/utils";
 import { useState } from "react";
 import { ListFilter, ListSort } from "@/types";
 import { usePullToRefresh } from "@/hooks";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 const AllVisibleFreelancers = () => {
   const { coordinates } = useLocationStore();
@@ -40,15 +40,14 @@ const AllVisibleFreelancers = () => {
     setActiveSort(sort);
   };
 
-  // Calculate active filter count
   const activeFilterCount = activeFilters.length + activeSort.length;
 
   const { refreshing, onRefresh } = usePullToRefresh();
 
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
     <>
-      <AppHeader showBack title="All Visible Freelancers" />
-
       <ListFilterHeader
         freelancersCount={items.length}
         onFilterPress={() => setIsFilterOpen(true)}
@@ -84,7 +83,7 @@ const AllVisibleFreelancers = () => {
           }
           contentContainerStyle={{
             padding: 16,
-            paddingBottom: 20,
+            paddingBottom: 20 + tabBarHeight,
             flexGrow: 1,
           }}
           refreshControl={

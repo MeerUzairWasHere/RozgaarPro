@@ -30,8 +30,8 @@ export default function HomeHeader({
       {isSearching && (
         <Text className="text-md text-brand-400 mb-4">
           {itemsLength === 0
-            ? `No results for "${query}" within ${MAX_RADIUS_KM} kms`
-            : `${itemsLength} result${itemsLength === 1 ? "" : "s"} for "${query}" within ${MAX_RADIUS_KM} kms`}
+            ? `No results for "${query}"`
+            : `${itemsLength} result${itemsLength === 1 ? "" : "s"} for "${query}"`}
         </Text>
       )}
 

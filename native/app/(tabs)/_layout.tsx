@@ -1,5 +1,11 @@
 import { Tabs } from "expo-router";
-import { Home, Briefcase, MessageCircle, User } from "lucide-react-native";
+import {
+  Home,
+  Briefcase,
+  MessageCircle,
+  User,
+  Search,
+} from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import { AppHeader } from "@/components";
 
@@ -80,17 +86,15 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="jobs"
+        name="explore-freelancers"
         options={{
-          title: "Jobs",
+          title: "Explore",
           tabBarIcon: ({ color, focused }) => (
-            <Briefcase
-              size={24}
-              color={color}
-              strokeWidth={focused ? 2.5 : 2}
-            />
+            <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
-          header: () => <AppHeader title="Find Jobs" showNotification={true} />,
+          header: () => (
+            <AppHeader showNotification={true} showLocation={true} />
+          ),
         }}
       />
       <Tabs.Screen

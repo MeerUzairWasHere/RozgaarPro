@@ -35,10 +35,7 @@ export default function TopRatedFreelancers() {
   if (!freelancers)
     return (
       <View>
-        <SectionHeader
-          title="Top Rated Freelancers"
-          onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
-        />
+        <SectionHeader title="Top Rated Freelancers" />
         <TopRatedFreelancersSkeletonList />
       </View>
     );
@@ -48,12 +45,7 @@ export default function TopRatedFreelancers() {
       data={freelancers?.data}
       keyExtractor={(item) => item.freelancer_id}
       renderItem={({ item }) => <FreelancerCard freelancer={item} />}
-      ListHeaderComponent={
-        <SectionHeader
-          title="Top Rated Freelancers"
-          onActionPress={() => router.push(ROUTES.ALL_VISIBLE_FREELANCERS)}
-        />
-      }
+      ListHeaderComponent={<SectionHeader title="Top Rated Freelancers" />}
       scrollEnabled={false}
       contentContainerStyle={{
         padding: 16,

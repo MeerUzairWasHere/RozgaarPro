@@ -91,7 +91,11 @@ export class AuthService implements IAuthService {
       throw new UnauthenticatedError("Invalid Credentials");
     }
 
-    const tokenUser = createTokenUser(user);
+    const freelancer = await this.prismaService.freelancer.findUnique({
+      where: { userId: user.id },
+    });
+
+    const tokenUser = createTokenUser(user, freelancer?.id);
 
     let refreshToken: string;
     const existingToken = await this.prismaService.token.findFirst({

@@ -24,13 +24,6 @@ export function useFreelancerSearch(query: string) {
         pageSize: 15,
         page: 1,
       },
-      filters: [
-        {
-          field: "distance_km",
-          operator: FilterOperator.LESS_THAN_OR_EQUAL,
-          value: 5,
-        },
-      ],
     });
 
   const { items } = extractInfiniteList(data);

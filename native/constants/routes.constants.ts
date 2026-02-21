@@ -8,7 +8,6 @@ export const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   OTP_VERIFICATION: "/otp-verification",
   HOME: "/home",
-  JOBS: "/jobs",
   MESSAGES: "/messages",
   PROFILE: "/profile",
   EDIT_PROFILE: "/(screens)/edit-profile",
@@ -18,13 +17,10 @@ export const ROUTES = {
   FREELANCER_DETAILS: "/(screens)/freelancer-details",
   JOB_REQUEST: "/(screens)/job-request",
   FREELANCER_ONBOARDING: "/(screens)/complete-profile",
-  ALL_VISIBLE_FREELANCERS: "/(screens)/all-visible-freelancers",
+  ALL_VISIBLE_FREELANCERS: "/(tabs)/all-visible-freelancers",
   FREELANCER_HOME: "/(tabs)/home/freelancer",
   USER_HOME: "/(tabs)/home/user",
 } as const;
 
 export const getFreelancerDetailsRoute = (freelancerId: string): Href =>
   `${ROUTES.FREELANCER_DETAILS}/${freelancerId}`;
-
-export const getJobRequestRoute = (freelancerId: string): Href =>
-  `${ROUTES.JOB_REQUEST}/${freelancerId}`;

@@ -25,6 +25,7 @@ export interface NearbyFreelancer {
 export interface NearbyFreelancerDetail extends NearbyFreelancer {
   latitude: number;
   longitude: number;
+  phone: string;
   location: string;
   description: string | null;
   availability: AvailabilityStatus;

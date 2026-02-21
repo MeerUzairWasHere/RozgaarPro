@@ -11,6 +11,10 @@ export interface LocationHeaderProps {
 export default function LocationHeader({ lightBackground = false }) {
   const { location, loading, getCurrentLocation } = useLocationStore();
 
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
   return (
     <TouchableOpacity
       activeOpacity={0.7}

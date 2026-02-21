@@ -5,4 +5,3 @@ export * from "./skill.controller";
 export * from "./profession.controller";
 export * from "./freelancer.controller";
 export * from "./location.controller";
-export * from "./job.controller";

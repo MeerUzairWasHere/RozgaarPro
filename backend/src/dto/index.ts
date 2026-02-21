@@ -5,4 +5,3 @@ export * from "./email.dto";
 export * from "./freelancer.dto";
 export * from "./profession.dto";
 export * from "./list-query.dto";
-export * from "./job.dto";

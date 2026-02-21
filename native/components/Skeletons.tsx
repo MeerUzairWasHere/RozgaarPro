@@ -77,7 +77,7 @@ export const FreelancerDetailSkeleton = () => {
         {/* Header */}
 
         <View className="px-4">
-          <View className="items-center pt-12 pb-6">
+          <View className="items-center pt-10 pb-6">
             {/* Avatar */}
             <View className="w-28 h-28 rounded-full bg-primary-200 dark:bg-primary-800 animate-pulse mb-4" />
 

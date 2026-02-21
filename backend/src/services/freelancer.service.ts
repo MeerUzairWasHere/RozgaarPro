@@ -9,17 +9,13 @@ import {
   NearbyFreelancerDetail,
 } from "../dto";
 import {
-  BucketType,
   IFreelancerService,
-  IImageService,
   ILocationService,
   IPrismaService,
   IProfileImageService,
-  IRekognitionService,
   IStorageService,
   IUserService,
   ProcessedImageResult,
-  StorageUploadResult,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
@@ -238,6 +234,7 @@ export class FreelancerService implements IFreelancerService {
     SELECT
       f.id::TEXT AS freelancer_id,
       u.id::TEXT AS user_id,
+      u.phone AS phone,
       u.name AS name,
       u."profileImage" AS profile_image_key,
       f.availability AS availability,

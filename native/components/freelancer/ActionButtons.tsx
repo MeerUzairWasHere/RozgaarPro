@@ -1,22 +1,35 @@
-import { getJobRequestRoute } from "@/constants";
 import { router } from "expo-router";
+import { MessageCircle, Phone } from "lucide-react-native";
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import { View, Text, TouchableOpacity, Linking } from "react-native";
 
 type Props = {
   freelancerId: string;
+  phone: string;
 };
 
-export default function ActionButtons({ freelancerId }: Props) {
+export default function ActionButtons({ freelancerId, phone }: Props) {
+  const handleCall = () => {
+    if (!phone) return;
+    Linking.openURL(`tel:${phone}`);
+  };
+
   return (
     <View className="flex-row gap-3">
       <TouchableOpacity
-        onPress={() => router.push(getJobRequestRoute(freelancerId))}
+        onPress={handleCall}
         className="flex-1 bg-brand-600 dark:bg-brand-500 rounded-2xl py-4 items-center shadow-lg"
       >
         <View className="flex-row items-center gap-2">
-          <Text className="text-white font-bold text-base">Hire Now</Text>
+          <Phone size={16} color="#fff" strokeWidth={2.5} />
+          <Text className="text-white font-bold text-base">Call</Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity className="flex-1 bg-brand-600 dark:bg-brand-500 rounded-2xl py-4 items-center shadow-lg">
+        <View className="flex-row items-center gap-2">
+          <MessageCircle size={16} color="#fff" strokeWidth={2.5} />
+          <Text className="text-white font-bold text-base">Message</Text>
         </View>
       </TouchableOpacity>
     </View>

@@ -26,7 +26,7 @@ import {
   CustomTouchableOpacityButton,
   BackButton,
   CustomInput,
-  ErrorBanner,
+  StatusBanner,
 } from "@/components";
 
 export default function LoginScreen() {
@@ -130,8 +130,9 @@ export default function LoginScreen() {
                       entering={FadeInDown.delay(200)}
                       className="mb-4"
                     >
-                      <ErrorBanner
+                      <StatusBanner
                         message={generalError}
+                        variant="error"
                         onDismiss={clearErrors}
                       />
                     </Animated.View>
