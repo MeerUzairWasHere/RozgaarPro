@@ -4,11 +4,13 @@ import {
   FlatList,
   TouchableOpacity,
   RefreshControl,
+  ActivityIndicator,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { RelativePathString, router } from "expo-router";
 import { useGetConversations } from "@/mutations";
 import { usePullToRefresh } from "@/hooks";
+import { extractInfiniteList } from "@/utils";
 import { QUERY_KEYS } from "@/constants";
 import { getConversationRoute } from "@/constants/routes.constants";
 import { Conversation } from "@/types/conversation.types";
@@ -79,9 +81,16 @@ function ConversationRow({ item }: { item: Conversation }) {
 
 export default function MessagesScreen() {
   const { t } = useTranslation();
-  const { data: conversations = [], isLoading } = useGetConversations();
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useGetConversations({});
+  const { items: conversations } = extractInfiniteList(data);
   const { refreshing, onRefresh } = usePullToRefresh({
-    queryKey: QUERY_KEYS.CONVERSATIONS.all,
+    queryKey: QUERY_KEYS.CONVERSATIONS.listQuery({}),
   });
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -96,6 +105,15 @@ export default function MessagesScreen() {
           paddingBottom: 20 + tabBarHeight,
           flexGrow: 1,
         }}
+        onEndReached={() => {
+          if (hasNextPage) fetchNextPage();
+        }}
+        onEndReachedThreshold={0.4}
+        ListFooterComponent={
+          isFetchingNextPage ? (
+            <ActivityIndicator style={{ marginVertical: 16 }} />
+          ) : null
+        }
         ListEmptyComponent={
           !isLoading ? (
             <EmptyState

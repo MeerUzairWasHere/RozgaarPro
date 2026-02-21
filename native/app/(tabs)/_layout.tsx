@@ -89,21 +89,19 @@ export default function TabsLayout() {
           ),
         }}
       />
-      {user?.role === USER_ROLE.FREELANCER && (
-        <Tabs.Screen
-          name="explore-freelancers"
-          options={{
-            href: user?.role === USER_ROLE.FREELANCER ? null : undefined,
-            title: t("search"),
-            tabBarIcon: ({ color, focused }) => (
-              <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
-            ),
-            header: () => (
-              <AppHeader showNotification={true} showLocation={true} />
-            ),
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="explore-freelancers"
+        options={{
+          href: user?.role === USER_ROLE.FREELANCER ? null : undefined,
+          title: t("search"),
+          tabBarIcon: ({ color, focused }) => (
+            <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
+          ),
+          header: () => (
+            <AppHeader showNotification={true} showLocation={true} />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="messages"
         options={{

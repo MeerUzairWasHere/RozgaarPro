@@ -5,9 +5,11 @@ import {
   ConversationOtherPartyDto,
   MessageDto,
 } from "../dto/conversation.dto";
+import { ListQueryDto } from "../dto";
 import { IConversationService, StartConversationResult } from "../interfaces/conversation.interface";
 import { IPrismaService } from "../interfaces/prisma.interface";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
+import { PaginatedResponse } from "../types";
 
 export class ConversationService implements IConversationService {
   constructor(private prismaService: IPrismaService) {}
@@ -16,27 +18,44 @@ export class ConversationService implements IConversationService {
     userId: string,
     freelancerId: string | null,
     role: Role,
-  ): Promise<ConversationListItemDto[]> {
+    query: ListQueryDto,
+  ): Promise<PaginatedResponse<ConversationListItemDto>> {
     const where =
       role === Role.USER
         ? { userId }
         : { freelancerId: freelancerId! };
 
-    const conversations = await this.prismaService.conversation.findMany({
-      where,
-      orderBy: { updatedAt: "desc" },
-      include: {
-        user: { select: { id: true, name: true } },
-        freelancer: { select: { id: true, user: { select: { name: true } } } },
-        messages: {
-          orderBy: { createdAt: "desc" },
-          take: 1,
-          select: { body: true, createdAt: true },
-        },
-      },
-    });
+    const page = query.pagination?.page ?? 1;
+    const pageSize = query.pagination?.pageSize ?? 20;
+    const skip = (page - 1) * pageSize;
 
-    return conversations.map((c) => {
+    const sortField = query.sort?.[0]?.field ?? "updatedAt";
+    const sortDirection = query.sort?.[0]?.direction ?? "desc";
+    const orderBy =
+      sortField === "updatedAt"
+        ? { updatedAt: sortDirection as "asc" | "desc" }
+        : { updatedAt: "desc" as const };
+
+    const [conversations, totalItems] = await Promise.all([
+      this.prismaService.conversation.findMany({
+        where,
+        orderBy,
+        skip,
+        take: pageSize,
+        include: {
+          user: { select: { id: true, name: true } },
+          freelancer: { select: { id: true, user: { select: { name: true } } } },
+          messages: {
+            orderBy: { createdAt: "desc" },
+            take: 1,
+            select: { body: true, createdAt: true },
+          },
+        },
+      }),
+      this.prismaService.conversation.count({ where }),
+    ]);
+
+    const data: ConversationListItemDto[] = conversations.map((c) => {
       const lastMsg = c.messages[0];
       const otherParty: ConversationOtherPartyDto =
         role === Role.USER
@@ -52,6 +71,18 @@ export class ConversationService implements IConversationService {
         updatedAt: c.updatedAt,
       };
     });
+    const totalPages = Math.ceil(totalItems / pageSize);
+    return {
+      data,
+      meta: {
+        page,
+        pageSize,
+        totalItems,
+        totalPages,
+        hasNext: page < totalPages,
+        hasPrev: page > 1,
+      },
+    };
   }
 
   async getByFreelancer(

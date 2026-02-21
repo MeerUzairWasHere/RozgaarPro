@@ -3,6 +3,8 @@ import {
   ConversationListItemDto,
   MessageDto,
 } from "../dto/conversation.dto";
+import { ListQueryDto } from "../dto";
+import { PaginatedResponse } from "../types";
 
 export interface StartConversationResult {
   conversationId: string;
@@ -14,7 +16,8 @@ export interface IConversationService {
     userId: string,
     freelancerId: string | null,
     role: Role,
-  ): Promise<ConversationListItemDto[]>;
+    query: ListQueryDto,
+  ): Promise<PaginatedResponse<ConversationListItemDto>>;
 
   getByFreelancer(
     userId: string,

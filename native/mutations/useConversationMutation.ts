@@ -1,4 +1,5 @@
 import {
+  useInfiniteQuery,
   useMutation,
   useQueryClient,
   UseMutationResult,
@@ -7,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import { conversationApiClient } from "@/api";
 import { QUERY_KEYS } from "@/constants";
+import { ListQuery } from "@/types";
 import {
   Conversation,
   Message,
@@ -16,10 +18,24 @@ import {
 const CONVERSATIONS_POLL_INTERVAL_MS = 8000;
 const MESSAGES_POLL_INTERVAL_MS = 5000;
 
-export const useGetConversations = (): UseQueryResult<Conversation[]> => {
-  return useQuery({
-    queryKey: QUERY_KEYS.CONVERSATIONS.all,
-    queryFn: () => conversationApiClient.getConversations(),
+export const useGetConversations = (query: ListQuery = {}) => {
+  return useInfiniteQuery({
+    queryKey: QUERY_KEYS.CONVERSATIONS.listQuery(query),
+    initialPageParam: 1,
+    queryFn: ({ pageParam }) =>
+      conversationApiClient.getConversations({
+        ...query,
+        pagination: {
+          page: pageParam,
+          pageSize: query.pagination?.pageSize ?? 20,
+        },
+      }),
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNext) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
     refetchInterval: CONVERSATIONS_POLL_INTERVAL_MS,
   });
 };
@@ -62,7 +78,10 @@ export const useStartConversation = (): UseMutationResult<
     mutationFn: ({ freelancerId, text }) =>
       conversationApiClient.startConversation(freelancerId, text),
     onSuccess: (_, { freelancerId }) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONVERSATIONS.all });
+      queryClient.invalidateQueries({
+        predicate: (q) =>
+          q.queryKey[0] === QUERY_KEYS.CONVERSATIONS.all[0],
+      });
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.CONVERSATIONS.byFreelancer(freelancerId),
       });
@@ -81,7 +100,10 @@ export const useSendMessage = (
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.CONVERSATIONS.messages(conversationId),
       });
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.CONVERSATIONS.all });
+      queryClient.invalidateQueries({
+        predicate: (q) =>
+          q.queryKey[0] === QUERY_KEYS.CONVERSATIONS.all[0],
+      });
     },
   });
 };

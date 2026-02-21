@@ -7,6 +7,7 @@ import {
   conversationIdParamSchema,
   freelancerIdParamSchema,
   validateGetMessagesQuery,
+  validateListConversationsInput,
   validateSendMessageInput,
   validateStartConversationInput,
 } from "../validators/conversation.validator";
@@ -18,7 +19,15 @@ const userOnly = rolesGuard(Role.USER);
 
 router
   .route("/")
-  .get(authGuard, userOrFreelancer, conversationController.listMyConversations)
+  .post(
+    authGuard,
+    userOrFreelancer,
+    validate({ body: validateListConversationsInput }),
+    conversationController.listMyConversations,
+  );
+
+router
+  .route("/start")
   .post(
     authGuard,
     userOnly,

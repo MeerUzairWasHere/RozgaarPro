@@ -1,4 +1,5 @@
 import { api } from "@/lib";
+import { ListQuery, PaginatedResponse } from "@/types";
 import {
   Conversation,
   Message,
@@ -6,8 +7,13 @@ import {
 } from "@/types/conversation.types";
 
 export const conversationApiClient = {
-  getConversations: async (): Promise<Conversation[]> => {
-    const { data } = await api.get<Conversation[]>("/conversations");
+  getConversations: async (
+    query: ListQuery,
+  ): Promise<PaginatedResponse<Conversation>> => {
+    const { data } = await api.post<PaginatedResponse<Conversation>>(
+      "/conversations",
+      query,
+    );
     return data;
   },
 
@@ -32,10 +38,10 @@ export const conversationApiClient = {
     freelancerId: string,
     text: string,
   ): Promise<StartConversationResult> => {
-    const { data } = await api.post<StartConversationResult>("/conversations", {
-      freelancerId,
-      text,
-    });
+    const { data } = await api.post<StartConversationResult>(
+      "/conversations/start",
+      { freelancerId, text },
+    );
     return data;
   },
 

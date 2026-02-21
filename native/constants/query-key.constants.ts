@@ -30,6 +30,8 @@ export const QUERY_KEYS = {
   },
   CONVERSATIONS: {
     all: ["conversations"] as const,
+    listQuery: (query: ListQuery) =>
+      [...QUERY_KEYS.CONVERSATIONS.all, JSON.stringify(query)] as const,
     byFreelancer: (freelancerId: string) =>
       [...QUERY_KEYS.CONVERSATIONS.all, "byFreelancer", freelancerId] as const,
     messages: (conversationId: string) =>

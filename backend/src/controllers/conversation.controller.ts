@@ -1,6 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
 import { Role } from "@prisma/client";
+import { ListQueryDto } from "../dto";
 import { IConversationService } from "../interfaces/conversation.interface";
 import { currentUser, getBody } from "../decorators";
 
@@ -12,10 +13,12 @@ export class ConversationController {
     res: Response,
   ): Promise<void> => {
     const user = currentUser(req);
+    const query = (getBody(req) ?? {}) as ListQueryDto;
     const result = await this.conversationService.listMyConversations(
       user.id,
       user.freelancerId ?? null,
       user.role as Role,
+      query,
     );
     res.status(StatusCodes.OK).json(result);
   };
