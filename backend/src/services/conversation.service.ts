@@ -19,14 +19,14 @@ import {
 import { IPrismaService } from "../interfaces/prisma.interface";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { PaginatedResponse } from "../types";
-import {
-  buildOrderBy,
-  buildPagination,
-  buildWhere,
-} from "../utils";
+import { buildOrderBy, buildPagination, buildWhere } from "../utils";
+import { IStorageService } from "../interfaces";
 
 export class ConversationService implements IConversationService {
-  constructor(private prismaService: IPrismaService) {}
+  constructor(
+    private prismaService: IPrismaService,
+    private storageService: IStorageService,
+  ) {}
 
   async listMyConversations(
     userId: string,
@@ -35,9 +35,7 @@ export class ConversationService implements IConversationService {
     query: ListQueryDto,
   ): Promise<PaginatedResponse<ConversationListItemDto>> {
     const baseWhere: Record<string, unknown> =
-      role === Role.USER
-        ? { userId }
-        : { freelancerId: freelancerId! };
+      role === Role.USER ? { userId } : { freelancerId: freelancerId! };
 
     const defaultFilters: ListFilter[] =
       role === Role.USER
@@ -60,44 +58,14 @@ export class ConversationService implements IConversationService {
       { field: "updatedAt", direction: SortDirection.DESC },
     ];
 
-    const whereFromFilters = buildWhere(
+    const where = buildWhere(
       [...defaultFilters, ...(query.filters ?? [])],
       baseWhere,
     );
 
-    const searchTerm = query.search?.term?.trim();
-    const searchWhere =
-      searchTerm != null && searchTerm.length > 0
-        ? {
-            OR: [
-              {
-                user: {
-                  name: { contains: searchTerm, mode: "insensitive" as const },
-                },
-              },
-              {
-                freelancer: {
-                  user: {
-                    name: {
-                      contains: searchTerm,
-                      mode: "insensitive" as const,
-                    },
-                  },
-                },
-              },
-            ],
-          }
-        : undefined;
-
-    const where =
-      searchWhere != null
-        ? { AND: [whereFromFilters, searchWhere] }
-        : whereFromFilters;
-
-    const orderBy = buildOrderBy([
-      ...defaultSort,
-      ...(query.sort ?? []),
-    ]) ?? [{ updatedAt: "desc" }];
+    const orderBy = buildOrderBy([...defaultSort, ...(query.sort ?? [])]) ?? [
+      { updatedAt: "desc" },
+    ];
 
     const { page, pageSize, skip, take } = buildPagination(
       query.pagination ?? { page: 1, pageSize: 20 },
@@ -112,7 +80,10 @@ export class ConversationService implements IConversationService {
         include: {
           user: { select: { id: true, name: true } },
           freelancer: {
-            select: { id: true, user: { select: { name: true } } },
+            select: {
+              id: true,
+              user: { select: { name: true, profileImage: true } },
+            },
           },
           messages: {
             orderBy: { createdAt: "desc" },
@@ -123,7 +94,6 @@ export class ConversationService implements IConversationService {
       }),
       this.prismaService.conversation.count({ where }),
     ]);
-
     const data: ConversationListItemDto[] = conversations.map((c) => {
       const lastMsg = c.messages[0];
       const otherParty: ConversationOtherPartyDto =
@@ -133,11 +103,16 @@ export class ConversationService implements IConversationService {
       const lastMessage: ConversationLastMessageDto | undefined = lastMsg
         ? { body: lastMsg.body, createdAt: lastMsg.createdAt }
         : undefined;
+
+      const profileImageUrl = c.freelancer.user.profileImage
+        ? this.storageService.getPublicUrl(c.freelancer.user.profileImage)
+        : null;
       return {
         id: c.id,
         otherParty,
         lastMessage,
         updatedAt: c.updatedAt,
+        profileImageUrl,
       };
     });
 
@@ -163,7 +138,12 @@ export class ConversationService implements IConversationService {
       where: { userId_freelancerId: { userId, freelancerId } },
       include: {
         user: { select: { id: true, name: true } },
-        freelancer: { select: { id: true, user: { select: { name: true } } } },
+        freelancer: {
+          select: {
+            id: true,
+            user: { select: { name: true, profileImage: true } },
+          },
+        },
         messages: {
           orderBy: { createdAt: "desc" },
           take: 1,
@@ -180,11 +160,15 @@ export class ConversationService implements IConversationService {
     const lastMessage: ConversationLastMessageDto | undefined = lastMsg
       ? { body: lastMsg.body, createdAt: lastMsg.createdAt }
       : undefined;
+    const profileImageUrl = c.freelancer.user.profileImage
+      ? this.storageService.getPublicUrl(c.freelancer.user.profileImage)
+      : null;
     return {
       id: c.id,
       otherParty,
       lastMessage,
       updatedAt: c.updatedAt,
+      profileImageUrl,
     };
   }
 

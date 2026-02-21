@@ -99,7 +99,10 @@ class Container {
       this.storageService,
       this.profileImageService,
     );
-    this.conversationService = new ConversationService(this.prismaService);
+    this.conversationService = new ConversationService(
+      this.prismaService,
+      this.storageService,
+    );
 
     // Initialize Controllers
     this.authController = new AuthController(this.authService);

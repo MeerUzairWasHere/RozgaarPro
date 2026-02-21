@@ -23,7 +23,7 @@ export const validateListConversationsInput = z.object({
 });
 
 export const validateStartConversationInput = z.object({
-  freelancerId: z.string().uuid({ message: "Invalid freelancerId" }),
+  freelancerId: z.uuid({ message: "Invalid freelancerId" }),
   text: messageBodySchema,
 });
 
@@ -32,11 +32,11 @@ export const validateSendMessageInput = z.object({
 });
 
 export const conversationIdParamSchema = z.object({
-  conversationId: z.string().uuid("conversationId is required and must be a valid UUID"),
+  conversationId: z.uuid("conversationId is required and must be a valid UUID"),
 });
 
 export const freelancerIdParamSchema = z.object({
-  freelancerId: z.string().uuid("freelancerId is required and must be a valid UUID"),
+  freelancerId: z.uuid("freelancerId is required and must be a valid UUID"),
 });
 
 export const validateGetMessagesQuery = z.object({

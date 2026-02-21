@@ -12,6 +12,7 @@ export interface ConversationListItemDto {
   id: string;
   otherParty: ConversationOtherPartyDto;
   lastMessage?: ConversationLastMessageDto;
+  profileImageUrl: string | null;
   updatedAt: Date;
 }
 

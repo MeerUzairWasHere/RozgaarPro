@@ -50,9 +50,9 @@ function ConversationRow({ item }: { item: Conversation }) {
       }
       activeOpacity={0.7}
     >
-      {item.profile_image_url !== null ? (
+      {item.profileImageUrl !== null ? (
         <Image
-          source={{ uri: item.profile_image_url }}
+          source={{ uri: item.profileImageUrl }}
           alt={item.otherParty.name}
           className="w-14 h-14 rounded-md bg-brand/40 dark:bg-brand/40"
         />

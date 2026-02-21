@@ -13,7 +13,7 @@ export interface Conversation {
   otherParty: ConversationOtherParty;
   lastMessage?: ConversationLastMessage;
   updatedAt: string;
-  profile_image_url: string | null;
+  profileImageUrl: string | null;
 }
 
 export interface Message {
