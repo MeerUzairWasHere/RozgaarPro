@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { RelativePathString, router } from "expo-router";
@@ -15,7 +16,7 @@ import { QUERY_KEYS } from "@/constants";
 import { getConversationRoute } from "@/constants/routes.constants";
 import { Conversation } from "@/types/conversation.types";
 import InitialAvatar from "@/components/common/InitialAvatar";
-import { EmptyState } from "@/components";
+import { EmptyState, FreelancerListSkeleton } from "@/components";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 function formatConversationTime(isoDate: string): string {
@@ -49,11 +50,20 @@ function ConversationRow({ item }: { item: Conversation }) {
       }
       activeOpacity={0.7}
     >
-      <InitialAvatar
-        name={item.otherParty.name}
-        size={48}
-        className="rounded-full bg-brand/40 dark:bg-brand/40 items-center justify-center"
-      />
+      {item.profile_image_url !== null ? (
+        <Image
+          source={{ uri: item.profile_image_url }}
+          alt={item.otherParty.name}
+          className="w-14 h-14 rounded-md bg-brand/40 dark:bg-brand/40"
+        />
+      ) : (
+        <InitialAvatar
+          name={item.otherParty.name}
+          size={48}
+          className="rounded-md  bg-brand/40 dark:bg-brand/40 items-center justify-center"
+        />
+      )}
+
       <View className="flex-1 min-w-0">
         <View className="flex-row justify-between items-center gap-2">
           <Text
@@ -81,51 +91,49 @@ function ConversationRow({ item }: { item: Conversation }) {
 
 export default function MessagesScreen() {
   const { t } = useTranslation();
-  const {
-    data,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useGetConversations({});
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetConversations({});
   const { items: conversations } = extractInfiniteList(data);
   const { refreshing, onRefresh } = usePullToRefresh({
     queryKey: QUERY_KEYS.CONVERSATIONS.listQuery({}),
   });
   const tabBarHeight = useBottomTabBarHeight();
-
   return (
     <View className="flex-1 bg-primary-50 dark:bg-primary-950">
-      <FlatList
-        data={conversations}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ConversationRow item={item} />}
-        contentContainerStyle={{
-          padding: 16,
-          paddingBottom: 20 + tabBarHeight,
-          flexGrow: 1,
-        }}
-        onEndReached={() => {
-          if (hasNextPage) fetchNextPage();
-        }}
-        onEndReachedThreshold={0.4}
-        ListFooterComponent={
-          isFetchingNextPage ? (
-            <ActivityIndicator style={{ marginVertical: 16 }} />
-          ) : null
-        }
-        ListEmptyComponent={
-          !isLoading ? (
-            <EmptyState
-              title={t("no_conversations")}
-              message={t("your_conversations")}
-            />
-          ) : null
-        }
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      />
+      {isLoading ? (
+        <FreelancerListSkeleton />
+      ) : (
+        <FlatList
+          data={conversations}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ConversationRow item={item} />}
+          contentContainerStyle={{
+            padding: 16,
+            paddingBottom: 20 + tabBarHeight,
+            flexGrow: 1,
+          }}
+          onEndReached={() => {
+            if (hasNextPage) fetchNextPage();
+          }}
+          onEndReachedThreshold={0.4}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator style={{ marginVertical: 16 }} />
+            ) : null
+          }
+          ListEmptyComponent={
+            !isLoading ? (
+              <EmptyState
+                title={t("no_conversations")}
+                message={t("your_conversations")}
+              />
+            ) : null
+          }
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
+      )}
     </View>
   );
 }

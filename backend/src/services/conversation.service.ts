@@ -5,11 +5,25 @@ import {
   ConversationOtherPartyDto,
   MessageDto,
 } from "../dto/conversation.dto";
-import { ListQueryDto } from "../dto";
-import { IConversationService, StartConversationResult } from "../interfaces/conversation.interface";
+import {
+  FilterOperator,
+  ListFilter,
+  ListQueryDto,
+  ListSort,
+  SortDirection,
+} from "../dto";
+import {
+  IConversationService,
+  StartConversationResult,
+} from "../interfaces/conversation.interface";
 import { IPrismaService } from "../interfaces/prisma.interface";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
 import { PaginatedResponse } from "../types";
+import {
+  buildOrderBy,
+  buildPagination,
+  buildWhere,
+} from "../utils";
 
 export class ConversationService implements IConversationService {
   constructor(private prismaService: IPrismaService) {}
@@ -20,31 +34,86 @@ export class ConversationService implements IConversationService {
     role: Role,
     query: ListQueryDto,
   ): Promise<PaginatedResponse<ConversationListItemDto>> {
-    const where =
+    const baseWhere: Record<string, unknown> =
       role === Role.USER
         ? { userId }
         : { freelancerId: freelancerId! };
 
-    const page = query.pagination?.page ?? 1;
-    const pageSize = query.pagination?.pageSize ?? 20;
-    const skip = (page - 1) * pageSize;
+    const defaultFilters: ListFilter[] =
+      role === Role.USER
+        ? [
+            {
+              field: "userId",
+              operator: FilterOperator.EQUAL_TO,
+              value: userId,
+            },
+          ]
+        : [
+            {
+              field: "freelancerId",
+              operator: FilterOperator.EQUAL_TO,
+              value: freelancerId!,
+            },
+          ];
 
-    const sortField = query.sort?.[0]?.field ?? "updatedAt";
-    const sortDirection = query.sort?.[0]?.direction ?? "desc";
-    const orderBy =
-      sortField === "updatedAt"
-        ? { updatedAt: sortDirection as "asc" | "desc" }
-        : { updatedAt: "desc" as const };
+    const defaultSort: ListSort[] = [
+      { field: "updatedAt", direction: SortDirection.DESC },
+    ];
+
+    const whereFromFilters = buildWhere(
+      [...defaultFilters, ...(query.filters ?? [])],
+      baseWhere,
+    );
+
+    const searchTerm = query.search?.term?.trim();
+    const searchWhere =
+      searchTerm != null && searchTerm.length > 0
+        ? {
+            OR: [
+              {
+                user: {
+                  name: { contains: searchTerm, mode: "insensitive" as const },
+                },
+              },
+              {
+                freelancer: {
+                  user: {
+                    name: {
+                      contains: searchTerm,
+                      mode: "insensitive" as const,
+                    },
+                  },
+                },
+              },
+            ],
+          }
+        : undefined;
+
+    const where =
+      searchWhere != null
+        ? { AND: [whereFromFilters, searchWhere] }
+        : whereFromFilters;
+
+    const orderBy = buildOrderBy([
+      ...defaultSort,
+      ...(query.sort ?? []),
+    ]) ?? [{ updatedAt: "desc" }];
+
+    const { page, pageSize, skip, take } = buildPagination(
+      query.pagination ?? { page: 1, pageSize: 20 },
+    );
 
     const [conversations, totalItems] = await Promise.all([
       this.prismaService.conversation.findMany({
         where,
         orderBy,
         skip,
-        take: pageSize,
+        take,
         include: {
           user: { select: { id: true, name: true } },
-          freelancer: { select: { id: true, user: { select: { name: true } } } },
+          freelancer: {
+            select: { id: true, user: { select: { name: true } } },
+          },
           messages: {
             orderBy: { createdAt: "desc" },
             take: 1,
@@ -71,6 +140,7 @@ export class ConversationService implements IConversationService {
         updatedAt: c.updatedAt,
       };
     });
+
     const totalPages = Math.ceil(totalItems / pageSize);
     return {
       data,
@@ -192,7 +262,8 @@ export class ConversationService implements IConversationService {
       role === Role.USER
         ? conv.userId === userId
         : conv.freelancerId === freelancerId;
-    if (!isParticipant) throw new ForbiddenError("Not a participant in this conversation");
+    if (!isParticipant)
+      throw new ForbiddenError("Not a participant in this conversation");
 
     const sinceDate = since ? new Date(since) : undefined;
     const isValidSince = sinceDate && !isNaN(sinceDate.getTime());
@@ -261,7 +332,11 @@ export class ConversationService implements IConversationService {
     senderRole: Role,
     text: string,
   ): Promise<MessageDto> {
-    const { allowed } = await this.canSend(conversationId, senderUserId, senderRole);
+    const { allowed } = await this.canSend(
+      conversationId,
+      senderUserId,
+      senderRole,
+    );
     if (!allowed) {
       throw new BadRequestError(
         "You can only send one message to start. Wait for the freelancer to reply.",

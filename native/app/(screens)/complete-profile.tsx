@@ -3,7 +3,7 @@ import { router } from "expo-router";
 import {
   CustomInput,
   CustomTouchableOpacityButton,
-  ErrorBanner,
+  StatusBanner,
 } from "@/components";
 import {
   View,
@@ -208,7 +208,11 @@ export default function CompleteProfile() {
         </View>
         {generalError && (
           <Animated.View entering={FadeInRight} className="px-4 mb-4">
-            <ErrorBanner message={generalError} onDismiss={clearErrors} />
+            <StatusBanner
+              variant="error"
+              message={generalError}
+              onDismiss={clearErrors}
+            />
           </Animated.View>
         )}
 
@@ -430,14 +434,18 @@ export default function CompleteProfile() {
                           onPress={handleTakeIdPhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">{t("retake")}</Text>
+                          <Text className="text-sm font-medium">
+                            {t("retake")}
+                          </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickIdImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">{t("gallery")}</Text>
+                          <Text className="text-sm font-medium">
+                            {t("gallery")}
+                          </Text>
                         </TouchableOpacity>
                       </View>
                     </>
@@ -495,14 +503,18 @@ export default function CompleteProfile() {
                           onPress={handleTakeProfilePhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">{t("retake")}</Text>
+                          <Text className="text-sm font-medium">
+                            {t("retake")}
+                          </Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickProfileImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">{t("gallery")}</Text>
+                          <Text className="text-sm font-medium">
+                            {t("gallery")}
+                          </Text>
                         </TouchableOpacity>
                       </View>
                     </>

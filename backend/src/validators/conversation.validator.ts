@@ -1,5 +1,10 @@
 import { z } from "zod";
-import { validatePaginationInput, sortableFields } from "./zod.schema";
+import {
+  filterableFields,
+  searchSchema,
+  sortableFields,
+  validatePaginationInput,
+} from "./zod.schema";
 
 const messageBodySchema = z
   .string()
@@ -8,9 +13,13 @@ const messageBodySchema = z
 
 export const validateListConversationsInput = z.object({
   pagination: validatePaginationInput.optional(),
+  filters: z
+    .array(filterableFields(["updatedAt"]))
+    .optional(),
   sort: z
     .array(sortableFields(["updatedAt"]))
     .optional(),
+  search: searchSchema.optional(),
 });
 
 export const validateStartConversationInput = z.object({

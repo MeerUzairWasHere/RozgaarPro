@@ -37,7 +37,6 @@ export class RekognitionService implements IRekognitionService {
     }
 
     if ((face.Quality?.Sharpness ?? 0) < 60) {
-      console.log(face.Quality?.Sharpness);
       throw new BadRequestError("Image is too blurry.");
     }
 
