@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import {
   View,
+  Text,
   Pressable,
   useColorScheme,
   FlatList,
@@ -8,7 +9,6 @@ import {
   type NativeSyntheticEvent,
   type NativeScrollEvent,
 } from "react-native";
-import { AppText as Text } from "@/components";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
@@ -16,29 +16,28 @@ import { ROUTES } from "@/constants";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomTouchableOpacityButton } from "@/components";
 import { cn } from "@/utils";
-import { useTranslation } from "react-i18next";
-
-const getSlides = (t: (key: string) => string) => [
+const slides = [
   {
     icon: Search,
-    titleKey: "find_skilled_freelancers" as const,
-    descriptionKey: "find_freelancers_desc" as const,
+    title: "Find Skilled Freelancers",
+    description:
+      "Search and connect with trusted local professionals — plumbers, electricians, carpenters, and more.",
   },
   {
     icon: ShieldCheck,
-    titleKey: "verified_professionals" as const,
-    descriptionKey: "verified_professionals_desc" as const,
+    title: "Verified Professionals",
+    description:
+      "Every freelancer is phone-verified. Hire with confidence knowing you're getting quality help.",
   },
   {
     icon: Briefcase,
-    titleKey: "work_opportunities" as const,
-    descriptionKey: "work_opportunities_desc" as const,
+    title: "Work Opportunities",
+    description:
+      "Freelancers: Get discovered by customers in your area. No middlemen, direct connections.",
   },
 ];
 
 export default function OnboardingScreen() {
-  const { t } = useTranslation();
-  const slides = getSlides(t);
   const [currentSlide, setCurrentSlide] = useState(0);
   const flatListRef = useRef<FlatList>(null);
   const { width } = useWindowDimensions();
@@ -84,7 +83,7 @@ export default function OnboardingScreen() {
           className="rounded-full px-4 py-2 overflow-hidden"
         >
           <Text className="text-primary-500 dark:text-primary-400 font-medium">
-            {t("skip")}
+            Skip
           </Text>
         </Pressable>
       </View>
@@ -104,24 +103,27 @@ export default function OnboardingScreen() {
             offset: slideWidth * index,
             index,
           })}
-          renderItem={({ item: slide }) => (
+          renderItem={({ item: slide }) => {
+            const Icon = slide.icon;
+            return (
             <View
               style={{ width: slideWidth }}
               className="flex-1 justify-center items-center"
             >
               <View className="rounded-full items-center justify-center mb-10">
-                <slide.icon size={56} color={isDark ? "#fff" : "#000"} />
+                <Icon size={56} color={isDark ? "#fff" : "#000"} />
               </View>
 
               <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">
-                {t(slide.titleKey)}
+                {slide.title}
               </Text>
 
               <Text className="text-base text-primary-600 dark:text-primary-200 text-center leading-6 max-w-[280px]">
-                {t(slide.descriptionKey)}
+                {slide.description}
               </Text>
             </View>
-          )}
+          );
+          }}
         />
       </View>
 
@@ -147,7 +149,7 @@ export default function OnboardingScreen() {
         <CustomTouchableOpacityButton
           onPress={handleNext}
           title={
-            currentSlide === slides.length - 1 ? t("get_started") : t("next")
+            currentSlide === slides.length - 1 ? "Get Started" : "Next"
           }
         />
       </View>

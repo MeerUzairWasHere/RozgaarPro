@@ -1,7 +1,7 @@
 import { AVAILABILITY_STATUS } from "@/types";
 import clsx from "clsx";
 import { View } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 
 const availabilityConfig = {
   AVAILABLE: {

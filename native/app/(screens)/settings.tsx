@@ -1,17 +1,13 @@
 import { useState } from "react";
 import {
   View,
+  Text,
   ScrollView,
   Pressable,
-  Modal,
   Switch,
   TouchableOpacity,
-  I18nManager,
 } from "react-native";
-import { AppText as Text } from "@/components";
-import { useTranslation } from "react-i18next";
 import {
-  Globe,
   ChevronRight,
   Moon,
   Bell,
@@ -21,10 +17,8 @@ import {
 } from "lucide-react-native";
 import { AppHeader } from "@/components";
 import { useThemeStore } from "@/store";
-import { useAppLanguage } from "@/src/i18n/useAppLanguage";
-import type { LanguageCode } from "@/src/i18n/languages";
 
-const isRTL = I18nManager.isRTL;
+const isRTL = false;
 
 function SectionTitle({
   label,
@@ -143,9 +137,6 @@ function SettingsRow({
 }
 
 export default function Settings() {
-  const { t } = useTranslation();
-  const { language, setLanguage, LANGUAGES } = useAppLanguage();
-  const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const colorScheme = useThemeStore((state) => state.colorScheme);
   const setColorScheme = useThemeStore((state) => state.setColorScheme);
   const [pushEnabled, setPushEnabled] = useState(true);
@@ -153,13 +144,6 @@ export default function Settings() {
   const isDark = colorScheme === "dark";
   const chevronColor = isDark ? "#B3A5F5" : "#6B4EEA";
   const iconColor = isDark ? "#B3A5F5" : "#6B4EEA";
-
-  const currentLang = LANGUAGES[language];
-
-  const handleSelectLanguage = async (code: LanguageCode) => {
-    await setLanguage(code);
-    setLanguageModalVisible(false);
-  };
 
   const handleChangePassword = () => {
     // TODO: Navigate to change password screen or open modal
@@ -175,7 +159,7 @@ export default function Settings() {
 
   return (
     <View className="flex-1 bg-primary-50 dark:bg-primary-950">
-      <AppHeader showBack title={t("settings")} />
+      <AppHeader showBack title="Settings" />
 
       <ScrollView
         className="flex-1 px-4 py-6"
@@ -184,13 +168,13 @@ export default function Settings() {
       >
         {/* Appearance */}
         <View className="mb-6">
-          <SectionTitle label={t("appearance")} />
+          <SectionTitle label="Appearance" />
           <SettingsCard>
             <SettingsRow
               icon={Moon}
               iconColor={iconColor}
-              title={t("dark_mode")}
-              subtitle={t("dark_mode_desc")}
+              title="Dark Mode"
+              subtitle="Easier on the eyes at night"
               right={
                 <Switch
                   value={isDark}
@@ -210,13 +194,13 @@ export default function Settings() {
 
         {/* Notifications */}
         <View className="mb-6">
-          <SectionTitle label={t("notifications")} />
+          <SectionTitle label="Notifications" />
           <SettingsCard className="divide-y divide-primary-200 dark:divide-primary-800">
             <SettingsRow
               icon={Bell}
               iconColor={iconColor}
-              title={t("push_notifications")}
-              subtitle={t("push_notifications_desc")}
+              title="Push Notifications"
+              subtitle="Get notified about new jobs"
               right={
                 <Switch
                   value={pushEnabled}
@@ -232,8 +216,8 @@ export default function Settings() {
             <SettingsRow
               icon={Bell}
               iconColor={iconColor}
-              title={t("sms_alerts")}
-              subtitle={t("sms_alerts_desc")}
+              title="SMS Alerts"
+              subtitle="Receive SMS for important updates"
               right={
                 <Switch
                   value={smsEnabled}
@@ -251,73 +235,34 @@ export default function Settings() {
 
         {/* Privacy & Security */}
         <View className="mb-6">
-          <SectionTitle label={t("privacy_security")} />
+          <SectionTitle label="Privacy & Security" />
           <SettingsCard className="divide-y divide-primary-200 dark:divide-primary-800">
             <SettingsRow
               icon={Lock}
               iconColor={iconColor}
-              title={t("change_password")}
+              title="Change Password"
               onPress={handleChangePassword}
               right={<ChevronRight size={20} color={chevronColor} />}
             />
             <SettingsRow
               icon={Shield}
               iconColor={iconColor}
-              title={t("privacy_policy")}
+              title="Privacy Policy"
               onPress={handlePrivacyPolicy}
               right={<ChevronRight size={20} color={chevronColor} />}
             />
           </SettingsCard>
         </View>
 
-        {/* Language */}
-        <View className="mb-6">
-          <SectionTitle label={t("language")} />
-          <SettingsCard>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => setLanguageModalVisible(true)}
-              style={{ flexDirection: isRTL ? "row-reverse" : "row" }}
-              className="flex-row items-center justify-between p-4"
-            >
-              <View
-                className="flex-row items-center gap-3 flex-1"
-                style={{ flexDirection: isRTL ? "row-reverse" : "row" }}
-              >
-                <View className="w-10 h-10 bg-primary-100 dark:bg-primary-800 rounded-xl items-center justify-center">
-                  <Globe size={20} color={iconColor} />
-                </View>
-                <View className="flex-1">
-                  <Text
-                    className="font-medium text-primary-950 dark:text-primary-50"
-                    style={{ textAlign: isRTL ? "right" : "left" }}
-                  >
-                    {t("app_language")}
-                  </Text>
-                  <Text
-                    className="text-xs text-primary-600 dark:text-primary-400 mt-0.5"
-                    style={{ textAlign: isRTL ? "right" : "left" }}
-                  >
-                    {currentLang?.nativeLabel ??
-                      currentLang?.label ??
-                      language}
-                  </Text>
-                </View>
-              </View>
-              <ChevronRight size={20} color={chevronColor} />
-            </TouchableOpacity>
-          </SettingsCard>
-        </View>
-
         {/* Danger Zone */}
         <View className="mb-2">
-          <SectionTitle label={t("danger_zone")} destructive />
+          <SectionTitle label="Danger Zone" destructive />
           <SettingsCard className="border-accent-red/30 dark:border-accent-red/30">
             <SettingsRow
               icon={Trash2}
               iconColor={iconColor}
-              title={t("delete_account")}
-              subtitle={t("delete_account_desc")}
+              title="Delete Account"
+              subtitle="Permanently remove your data"
               onPress={handleDeleteAccount}
               right={<ChevronRight size={20} color="#dc2626" />}
               destructive
@@ -325,70 +270,6 @@ export default function Settings() {
           </SettingsCard>
         </View>
       </ScrollView>
-
-      {/* Language picker modal */}
-      <Modal
-        visible={languageModalVisible}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setLanguageModalVisible(false)}
-        statusBarTranslucent
-      >
-        <Pressable
-          style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" }}
-          onPress={() => setLanguageModalVisible(false)}
-        >
-          <Pressable
-            style={{
-              backgroundColor: isDark ? "#1a1a1a" : "#ffffff",
-              borderTopLeftRadius: 24,
-              borderTopRightRadius: 24,
-              paddingTop: 16,
-              paddingBottom: 32,
-              paddingHorizontal: 16,
-            }}
-            onPress={() => {}}
-          >
-            <Text
-              className="text-sm font-semibold text-primary-500 dark:text-primary-400 uppercase tracking-wider mb-4 px-1"
-              style={{ textAlign: isRTL ? "right" : "left" }}
-            >
-              {t("app_language_desc")}
-            </Text>
-            {(Object.keys(LANGUAGES) as LanguageCode[]).map((code) => {
-              const info = LANGUAGES[code];
-              const isSelected = language === code;
-              return (
-                <Pressable
-                  key={code}
-                  onPress={() => handleSelectLanguage(code)}
-                  className="flex-row items-center justify-between py-4 px-3 rounded-xl active:opacity-80 mb-1"
-                  style={{
-                    flexDirection: isRTL ? "row-reverse" : "row",
-                    backgroundColor: isSelected
-                      ? isDark
-                        ? "rgba(179,165,245,0.15)"
-                        : "rgba(107,78,234,0.1)"
-                      : "transparent",
-                  }}
-                >
-                  <Text
-                    className="text-base font-medium text-primary-950 dark:text-primary-50 flex-1"
-                    style={{ textAlign: isRTL ? "right" : "left" }}
-                  >
-                    {info.nativeLabel}
-                  </Text>
-                  {isSelected && (
-                    <View className="w-6 h-6 rounded-full bg-brand dark:bg-brand-500 items-center justify-center">
-                      <Text className="text-white text-xs font-bold">✓</Text>
-                    </View>
-                  )}
-                </Pressable>
-              );
-            })}
-          </Pressable>
-        </Pressable>
-      </Modal>
     </View>
   );
 }

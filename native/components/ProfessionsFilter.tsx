@@ -1,7 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "./common/AppText";
-import { useTranslation } from "react-i18next";
+import { Text } from "react-native";
 import { useGetProfessionsFilterList } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { ProfessionsFilterFilterSkeleton } from "./Skeletons";
@@ -10,7 +9,6 @@ import { ROUTES } from "@/constants";
 import SectionHeader from "./SectionHeader";
 
 export default function ProfessionsFilter() {
-  const { t } = useTranslation();
   const {
     coordinates: { latitude, longitude, accuracy },
   } = useLocationStore();
@@ -22,7 +20,7 @@ export default function ProfessionsFilter() {
   if (!data) {
     return (
       <>
-        <SectionHeader title={t("what_do_you_need")} />
+        <SectionHeader title="What do you need?" />
         <ProfessionsFilterFilterSkeleton />
       </>
     );
@@ -32,7 +30,7 @@ export default function ProfessionsFilter() {
 
   return (
     <View>
-      <SectionHeader title={t("what_do_you_need")} />
+      <SectionHeader title="What do you need?" />
 
       <View className="flex-row flex-wrap -mx-1.5">
         {data?.map(({ profession_id, profession_name, count }) => (
@@ -54,7 +52,7 @@ export default function ProfessionsFilter() {
                 {profession_name}
               </Text>
               <Text className="text-sm text-brand-600 dark:text-brand-400 text-center">
-                {t("count_nearby", { count })}
+                {`${count} nearby`}
               </Text>
             </TouchableOpacity>
           </View>

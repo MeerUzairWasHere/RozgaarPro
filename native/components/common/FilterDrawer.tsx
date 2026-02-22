@@ -1,5 +1,5 @@
 import { Modal, View, Pressable, useColorScheme } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 import { Star, MapPin, ShieldCheck } from "lucide-react-native";
 import { useState } from "react";
 import { ListFilter, ListSort, FilterOperator, SortDirection } from "@/types";

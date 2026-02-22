@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 import {
   AlertCircle,
   CheckCircle,

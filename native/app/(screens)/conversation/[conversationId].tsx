@@ -2,16 +2,15 @@ import { useState, useRef, useEffect } from "react";
 import {
   View,
   FlatList,
+  Text,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { AppText as Text } from "@/components";
 import { useLocalSearchParams } from "expo-router";
 import { AppHeader } from "@/components";
 import { useGetMessages, useSendMessage } from "@/mutations";
-import { useTranslation } from "react-i18next";
 import { cn } from "@/utils";
 import { Message } from "@/types/conversation.types";
 import { useAuthStore } from "@/store";
@@ -41,7 +40,6 @@ function MessageBubble({ message }: { message: Message }) {
 }
 
 export default function ConversationThreadScreen() {
-  const { t } = useTranslation();
   const { conversationId, otherPartyName } = useLocalSearchParams<{
     conversationId: string;
     otherPartyName?: string;
@@ -86,7 +84,7 @@ export default function ConversationThreadScreen() {
 
   return (
     <>
-      <AppHeader showBack title={otherPartyName ?? t("conversation")} />
+      <AppHeader showBack title={otherPartyName ?? "Conversation"} />
       <KeyboardAvoidingView
         className="flex-1 bg-primary-50 dark:bg-primary-950"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
@@ -94,7 +92,7 @@ export default function ConversationThreadScreen() {
         {isLoading ? (
           <View className="flex-1 items-center justify-center">
             <Text className="text-primary-600 dark:text-primary-400">
-              {t("loading")}…
+              Loading…
             </Text>
           </View>
         ) : (
@@ -111,7 +109,7 @@ export default function ConversationThreadScreen() {
             ListEmptyComponent={
               <View className="flex-1 justify-center py-8">
                 <Text className="text-center text-primary-500 dark:text-primary-400">
-                  {t("no_messages_yet")}
+                  No messages yet
                 </Text>
               </View>
             }
@@ -121,7 +119,7 @@ export default function ConversationThreadScreen() {
         {userWaitingForReply && (
           <View className="px-4 pb-2">
             <Text className="text-sm text-primary-500 dark:text-primary-400 text-center">
-              {t("wait_for_freelancer_reply")}
+              Wait for the freelancer to reply before sending more messages.
             </Text>
           </View>
         )}
@@ -129,7 +127,7 @@ export default function ConversationThreadScreen() {
         <View className="flex-row items-end gap-2 px-4 pb-6 pt-2 border-t border-primary-100 dark:border-primary-800 bg-white dark:bg-primary-900">
           <TextInput
             className="flex-1 min-h-[44] max-h-24 rounded-2xl border border-primary-200 dark:border-primary-700 bg-primary-50 dark:bg-primary-800 px-4 py-2.5 text-primary-950 dark:text-primary-50"
-            placeholder={t("type_a_message")}
+            placeholder="Type a message…"
             placeholderTextColor="#9ca3af"
             value={text}
             onChangeText={setText}
@@ -154,7 +152,7 @@ export default function ConversationThreadScreen() {
                   : "text-primary-500 dark:text-primary-400",
               )}
             >
-              {t("send")}
+              Send
             </Text>
           </TouchableOpacity>
         </View>

@@ -1,5 +1,4 @@
-import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "@/components";
+import { View, Text, TouchableOpacity } from "react-native";
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -13,10 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useAuthStore } from "@/store";
 import { USER_ROLE } from "@/types";
 import { useEffect } from "react";
-import { useTranslation } from "react-i18next";
-
 export default function RoleSelectScreen() {
-  const { t } = useTranslation();
   const router = useRouter();
 
   const { setUserRole, isAuthenticated } = useAuthStore();
@@ -51,14 +47,14 @@ export default function RoleSelectScreen() {
             entering={FadeInDown.delay(100)}
             className="text-2xl font-bold text-primary-900 dark:text-primary-50 mb-2"
           >
-            {t("welcome_rozgaarpro")}
+            Welcome to RozgaarPro
           </Animated.Text>
 
           <Animated.Text
             entering={FadeInDown.delay(200)}
             className="text-sm text-primary-600 dark:text-primary-400 text-center"
           >
-            {t("how_use_app")}
+            How would you like to use the app?
           </Animated.Text>
         </View>
 
@@ -80,10 +76,10 @@ export default function RoleSelectScreen() {
 
               <View className="flex-1">
                 <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50 mb-1">
-                  {t("i_am_user")}
+                  I am a user
                 </Text>
                 <Text className="text-sm text-primary-600 dark:text-primary-400 leading-5">
-                  {t("i_am_user_desc")}
+                  Find and hire skilled professionals for your home or business
                 </Text>
               </View>
             </TouchableOpacity>
@@ -105,10 +101,10 @@ export default function RoleSelectScreen() {
 
               <View className="flex-1">
                 <Text className="text-lg font-semibold text-primary-900 dark:text-primary-50 mb-1">
-                  {t("i_am_freelancer")}
+                  I am a freelancer
                 </Text>
                 <Text className="text-sm text-primary-600 dark:text-primary-400 leading-5">
-                  {t("i_am_freelancer_desc")}
+                  Get discovered by customers and find work nearby
                 </Text>
               </View>
             </TouchableOpacity>
@@ -120,7 +116,7 @@ export default function RoleSelectScreen() {
           entering={FadeIn.delay(600)}
           className="text-center text-xs primary-text py-6"
         >
-          {t("terms_of_service")}
+          By continuing, you agree to our Terms of Service
         </Animated.Text>
       </View>
     </SafeAreaView>

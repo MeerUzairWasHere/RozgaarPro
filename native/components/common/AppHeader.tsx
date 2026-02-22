@@ -1,7 +1,7 @@
 import { Bell } from "lucide-react-native";
 import React from "react";
 import { View, TouchableOpacity, useColorScheme } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 import BackButton from "./BackButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocationHeader from "./LocationHeader";

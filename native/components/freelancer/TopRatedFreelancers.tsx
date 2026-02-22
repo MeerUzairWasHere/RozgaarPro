@@ -8,10 +8,7 @@ import { TopRatedFreelancersSkeletonList } from "../Skeletons";
 import { router } from "expo-router";
 import { ROUTES } from "@/constants";
 import { SortDirection } from "@/types";
-import { useTranslation } from "react-i18next";
-
 export default function TopRatedFreelancers() {
-  const { t } = useTranslation();
   const { coordinates } = useLocationStore();
 
   const { data: freelancers } = useGetTopRatedFreelancers({
@@ -37,7 +34,7 @@ export default function TopRatedFreelancers() {
   if (!freelancers)
     return (
       <View>
-        <SectionHeader title={t("top_rated_freelancers")} />
+        <SectionHeader title="Top Rated Freelancers" />
         <TopRatedFreelancersSkeletonList />
       </View>
     );
@@ -48,7 +45,7 @@ export default function TopRatedFreelancers() {
       keyExtractor={(item) => item.freelancer_id}
       renderItem={({ item }) => <FreelancerCard freelancer={item} />}
       ListHeaderComponent={
-        <SectionHeader title={t("top_rated_freelancers")} />
+        <SectionHeader title="Top Rated Freelancers" />
       }
       scrollEnabled={false}
       contentContainerStyle={{

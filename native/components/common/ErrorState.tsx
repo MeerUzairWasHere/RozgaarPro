@@ -1,7 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "./AppText";
-import { useTranslation } from "react-i18next";
+import { Text } from "react-native";
 
 type Props = {
   title?: string;
@@ -16,10 +15,9 @@ export default function ErrorState({
   buttonText,
   onPress,
 }: Props) {
-  const { t } = useTranslation();
-  const displayTitle = title ?? t("something_went_wrong");
-  const displayMessage = message ?? t("couldnt_load_data");
-  const displayButtonText = buttonText ?? t("try_again");
+  const displayTitle = title ?? "Something went wrong";
+  const displayMessage = message ?? "We couldn't load the data.";
+  const displayButtonText = buttonText ?? "Try Again";
   return (
     <View className="flex-1 items-center justify-center px-6 bg-primary dark:bg-primary-950">
       <View className="rounded-3xl p-8 items-center shadow-lg bg-white dark:bg-primary-900 border border-primary-100 dark:border-primary-800">

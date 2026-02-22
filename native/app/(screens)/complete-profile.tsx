@@ -7,12 +7,12 @@ import {
 } from "@/components";
 import {
   View,
+  Text,
   ScrollView,
   TouchableOpacity,
   Image,
   Keyboard,
 } from "react-native";
-import { AppText as Text } from "@/components";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
@@ -36,10 +36,8 @@ import {
 } from "@/utils";
 import { useEffect, useState } from "react";
 import RequiredLabel from "@/components/common/RequiredLabel";
-import { useTranslation } from "react-i18next";
 
 export default function CompleteProfile() {
-  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const mutationCompleteProfile = useCompleteFreelancerProfile();
@@ -170,10 +168,10 @@ export default function CompleteProfile() {
         {/* Header */}
         <View className="p-4 pt-16">
           <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50">
-            {t("complete_your_profile")}
+            Complete your profile
           </Text>
           <Text className="text-sm text-primary-600 dark:text-primary-400 mt-1">
-            {t("setup_freelancer_profile")}
+            Set up your freelancer profile to get started
           </Text>
         </View>
 
@@ -203,7 +201,7 @@ export default function CompleteProfile() {
             ))}
           </View>
           <Text className="text-sm text-primary-600 dark:text-primary-400 mt-2">
-            {t("step_of", { current: step })}
+            {`Step ${step} of 4`}
           </Text>
         </View>
         {generalError && (
@@ -221,10 +219,10 @@ export default function CompleteProfile() {
           {step === 1 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                {t("choose_profession")}
+                Choose your profession
               </Text>
               <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                {t("select_main_profession")}
+                Select your main profession
               </Text>
 
               {isLoadingProfessions ? (
@@ -284,7 +282,7 @@ export default function CompleteProfile() {
           {step === 2 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                {t("select_up_to_3_skills")}
+                Select up to 3 skills
               </Text>
 
               {isLoadingSkills ? (
@@ -336,7 +334,7 @@ export default function CompleteProfile() {
               )}
 
               <Text className="text-sm mt-2 text-primary-600 dark:text-primary-400">
-                {t("selected_count", { count: formData.skills.length })}
+                {`${formData.skills.length}/3 selected`}
               </Text>
             </Animated.View>
           )}
@@ -345,17 +343,17 @@ export default function CompleteProfile() {
           {step === 3 && (
             <Animated.View entering={FadeInRight}>
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50 mb-2">
-                {t("your_experience")}
+                Your experience
               </Text>
               <Text className="text-primary-600 dark:text-primary-400 mb-6">
-                {t("experience_placeholder")}
+                How many years of experience do you have?
               </Text>
 
               <CustomInput
                 icon={
                   <Clock size={15} color={isDark ? "#B3A5F5" : "#6B4EEA"} />
                 }
-                placeholder={t("experience_eg")}
+                placeholder="e.g. 2.5"
                 value={experienceText}
                 keyboardType="decimal-pad"
                 returnKeyType="done"
@@ -400,16 +398,16 @@ export default function CompleteProfile() {
           {step === 4 && (
             <Animated.View entering={FadeInRight} className="gap-5">
               <Text className="text-xl font-bold text-primary-900 dark:text-primary-50">
-                {t("verify_identity")}
+                Verify your identity
               </Text>
               {/* ID Verification Card */}
               <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
                 <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  <RequiredLabel label={t("government_id")} />
+                  <RequiredLabel label="Government ID" />
                 </Text>
 
                 <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
-                  {t("id_types")}
+                  CNIC, passport, or driver's license
                 </Text>
 
                 <View className="items-center gap-3">
@@ -426,7 +424,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-red-100 rounded-xl"
                         >
                           <Text className="text-sm font-medium text-red-600">
-                            {t("remove")}
+                            Remove
                           </Text>
                         </TouchableOpacity>
 
@@ -435,7 +433,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
                           <Text className="text-sm font-medium">
-                            {t("retake")}
+                            Retake
                           </Text>
                         </TouchableOpacity>
 
@@ -444,7 +442,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
                           <Text className="text-sm font-medium">
-                            {t("gallery")}
+                            Gallery
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -466,7 +464,7 @@ export default function CompleteProfile() {
                         className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                       >
                         <Text className="text-sm font-medium">
-                          {t("select_from_gallery")}
+                          Select from gallery
                         </Text>
                       </TouchableOpacity>
                     </>
@@ -476,10 +474,10 @@ export default function CompleteProfile() {
               {/* Profile Photo Card */}
               <View className="bg-white dark:bg-primary-900 rounded-2xl p-4 border border-primary-200 dark:border-primary-700">
                 <Text className="font-semibold text-primary-900 dark:text-primary-50 mb-2">
-                  {t("profile_photo_optional")}
+                  Profile photo (optional)
                 </Text>
                 <Text className="text-sm text-primary-600 dark:text-primary-400 mb-3">
-                  {t("profile_photo_hint")}
+                  A clear photo helps clients trust you
                 </Text>
 
                 <View className="items-center gap-3">
@@ -495,7 +493,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-red-100 rounded-xl"
                         >
                           <Text className="text-sm font-medium text-red-600">
-                            {t("remove")}
+                            Remove
                           </Text>
                         </TouchableOpacity>
 
@@ -504,7 +502,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
                           <Text className="text-sm font-medium">
-                            {t("retake")}
+                            Retake
                           </Text>
                         </TouchableOpacity>
 
@@ -513,7 +511,7 @@ export default function CompleteProfile() {
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
                           <Text className="text-sm font-medium">
-                            {t("gallery")}
+                            Gallery
                           </Text>
                         </TouchableOpacity>
                       </View>
@@ -535,7 +533,7 @@ export default function CompleteProfile() {
                         className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                       >
                         <Text className="text-sm font-medium">
-                          {t("select_from_gallery")}
+                          Select from gallery
                         </Text>
                       </TouchableOpacity>
                     </>
@@ -574,7 +572,7 @@ export default function CompleteProfile() {
                           : "text-primary-900 dark:text-primary-50",
                       )}
                     >
-                      {t("location_access")}
+                      Location access
                     </Text>
                     <Text
                       className={cn(
@@ -585,8 +583,8 @@ export default function CompleteProfile() {
                       )}
                     >
                       {permissionGranted
-                        ? t("location_granted")
-                        : t("location_allow_hint")}
+                        ? "Location granted"
+                        : "Allow location to show clients where you work"}
                     </Text>
                   </View>
                 </View>
@@ -603,12 +601,12 @@ export default function CompleteProfile() {
           disabled={isNextDisabled || loading}
           title={
             loading
-              ? t("saving")
+              ? "Saving..."
               : step === 4 && !permissionGranted
-                ? t("enable_location_to_continue")
+                ? "Enable location to continue"
                 : step === 4
-                  ? t("complete_profile")
-                  : t("continue")
+                  ? "Complete profile"
+                  : "Continue"
           }
         />
       </View>

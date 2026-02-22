@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import {
   View,
+  Text,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { AppText as Text } from "@/components";
 import {
   useLocalSearchParams,
   router,
@@ -18,10 +18,8 @@ import {
   useStartConversation,
 } from "@/mutations";
 import { getConversationRoute } from "@/constants/routes.constants";
-import { useTranslation } from "react-i18next";
 
 export default function StartConversationScreen() {
-  const { t } = useTranslation();
   const { freelancerId } = useLocalSearchParams<{ freelancerId: string }>();
   const [text, setText] = useState("");
   const { data: conversation, isLoading } =
@@ -56,7 +54,7 @@ export default function StartConversationScreen() {
   if (isLoading) {
     return (
       <>
-        <AppHeader showBack title={t("conversation")} />
+        <AppHeader showBack title="Conversation" />
         <View className="flex-1 bg-primary-50 dark:bg-primary-950 items-center justify-center">
           <ActivityIndicator size="large" />
         </View>
@@ -67,7 +65,7 @@ export default function StartConversationScreen() {
   if (conversation) {
     return (
       <>
-        <AppHeader showBack title={t("conversation")} />
+        <AppHeader showBack title="Conversation" />
         <View className="flex-1 bg-primary-50 dark:bg-primary-950 items-center justify-center">
           <ActivityIndicator size="large" />
         </View>
@@ -77,14 +75,14 @@ export default function StartConversationScreen() {
 
   return (
     <>
-      <AppHeader showBack title={t("start_conversation")} />
+      <AppHeader showBack title="Start conversation" />
       <View className="flex-1 bg-primary-50 dark:bg-primary-950 px-4 pt-6">
         <Text className="text-primary-600 dark:text-primary-400 mb-4">
-          {t("send_first_message_to_start")}
+          Send one message to start the chat. The freelancer can then reply and you can continue the conversation.
         </Text>
         <TextInput
           className="min-h-[100] rounded-2xl border border-primary-200 dark:border-primary-700 bg-white dark:bg-primary-900 px-4 py-3 text-primary-950 dark:text-primary-50"
-          placeholder={t("type_a_message")}
+          placeholder="Type a message…"
           placeholderTextColor="#9ca3af"
           value={text}
           onChangeText={setText}
@@ -98,7 +96,7 @@ export default function StartConversationScreen() {
           {startConversation.isPending ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text className="text-white font-semibold">{t("send")}</Text>
+            <Text className="text-white font-semibold">Send</Text>
           )}
         </TouchableOpacity>
       </View>

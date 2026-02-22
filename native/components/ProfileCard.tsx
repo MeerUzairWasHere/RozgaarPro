@@ -2,7 +2,7 @@ import React from "react";
 import clsx from "clsx";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { View, useColorScheme } from "react-native";
-import { AppText as Text } from "./common/AppText";
+import { Text } from "react-native";
 import { User, Shield, Phone, MapPin } from "lucide-react-native";
 import { useAuthStore, useLocationStore } from "@/store";
 import { USER_ROLE } from "@/types";

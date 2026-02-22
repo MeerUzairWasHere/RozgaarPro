@@ -69,7 +69,7 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       setAuthenticated(false);
       resetLocation();
       clearAuth();
-      // Clear only auth persistence so language preference (@RozgaarPro/language) is preserved
+      // Clear only auth persistence
       await AsyncStorage.removeItem("auth-storage");
       await AsyncStorage.removeItem("onboarding-storage"); //TODO: Remove this after onboarding is implemented
       router.replace(ROUTES.SELECT_ROLE);

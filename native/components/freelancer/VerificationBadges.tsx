@@ -1,6 +1,6 @@
 import React from "react";
 import { View, useColorScheme } from "react-native";
-import { AppText as Text } from "../common/AppText";
+import { Text } from "react-native";
 import { Shield, Award, Phone } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 

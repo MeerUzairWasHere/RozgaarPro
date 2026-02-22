@@ -7,13 +7,29 @@ import {
   Search,
 } from "lucide-react-native";
 import { useColorScheme } from "react-native";
+import { PlatformPressable } from "@react-navigation/elements";
 import { AppHeader } from "@/components";
-import { useTranslation } from "react-i18next";
 import { useAuthStore } from "@/store";
 import { USER_ROLE } from "@/types";
 
+/**
+ * Wraps the default tab button so the entire tab (icon + label) is one pressable.
+ * Uses the same PlatformPressable as the navigator and only adds flex: 1 so the
+ * hit area fills the tab cell (fixes icon-only taps not switching tabs).
+ */
+function TabBarButton(
+  props: React.ComponentProps<typeof PlatformPressable> & { children: React.ReactNode }
+) {
+  const { style, ...rest } = props;
+  return (
+    <PlatformPressable
+      {...rest}
+      style={[style, { flex: 1, justifyContent: "center", alignItems: "center" }]}
+    />
+  );
+}
+
 export default function TabsLayout() {
-  const { t } = useTranslation();
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const user = useAuthStore((state) => state.user);
@@ -78,12 +94,13 @@ export default function TabsLayout() {
           fontSize: 12,
           fontWeight: "500",
         },
+        tabBarButton: (props) => <TabBarButton {...props} />,
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
-          title: t("home"),
+          title: "Home",
           tabBarIcon: ({ color, focused }) => (
             <Home size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
@@ -93,7 +110,7 @@ export default function TabsLayout() {
         name="explore-freelancers"
         options={{
           href: user?.role === USER_ROLE.FREELANCER ? null : undefined,
-          title: t("search"),
+          title: "Search",
           tabBarIcon: ({ color, focused }) => (
             <Search size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
@@ -105,7 +122,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="messages"
         options={{
-          title: t("messages"),
+          title: "Messages",
           tabBarIcon: ({ color, focused }) => (
             <MessageCircle
               size={24}
@@ -114,19 +131,19 @@ export default function TabsLayout() {
             />
           ),
           header: () => (
-            <AppHeader title={t("messages")} showNotification={true} />
+            <AppHeader title="Messages" showNotification={true} />
           ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: t("profile"),
+          title: "Profile",
           tabBarIcon: ({ color, focused }) => (
             <User size={24} color={color} strokeWidth={focused ? 2.5 : 2} />
           ),
           header: () => (
-            <AppHeader title={t("profile")} showNotification={true} />
+            <AppHeader title="Profile" showNotification={true} />
           ),
         }}
       />

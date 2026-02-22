@@ -1,6 +1,6 @@
 import React from "react";
 import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "./common/AppText";
+import { Text } from "react-native";
 
 type SectionHeaderProps = {
   title: string;

@@ -1,13 +1,12 @@
 import {
   View,
+  Text,
   FlatList,
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
   Image,
 } from "react-native";
-import { AppText as Text } from "@/components";
-import { useTranslation } from "react-i18next";
 import { RelativePathString, router } from "expo-router";
 import { useGetConversations } from "@/mutations";
 import { usePullToRefresh } from "@/hooks";
@@ -90,7 +89,6 @@ function ConversationRow({ item }: { item: Conversation }) {
 }
 
 export default function MessagesScreen() {
-  const { t } = useTranslation();
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetConversations({});
   const { items: conversations } = extractInfiniteList(data);
@@ -124,8 +122,8 @@ export default function MessagesScreen() {
           ListEmptyComponent={
             !isLoading ? (
               <EmptyState
-                title={t("no_conversations")}
-                message={t("your_conversations")}
+                title="No conversations yet"
+                message="Your conversations"
               />
             ) : null
           }

@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { AppText as Text } from "./common/AppText";
+import { Text } from "react-native";
 import SearchBar from "./SearchBar";
 import ProfessionsFilter from "./ProfessionsFilter";
 import SectionHeader from "./SectionHeader";

@@ -1,5 +1,6 @@
 import {
   View,
+  Text,
   Keyboard,
   Pressable,
   useColorScheme,
@@ -9,7 +10,6 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from "react-native";
-import { AppText as Text } from "@/components";
 import { useRef } from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Phone, Lock, Mail } from "lucide-react-native";
@@ -28,10 +28,7 @@ import {
   CustomInput,
   StatusBanner,
 } from "@/components";
-import { useTranslation } from "react-i18next";
-
 export default function LoginScreen() {
-  const { t } = useTranslation();
   const colourScheme = useColorScheme();
   const { loginMethod, setLoginMethod, setField, phone, email, password } =
     useAuthStore();
@@ -83,10 +80,10 @@ export default function LoginScreen() {
                 <View>
                   <Animated.View entering={FadeInDown}>
                     <Text className="text-3xl font-bold dark:text-primary-50 text-primary-950 mb-1">
-                      {t("welcome_back")}
+                      Welcome back
                     </Text>
                     <Text className="text-sm dark:text-primary-50 text-primary-950 mb-8">
-                      {t("login_subtitle")}
+                      Login to your account to continue
                     </Text>
                   </Animated.View>
 
@@ -118,7 +115,7 @@ export default function LoginScreen() {
                               : "text-primary-600 dark:text-primary-400 font-medium",
                           )}
                         >
-                          {t(type.toLowerCase())}
+                          {type === LOGIN_METHOD.PHONE ? "Phone" : "Email"}
                         </Text>
                       </Pressable>
                     ))}
@@ -164,8 +161,8 @@ export default function LoginScreen() {
                       }
                       placeholder={
                         loginMethod === LOGIN_METHOD.EMAIL
-                          ? t("email")
-                          : t("phone")
+                          ? "Email"
+                          : "Phone"
                       }
                       value={loginMethod === LOGIN_METHOD.EMAIL ? email : phone}
                       onChangeText={(text) => {
@@ -207,7 +204,7 @@ export default function LoginScreen() {
                           }
                         />
                       }
-                      placeholder={t("password")}
+                      placeholder="Password"
                       value={password}
                       onChangeText={(text) => {
                         setField("password", text);
@@ -222,7 +219,7 @@ export default function LoginScreen() {
                     {/* Forgot Password */}
                     <View className="flex flex-row self-end mb-6">
                       <CustomPressableButton
-                        title={t("forgot_password")}
+                        title="Forgot password?"
                         onPress={() => router.replace(ROUTES.FORGOT_PASSWORD)}
                       />
                     </View>
@@ -234,7 +231,7 @@ export default function LoginScreen() {
                     className="mt-2"
                   >
                     <CustomTouchableOpacityButton
-                      title={t("sign_in")}
+                      title="Sign In"
                       onPress={handleLogin}
                       isLoading={loginMutation.isPending}
                       disabled={
@@ -249,10 +246,10 @@ export default function LoginScreen() {
                 {/* Footer */}
                 <View className="flex flex-row items-baseline justify-center pb-6 pt-8">
                   <Text className="text-sm dark:text-primary-300 text-primary-700">
-                    {t("dont_have_account")}{" "}
+                    Don't have an account?{" "}
                   </Text>
                   <CustomPressableButton
-                    title={t("create_account_link")}
+                    title="Create account"
                     onPress={() => router.replace(ROUTES.SIGN_UP)}
                   />
                 </View>

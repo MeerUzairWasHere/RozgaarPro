@@ -15,10 +15,8 @@ import { FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { extractInfiniteList } from "@/utils";
 import { useState, useMemo } from "react";
 import { usePullToRefresh } from "@/hooks";
-import { useTranslation } from "react-i18next";
 
 export default function FreelancerFilterView() {
-  const { t } = useTranslation();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [additionalFilters, setAdditionalFilters] = useState<ListFilter[]>([]);
   const [activeSort, setActiveSort] = useState<ListSort[]>([]);
@@ -83,8 +81,8 @@ export default function FreelancerFilterView() {
         showBack
         title={
           professionName
-            ? `${professionName} ${t("nearby")}`
-            : t("no_freelancers_found")
+            ? `${professionName} Nearby`
+            : "No freelancers found"
         }
       />
 
@@ -118,7 +116,7 @@ export default function FreelancerFilterView() {
           }
           ListEmptyComponent={
             !isLoading ? (
-              <EmptyState title={t("no_freelancers_found")} />
+              <EmptyState title="No freelancers found" />
             ) : null
           }
           contentContainerStyle={{

@@ -1,8 +1,7 @@
 import { View } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 import CustomTouchableOpacityButton from "./CustomTouchableOpacityButton";
 import { Filter } from "lucide-react-native";
-import { useTranslation } from "react-i18next";
 
 type Props = {
   freelancersCount: number;
@@ -16,13 +15,12 @@ const ListFilterHeader = ({
   onFilterPress,
   activeFilterCount = 0,
 }: Props) => {
-  const { t } = useTranslation();
   return (
     <View className="flex-row items-center justify-between px-4 py-3 bg-white dark:bg-primary-900">
-      <Text className="text-sm font-pmedium text-primary-700 dark:text-primary-300">
+      <Text className="text-sm font-medium text-primary-700 dark:text-primary-300">
         {freelancersCount === 0
-          ? t("no_freelancers_found")
-          : t("freelancers_found", { count: freelancersCount })}
+          ? "No freelancers found"
+          : `${freelancersCount} freelancer${freelancersCount === 1 ? "" : "s"} found`}
       </Text>
 
       <View className="relative">
@@ -30,13 +28,13 @@ const ListFilterHeader = ({
           onPress={onFilterPress}
           className="flex-row items-center gap-2 px-4 h-9 py-1 rounded-full bg-brand/80 dark:bg-brand/40"
           leftIcon={<Filter size={20} color="#fff" />}
-          title={t("filter")}
+          title="Filter"
         />
 
         {/* Badge - only show when filters are active */}
         {activeFilterCount > 0 && (
           <View className="absolute -top-1 -right-1 bg-red-500 rounded-full min-w-[20px] h-5 items-center justify-center px-1.5">
-            <Text className="text-white text-xs font-pbold">
+            <Text className="text-white text-xs font-bold">
               {activeFilterCount}
             </Text>
           </View>

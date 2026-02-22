@@ -1,9 +1,7 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { View, TouchableOpacity } from "react-native";
-import { AppText as Text } from "./AppText";
-import { useTranslation } from "react-i18next";
+import { View, Text, TouchableOpacity } from "react-native";
 
 export interface LocationHeaderProps {
   /** When true, header background is light (#F2F2F2) – use dark text/icon */
@@ -11,7 +9,6 @@ export interface LocationHeaderProps {
 }
 
 export default function LocationHeader({ lightBackground = false }) {
-  const { t } = useTranslation();
   const { location, loading, getCurrentLocation } = useLocationStore();
 
   useEffect(() => {
@@ -43,7 +40,7 @@ export default function LocationHeader({ lightBackground = false }) {
               : "text-xs text-white/80"
           }
         >
-          {t("your_location")}
+          Your Location
         </Text>
 
         <Text
@@ -54,8 +51,8 @@ export default function LocationHeader({ lightBackground = false }) {
           }
         >
           {loading
-            ? t("updating_location")
-            : location || t("tap_to_enable_location")}
+            ? "Updating location..."
+            : location || "Tap to enable location"}
         </Text>
       </View>
     </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { View, TextInput, useColorScheme } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 import { cn } from "@/utils";
 
 interface CustomInputProps {

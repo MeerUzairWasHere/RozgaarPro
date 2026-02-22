@@ -5,7 +5,7 @@ import {
   useColorScheme,
   Image,
 } from "react-native";
-import { AppText as Text } from "../common/AppText";
+import { Text } from "react-native";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import { formatDistance } from "@/lib";
 import { router } from "expo-router";
@@ -60,7 +60,9 @@ export default function FreelancerCard({
         <View className="flex-1 min-w-0">
           {/* Name */}
           <View className="flex-row items-center gap-2 mb-2">
-            <Text className="font-semibold text-primary-900 dark:text-primary-50 truncate">
+            <Text
+              className="font-semibold text-primary-900 dark:text-primary-50 truncate"
+            >
               {freelancer.name}
             </Text>
           </View>
@@ -68,7 +70,9 @@ export default function FreelancerCard({
           {/* Profession & Experience */}
           <View className="flex-row items-center gap-2 mb-2">
             <View className="bg-brand-300 dark:bg-brand-300 px-2 py-1 rounded-md ">
-              <Text className="text-sm font-medium text-black dark:text-primary-950">
+              <Text
+                className="text-sm font-medium text-black dark:text-primary-950"
+              >
                 {freelancer.primary_profession_name}
               </Text>
             </View>

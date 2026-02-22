@@ -1,4 +1,4 @@
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 
 type RequiredLabelProps = {
   label: string;

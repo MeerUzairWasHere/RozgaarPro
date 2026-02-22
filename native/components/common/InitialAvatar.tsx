@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import { AppText as Text } from "./AppText";
+import { Text } from "react-native";
 
 interface InitialAvatarProps {
   name: string;

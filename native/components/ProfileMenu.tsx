@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Pressable, useColorScheme } from "react-native";
-import { AppText as Text } from "./common/AppText";
+import { Text } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Route, router } from "expo-router";
 import {
@@ -12,23 +12,20 @@ import {
 } from "lucide-react-native";
 import { ROUTES } from "@/constants";
 import clsx from "clsx";
-import { useTranslation } from "react-i18next";
 
 type MenuItem = {
   icon: React.ComponentType<{ size: number; color: string }>;
-  labelKey: string;
+  label: string;
   route: Route;
 };
 
-const getMenuItems = (t: (key: string) => string): MenuItem[] => [
-  { icon: User, labelKey: "edit_profile", route: ROUTES.EDIT_PROFILE },
-  { icon: Settings, labelKey: "settings", route: ROUTES.SETTINGS },
-  { icon: HelpCircle, labelKey: "help_support", route: ROUTES.HELP_SUPPORT },
+const menuItems: MenuItem[] = [
+  { icon: User, label: "Edit Profile", route: ROUTES.EDIT_PROFILE },
+  { icon: Settings, label: "Settings", route: ROUTES.SETTINGS },
+  { icon: HelpCircle, label: "Help & Support", route: ROUTES.HELP_SUPPORT },
 ];
 
 export default function ProfileMenu() {
-  const { t } = useTranslation();
-  const menuItems = getMenuItems(t);
   const isDark = useColorScheme() === "dark";
   const chevronColor = isDark ? "#B3A5F5" : "#6B4EEA";
 
@@ -42,7 +39,7 @@ export default function ProfileMenu() {
 
         return (
           <Pressable
-            key={item.labelKey}
+            key={item.label}
             onPress={() => router.push(item.route)}
             className={clsx(
               "w-full flex-row justify-between p-4 rounded-2xl border items-center shadow-sm",
@@ -55,7 +52,7 @@ export default function ProfileMenu() {
               </View>
 
               <Text className="font-medium text-primary-950 dark:text-primary-50">
-                {t(item.labelKey)}
+                {item.label}
               </Text>
             </View>
 
@@ -75,7 +72,7 @@ export default function ProfileMenu() {
           </View>
 
           <Text className="font-medium text-primary-950 dark:text-primary-50">
-            {t("rate_us")}
+            Rate Us
           </Text>
         </View>
 

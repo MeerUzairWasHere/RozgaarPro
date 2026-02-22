@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { View, TextInput, Pressable } from "react-native";
-import { AppText as Text } from "@/components";
+import { View, Text, TextInput, Pressable } from "react-native";
 import Animated, {
   FadeIn,
   FadeInDown,
@@ -13,10 +12,7 @@ import { ROUTES } from "@/constants";
 import { useRequestOTP, useVerityOTP } from "@/mutations";
 import { CustomTouchableOpacityButton } from "@/components";
 import { cn } from "@/utils";
-import { useTranslation } from "react-i18next";
-
 export default function VerifyOTPScreen() {
-  const { t } = useTranslation();
   const { phone } = useAuthStore();
 
   const [otp, setOtp] = useState("");
@@ -74,11 +70,11 @@ export default function VerifyOTPScreen() {
           className="items-center mb-12"
         >
           <Text className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-            {t("verify_phone")}
+            Verify your phone
           </Text>
 
           <Text className="text-base text-gray-600 dark:text-gray-400 text-center mb-1">
-            {t("enter_code_sent_to")}
+            Enter the 6-digit code sent to
           </Text>
 
           <Text className="text-base font-semibold text-gray-900 dark:text-white">
@@ -132,7 +128,7 @@ export default function VerifyOTPScreen() {
         >
           {countdown > 0 ? (
             <View className="flex-row">
-              <Text className="text-sm primary-text">{t("resend_code_in")} </Text>
+              <Text className="text-sm primary-text">Resend code in </Text>
               <Text className="text-sm font-bold primary-text">
                 {countdown}s
               </Text>
@@ -144,8 +140,8 @@ export default function VerifyOTPScreen() {
             >
               <Text className="text-sm font-semibold text-gray-500">
                 {mutationRequestOTP.isPending
-                  ? t("sending")
-                  : t("resend_code")}
+                  ? "Sending..."
+                  : "Resend Code"}
               </Text>
             </Pressable>
           )}
@@ -158,7 +154,7 @@ export default function VerifyOTPScreen() {
         >
           <View className="bg-primary-100 dark:bg-primary-900 rounded-2xl p-4">
             <Text className="text-sm primary-text text-center">
-              {t("check_sms")}
+              Please check your SMS for the verification code.
             </Text>
           </View>
         </Animated.View>
@@ -169,7 +165,7 @@ export default function VerifyOTPScreen() {
             onPress={handleVerify}
             disabled={!isOtpComplete}
             title={
-              mutationVerifyOTP.isPending ? t("verifying") : t("verify")
+              mutationVerifyOTP.isPending ? "Verifying..." : "Verify"
             }
           />
         </Animated.View>
@@ -179,7 +175,7 @@ export default function VerifyOTPScreen() {
           <Animated.View entering={FadeIn.duration(300)} className="mt-4">
             <View className="bg-red-50 border border-red-200 rounded-xl p-4">
               <Text className="text-sm text-red-600 text-center">
-                {mutationVerifyOTP.error?.message || t("invalid_otp")}
+                {mutationVerifyOTP.error?.message || "Invalid OTP. Please try again."}
               </Text>
             </View>
           </Animated.View>

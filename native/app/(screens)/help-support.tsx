@@ -1,14 +1,12 @@
 import { useState } from "react";
 import {
   View,
+  Text,
   ScrollView,
   Pressable,
   useColorScheme,
   Linking,
-  I18nManager,
 } from "react-native";
-import { AppText as Text } from "@/components";
-import { useTranslation } from "react-i18next";
 import {
   Phone,
   MessageCircle,
@@ -20,7 +18,7 @@ import {
 } from "lucide-react-native";
 import { AppHeader } from "@/components";
 
-const isRTL = I18nManager.isRTL;
+const isRTL = false;
 
 const SUPPORT_PHONE = "+911234567890";
 const SUPPORT_EMAIL = "support@rozgaarpro.com";
@@ -38,7 +36,6 @@ function SectionTitle({ label }: { label: string }) {
 }
 
 export default function HelpSupport() {
-  const { t } = useTranslation();
   const [expandedFaqIndex, setExpandedFaqIndex] = useState<number | null>(null);
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
@@ -46,10 +43,10 @@ export default function HelpSupport() {
   const iconMuted = isDark ? "#9ca3af" : "#6b7280";
 
   const faqs: { q: string; a: string }[] = [
-    { q: t("faq_find_worker"), a: t("faq_find_worker_a") },
-    { q: t("faq_get_verified"), a: t("faq_get_verified_a") },
-    { q: t("faq_free"), a: t("faq_free_a") },
-    { q: t("faq_report"), a: t("faq_report_a") },
+    { q: "How do I find a worker?", a: "Search by category or location on the home screen." },
+    { q: "How do I get verified?", a: "Upload your ID in your profile. Verification takes 24-48 hours." },
+    { q: "Is RozgaarPro free?", a: "Yes, finding and contacting workers is completely free." },
+    { q: "How do I report a problem?", a: "Contact us through any channel listed below." },
   ];
 
   const handleCall = () => {
@@ -78,7 +75,7 @@ export default function HelpSupport() {
 
   return (
     <View className="flex-1 bg-primary-50 dark:bg-primary-950">
-      <AppHeader showBack title={t("help_support")} />
+      <AppHeader showBack title="Help & Support" />
 
       <ScrollView
         className="flex-1 px-4 py-6"
@@ -87,7 +84,7 @@ export default function HelpSupport() {
       >
         {/* Contact Us */}
         <View className="mb-6">
-          <SectionTitle label={t("contact_us")} />
+          <SectionTitle label="Contact Us" />
           <View
             className="flex-row gap-3"
             style={{ flexDirection: isRTL ? "row-reverse" : "row" }}
@@ -103,7 +100,7 @@ export default function HelpSupport() {
                 className="text-sm font-medium text-primary-950 dark:text-primary-50"
                 style={{ textAlign: "center" }}
               >
-                {t("call_us")}
+                Call Us
               </Text>
             </Pressable>
             <Pressable
@@ -117,7 +114,7 @@ export default function HelpSupport() {
                 className="text-sm font-medium text-primary-950 dark:text-primary-50"
                 style={{ textAlign: "center" }}
               >
-                {t("whatsapp")}
+                WhatsApp
               </Text>
             </Pressable>
             <Pressable
@@ -131,7 +128,7 @@ export default function HelpSupport() {
                 className="text-sm font-medium text-primary-950 dark:text-primary-50"
                 style={{ textAlign: "center" }}
               >
-                {t("email")}
+                Email
               </Text>
             </Pressable>
           </View>
@@ -139,7 +136,7 @@ export default function HelpSupport() {
 
         {/* FAQ */}
         <View className="mb-6">
-          <SectionTitle label={t("faq")} />
+          <SectionTitle label="Frequently Asked Questions" />
           <View className="bg-white dark:bg-primary-900 rounded-2xl border border-primary-200 dark:border-primary-800 overflow-hidden">
             {faqs.map((faq, index) => {
               const isExpanded = expandedFaqIndex === index;
@@ -202,7 +199,7 @@ export default function HelpSupport() {
 
         {/* Quick Links */}
         <View className="mb-6">
-          <SectionTitle label={t("quick_links")} />
+          <SectionTitle label="Quick Links" />
           <View className="bg-white dark:bg-primary-900 rounded-2xl border border-primary-200 dark:border-primary-800 overflow-hidden divide-y divide-primary-200 dark:divide-primary-800">
             <Pressable
               onPress={handleTerms}
@@ -218,7 +215,7 @@ export default function HelpSupport() {
                   className="font-medium text-primary-950 dark:text-primary-50 text-sm"
                   style={{ textAlign: isRTL ? "right" : "left" }}
                 >
-                  {t("terms_of_service_a")}
+                  Terms of Service
                 </Text>
               </View>
               <ChevronRight size={18} color={chevronColor} />
@@ -237,7 +234,7 @@ export default function HelpSupport() {
                   className="font-medium text-primary-950 dark:text-primary-50 text-sm"
                   style={{ textAlign: isRTL ? "right" : "left" }}
                 >
-                  {t("privacy_policy")}
+                  Privacy Policy
                 </Text>
               </View>
               <ChevronRight size={18} color={chevronColor} />
@@ -256,7 +253,7 @@ export default function HelpSupport() {
                   className="font-medium text-primary-950 dark:text-primary-50 text-sm"
                   style={{ textAlign: isRTL ? "right" : "left" }}
                 >
-                  {t("community_guidelines")}
+                  Community Guidelines
                 </Text>
               </View>
               <ChevronRight size={18} color={chevronColor} />
@@ -268,7 +265,7 @@ export default function HelpSupport() {
           className="text-center text-xs text-primary-500 dark:text-primary-400 pt-4"
           style={{ textAlign: "center" }}
         >
-          {t("support_footer")}
+          RozgaarPro Support · Available 9 AM – 9 PM IST
         </Text>
       </ScrollView>
     </View>
