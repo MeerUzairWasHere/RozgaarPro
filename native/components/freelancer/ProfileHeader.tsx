@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image } from "react-native";
-import { AppText as Text } from "@/components";
+import { AppText as Text } from "../common/AppText";
 import { Briefcase } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import InitialAvatar from "../common/InitialAvatar";

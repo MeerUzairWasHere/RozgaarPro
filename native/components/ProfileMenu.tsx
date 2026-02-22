@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Pressable, useColorScheme } from "react-native";
-import { AppText as Text } from "@/components";
+import { AppText as Text } from "./common/AppText";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Route, router } from "expo-router";
 import {

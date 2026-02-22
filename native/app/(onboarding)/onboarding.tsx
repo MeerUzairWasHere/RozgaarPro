@@ -1,7 +1,14 @@
-import { useState } from "react";
-import { View, Pressable, useColorScheme } from "react-native";
+import { useRef, useState } from "react";
+import {
+  View,
+  Pressable,
+  useColorScheme,
+  FlatList,
+  useWindowDimensions,
+  type NativeSyntheticEvent,
+  type NativeScrollEvent,
+} from "react-native";
 import { AppText as Text } from "@/components";
-import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";
 import { useOnboardingStore } from "@/store/useOnboardingStore";
@@ -33,6 +40,8 @@ export default function OnboardingScreen() {
   const { t } = useTranslation();
   const slides = getSlides(t);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const flatListRef = useRef<FlatList>(null);
+  const { width } = useWindowDimensions();
   const router = useRouter();
   const completeOnboarding = useOnboardingStore((s) => s.completeOnboarding);
   const colorScheme = useColorScheme();
@@ -43,8 +52,25 @@ export default function OnboardingScreen() {
     router.replace(ROUTES.SELECT_ROLE);
   };
 
-  const slide = slides[currentSlide];
-  const Icon = slide.icon;
+  const slideWidth = width - 64; // px-8 = 32 each side
+
+  const onMomentumScrollEnd = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const index = Math.round(e.nativeEvent.contentOffset.x / slideWidth);
+    setCurrentSlide(Math.min(index, slides.length - 1));
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+    flatListRef.current?.scrollToIndex({ index, animated: true });
+  };
+
+  const handleNext = () => {
+    if (currentSlide === slides.length - 1) {
+      handleFinish();
+    } else {
+      goToSlide(currentSlide + 1);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-primary dark:bg-primary-950">
@@ -63,26 +89,40 @@ export default function OnboardingScreen() {
         </Pressable>
       </View>
 
-      {/* Center */}
-      <View className="flex-1 justify-center items-center px-8">
-        <Animated.View
-          key={currentSlide}
-          entering={FadeInRight}
-          exiting={FadeOutLeft}
-          className="items-center"
-        >
-          <View className="rounded-full items-center justify-center mb-10  ">
-            <Icon size={56} color={isDark ? "#fff" : "#000"} />
-          </View>
+      {/* Center: swipeable slides */}
+      <View className="flex-1 px-8">
+        <FlatList
+          ref={flatListRef}
+          data={slides}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={onMomentumScrollEnd}
+          keyExtractor={(_, i) => String(i)}
+          getItemLayout={(_, index) => ({
+            length: slideWidth,
+            offset: slideWidth * index,
+            index,
+          })}
+          renderItem={({ item: slide }) => (
+            <View
+              style={{ width: slideWidth }}
+              className="flex-1 justify-center items-center"
+            >
+              <View className="rounded-full items-center justify-center mb-10">
+                <slide.icon size={56} color={isDark ? "#fff" : "#000"} />
+              </View>
 
-          <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">
-            {t(slide.titleKey)}
-          </Text>
+              <Text className="text-2xl font-bold text-primary-900 dark:text-primary-50 text-center mb-4">
+                {t(slide.titleKey)}
+              </Text>
 
-          <Text className="text-base text-primary-600 dark:text-primary-200 text-center leading-6 max-w-[280px]">
-            {t(slide.descriptionKey)}
-          </Text>
-        </Animated.View>
+              <Text className="text-base text-primary-600 dark:text-primary-200 text-center leading-6 max-w-[280px]">
+                {t(slide.descriptionKey)}
+              </Text>
+            </View>
+          )}
+        />
       </View>
 
       {/* Bottom */}
@@ -92,7 +132,7 @@ export default function OnboardingScreen() {
           {slides.map((_, index) => (
             <Pressable
               key={index}
-              onPress={() => setCurrentSlide(index)}
+              onPress={() => goToSlide(index)}
               className={cn(
                 "h-2 rounded-full mx-1",
                 index === currentSlide
@@ -105,11 +145,7 @@ export default function OnboardingScreen() {
 
         {/* Button */}
         <CustomTouchableOpacityButton
-          onPress={() =>
-            currentSlide === slides.length - 1
-              ? handleFinish()
-              : setCurrentSlide((p) => p + 1)
-          }
+          onPress={handleNext}
           title={
             currentSlide === slides.length - 1 ? t("get_started") : t("next")
           }

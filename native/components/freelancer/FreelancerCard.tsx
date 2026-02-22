@@ -5,7 +5,7 @@ import {
   useColorScheme,
   Image,
 } from "react-native";
-import { AppText as Text } from "@/components";
+import { AppText as Text } from "../common/AppText";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import { formatDistance } from "@/lib";
 import { router } from "expo-router";

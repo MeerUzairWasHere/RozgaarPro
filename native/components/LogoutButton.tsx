@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Pressable, ActivityIndicator } from "react-native";
-import { AppText as Text } from "@/components";
+import { AppText as Text } from "./common/AppText";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { LogOut } from "lucide-react-native";
 import clsx from "clsx";
