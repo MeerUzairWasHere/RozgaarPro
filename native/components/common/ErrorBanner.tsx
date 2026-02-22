@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { AppText as Text } from "./AppText";
 import { AlertCircle, X } from "lucide-react-native";
 import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 

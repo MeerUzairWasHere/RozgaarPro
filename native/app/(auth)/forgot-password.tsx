@@ -1,7 +1,8 @@
 import { CustomTouchableOpacityButton } from "@/components";
 import { ROUTES } from "@/constants";
 import { useRouter } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { AppText as Text } from "@/components";
 import { useTranslation } from "react-i18next";
 
 export default function ForgotPasswordScreen() {

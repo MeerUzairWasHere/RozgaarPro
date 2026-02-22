@@ -7,6 +7,9 @@ module.exports = {
 
   theme: {
     extend: {
+      fontFamily: {
+        urdu: ["NotoNastaliqUrdu_400Regular", "sans-serif"],
+      },
       colors: {
         // Neutral scale: backgrounds and text
         primary: {

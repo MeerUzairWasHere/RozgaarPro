@@ -1,4 +1,5 @@
-import { Text, Pressable } from "react-native";
+import { Pressable } from "react-native";
+import { AppText as Text } from "./AppText";
 import React from "react";
 import cn from "clsx";
 

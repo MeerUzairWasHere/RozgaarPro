@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import {
   useLocalSearchParams,
   router,

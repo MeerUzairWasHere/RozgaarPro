@@ -1,11 +1,11 @@
 import { FREELANCER_STATUS, NearbyFreelancer } from "@/types";
 import {
   View,
-  Text,
   TouchableOpacity,
   useColorScheme,
   Image,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { MapPin, ShieldCheck, Star } from "lucide-react-native";
 import { formatDistance } from "@/lib";
 import { router } from "expo-router";

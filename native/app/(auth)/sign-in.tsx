@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   Keyboard,
   Pressable,
   useColorScheme,
@@ -10,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   TextInput,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { useRef } from "react";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { Phone, Lock, Mail } from "lucide-react-native";
@@ -69,7 +69,7 @@ export default function LoginScreen() {
           <View className="flex-1">
             {/* Header */}
             <View className="p-4">
-              <BackButton />
+              <BackButton fallbackHref={ROUTES.SELECT_ROLE} />
             </View>
 
             <ScrollView

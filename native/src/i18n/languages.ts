@@ -2,10 +2,10 @@
  * Supported languages and RTL configuration.
  */
 
-export const RTL_LANGS = ["ur", "ks"] as const;
+export const RTL_LANGS = ["ur"] as const;
 export type RtlLang = (typeof RTL_LANGS)[number];
 
-export type LanguageCode = "en" | "ur" | "ks";
+export type LanguageCode = "en" | "ur";
 
 export const LANGUAGES: Record<
   LanguageCode,
@@ -13,7 +13,6 @@ export const LANGUAGES: Record<
 > = {
   en: { code: "en", label: "English", nativeLabel: "English" },
   ur: { code: "ur", label: "Urdu", nativeLabel: "اردو" },
-  ks: { code: "ks", label: "Kashmiri", nativeLabel: "کٲشُر" },
 };
 
 export function isRtl(lang: string): boolean {

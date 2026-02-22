@@ -1,7 +1,8 @@
 import { useLocationStore } from "@/store/useLocationStore";
 import { MapPin } from "lucide-react-native";
 import React, { useEffect } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { AppText as Text } from "./AppText";
 import { useTranslation } from "react-i18next";
 
 export interface LocationHeaderProps {

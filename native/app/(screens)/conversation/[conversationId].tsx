@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import {
   View,
-  Text,
   FlatList,
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { useLocalSearchParams } from "expo-router";
 import { AppHeader } from "@/components";
 import { useGetMessages, useSendMessage } from "@/mutations";

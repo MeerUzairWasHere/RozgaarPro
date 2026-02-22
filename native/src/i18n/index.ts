@@ -5,14 +5,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LANGUAGES, RTL_LANGS, isRtl, type LanguageCode } from "./languages";
 import en from "./locales/en.json";
 import ur from "./locales/ur.json";
-import ks from "./locales/ks.json";
 
 const STORAGE_KEY = "@RozgaarPro/language";
 
 const resources = {
   en: { translation: en },
   ur: { translation: ur },
-  ks: { translation: ks },
 } as const;
 
 /**
@@ -81,17 +79,17 @@ function getDeviceLocaleTag(): string | null {
 
 /**
  * Detect initial language: stored > device locale > "en".
- * Only returns en | ur | ks.
+ * Only returns en | ur.
  */
 async function detectInitialLanguage(): Promise<LanguageCode> {
   const stored = await getStoredLanguage();
-  if (stored && (stored === "en" || stored === "ur" || stored === "ks")) {
+  if (stored && (stored === "en" || stored === "ur")) {
     return stored as LanguageCode;
   }
 
   const preferred = getDeviceLocaleTag();
-  if (preferred === "ur" || preferred === "ks") {
-    return preferred as LanguageCode;
+  if (preferred === "ur") {
+    return "ur";
   }
 
   return "en";

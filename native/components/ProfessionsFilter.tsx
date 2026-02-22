@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { AppText as Text } from "@/components";
 import { useTranslation } from "react-i18next";
 import { useGetProfessionsFilterList } from "@/mutations";
 import { useLocationStore } from "@/store";

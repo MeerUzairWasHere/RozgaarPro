@@ -1,5 +1,6 @@
 import { Search } from "lucide-react-native";
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { AppText as Text } from "./AppText";
 import { useTranslation } from "react-i18next";
 
 type Props = {

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { View, Text, Pressable, useColorScheme } from "react-native";
+import { View, Pressable, useColorScheme } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
 import { Search, ShieldCheck, Briefcase } from "lucide-react-native";
 import { useRouter } from "expo-router";

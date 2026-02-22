@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 type Props = {

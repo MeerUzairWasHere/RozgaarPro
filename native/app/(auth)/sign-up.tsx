@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -8,6 +7,7 @@ import {
   Keyboard,
   Pressable,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { User, Phone, Lock } from "lucide-react-native";
 import { Redirect, router } from "expo-router";
@@ -65,7 +65,7 @@ export default function SignupScreen() {
           <View className="flex-1">
             {/* Header */}
             <View className="p-4">
-              <BackButton />
+              <BackButton fallbackHref={ROUTES.SIGN_IN} />
             </View>
 
             <ScrollView

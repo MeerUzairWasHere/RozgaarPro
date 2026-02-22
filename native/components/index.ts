@@ -1,5 +1,6 @@
 export * from "./Skeletons";
 // Common
+export { AppText } from "./common/AppText";
 export { default as BackButton } from "./common/BackButton";
 export { default as CustomInput } from "./common/CustomInput";
 export { default as CustomPressableButton } from "./common/CustomPressableButton";

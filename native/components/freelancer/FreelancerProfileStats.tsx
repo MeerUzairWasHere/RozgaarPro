@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, useColorScheme } from "react-native";
+import { View, useColorScheme } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Briefcase, Star, IndianRupee } from "lucide-react-native";
 import clsx from "clsx";

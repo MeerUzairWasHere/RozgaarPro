@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  Text,
   View,
   ScrollView,
   Pressable,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   I18nManager,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { useTranslation } from "react-i18next";
 import {
   Globe,

@@ -1,12 +1,12 @@
 import {
   View,
-  Text,
   FlatList,
   TouchableOpacity,
   RefreshControl,
   ActivityIndicator,
   Image,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { useTranslation } from "react-i18next";
 import { RelativePathString, router } from "expo-router";
 import { useGetConversations } from "@/mutations";

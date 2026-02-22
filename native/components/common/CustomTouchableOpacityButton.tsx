@@ -1,10 +1,10 @@
 import {
   View,
-  Text,
   TouchableOpacity,
   ActivityIndicator,
   useColorScheme,
 } from "react-native";
+import { AppText as Text } from "./AppText";
 import React from "react";
 import cn from "clsx";
 

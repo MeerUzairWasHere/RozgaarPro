@@ -1,6 +1,7 @@
 import { MessageCircle, Phone } from "lucide-react-native";
 import React from "react";
-import { View, Text, TouchableOpacity, Linking } from "react-native";
+import { View, TouchableOpacity, Linking } from "react-native";
+import { AppText as Text } from "@/components";
 import { useTranslation } from "react-i18next";
 import { router } from "expo-router";
 import { getStartConversationRoute } from "@/constants";

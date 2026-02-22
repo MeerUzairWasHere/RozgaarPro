@@ -1,4 +1,5 @@
-import { Text, View } from "react-native";
+import { View } from "react-native";
+import { AppText as Text } from "./AppText";
 import CustomTouchableOpacityButton from "./CustomTouchableOpacityButton";
 import { Filter } from "lucide-react-native";
 import { useTranslation } from "react-i18next";

@@ -1,6 +1,7 @@
 import { Calendar, Star } from "lucide-react-native";
 import React from "react";
-import { View, Text, useColorScheme } from "react-native";
+import { View, useColorScheme } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function ReviewsSection() {

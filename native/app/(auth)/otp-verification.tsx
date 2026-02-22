@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { View, Text, TextInput, Pressable } from "react-native";
+import { View, TextInput, Pressable } from "react-native";
+import { AppText as Text } from "@/components";
 import Animated, {
   FadeIn,
   FadeInDown,

@@ -7,12 +7,12 @@ import {
 } from "@/components";
 import {
   View,
-  Text,
   ScrollView,
   TouchableOpacity,
   Image,
   Keyboard,
 } from "react-native";
+import { AppText as Text } from "@/components";
 import { Camera, MapPin, Clock } from "lucide-react-native";
 import { useColorScheme } from "react-native";
 import Animated, { FadeInRight } from "react-native-reanimated";
