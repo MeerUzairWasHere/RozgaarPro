@@ -5,6 +5,7 @@ import { Text } from "react-native";
 import BackButton from "./BackButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import LocationHeader from "./LocationHeader";
+import { ROUTES } from "@/constants";
 
 interface HeaderProps {
   title?: string;
@@ -31,7 +32,7 @@ export default function AppHeader({
       >
         <View className="flex-row items-center justify-between px-4 py-3">
           <View className="flex-row items-center gap-3">
-            {showBack && <BackButton />}
+            {showBack && <BackButton fallbackHref={ROUTES.HOME} />}
             {showLocation && <LocationHeader lightBackground={!isDark} />}
             {title && (
               <Text

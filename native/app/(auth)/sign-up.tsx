@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Pressable,
+  useColorScheme,
 } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { User, Phone, Lock } from "lucide-react-native";
@@ -27,8 +28,10 @@ import { useRef } from "react";
 import { cn } from "@/utils";
 import { useFormErrors } from "@/hooks";
 export default function SignupScreen() {
+  const colorScheme = useColorScheme();
   const { name, phone, password, userRole, setField, signupStep, setUserRole } =
     useAuthStore();
+  const iconColor = colorScheme === "dark" ? "#B3A5F5" : "#6B4EEA";
 
   const registerMutation = useRegister();
   const phoneInputRef = useRef<any>(null);
@@ -143,7 +146,7 @@ export default function SignupScreen() {
                   >
                     {/* Name */}
                     <CustomInput
-                      icon={<User size={15} color="#6B4EEA" />}
+                      icon={<User size={15} color={iconColor} />}
                       placeholder="Full Name"
                       value={name}
                       onChangeText={(text) => {
@@ -159,7 +162,7 @@ export default function SignupScreen() {
                     {/* Phone */}
                     <CustomInput
                       ref={phoneInputRef}
-                      icon={<Phone size={15} color="#6B4EEA" />}
+                      icon={<Phone size={15} color={iconColor} />}
                       placeholder="Phone Number"
                       value={phone}
                       onChangeText={(text) => {
@@ -175,7 +178,7 @@ export default function SignupScreen() {
                     {/* Password */}
                     <CustomInput
                       ref={passwordInputRef}
-                      icon={<Lock size={15} color="#6B4EEA" />}
+                      icon={<Lock size={15} color={iconColor} />}
                       placeholder="Password"
                       value={password}
                       onChangeText={(text) => {
