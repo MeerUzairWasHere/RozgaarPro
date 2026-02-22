@@ -12,6 +12,7 @@ export { default as LocationHeader } from "./common/LocationHeader";
 export { default as FilterDrawer } from "./common/FilterDrawer";
 export { default as InitialAvatar } from "./common/InitialAvatar";
 export { default as ErrorState } from "./common/ErrorState";
+export { default as HomeHero } from "./HomeHero";
 export { default as StatusBanner } from "./common/StatusBanner";
 export { default as AvailabilityStatus } from "./common/AvailabilityStatus";
 

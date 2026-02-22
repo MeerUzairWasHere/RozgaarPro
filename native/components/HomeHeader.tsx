@@ -6,6 +6,7 @@ import SectionHeader from "./SectionHeader";
 import TopRatedFreelancers from "./freelancer/TopRatedFreelancers";
 import EmptyState from "./common/EmptyState";
 import { MAX_RADIUS_KM } from "@/constants";
+import HomeHero from "./HomeHero";
 
 type Props = {
   query: string;
@@ -26,8 +27,8 @@ export default function HomeHeader({
 
   return (
     <View className="pt-4">
+      <HomeHero />
       <SearchBar value={query} onChange={setQuery} />
-
       {isSearching && (
         <Text className="text-md text-brand-400 mb-4">
           {itemsLength === 0
@@ -35,21 +36,18 @@ export default function HomeHeader({
             : `${itemsLength} result${itemsLength === 1 ? "" : "s"} for "${query}"`}
         </Text>
       )}
-
       {!hasTyped && !isSearching && (
         <>
           <ProfessionsFilter />
           <TopRatedFreelancers />
         </>
       )}
-
       {hasTyped && !isSearching && (
         <EmptyState
           title="Start typing to search"
           message="Search by name or profession."
         />
       )}
-
       {isSearching && !isLoading && itemsLength === 0 && (
         <EmptyState
           title={`No results for "${query}"`}

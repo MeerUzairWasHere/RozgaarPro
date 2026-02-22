@@ -5,8 +5,6 @@ import { useGetTopRatedFreelancers } from "@/mutations";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import FreelancerCard from "./FreelancerCard";
 import { TopRatedFreelancersSkeletonList } from "../Skeletons";
-import { router } from "expo-router";
-import { ROUTES } from "@/constants";
 import { SortDirection } from "@/types";
 export default function TopRatedFreelancers() {
   const { coordinates } = useLocationStore();
@@ -44,9 +42,7 @@ export default function TopRatedFreelancers() {
       data={freelancers?.data}
       keyExtractor={(item) => item.freelancer_id}
       renderItem={({ item }) => <FreelancerCard freelancer={item} />}
-      ListHeaderComponent={
-        <SectionHeader title="Top Rated Freelancers" />
-      }
+      ListHeaderComponent={<SectionHeader title="Top Rated Freelancers" />}
       scrollEnabled={false}
       contentContainerStyle={{
         padding: 16,
