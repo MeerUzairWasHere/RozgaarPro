@@ -71,7 +71,6 @@ export const useLogout = (): UseMutationResult<void, Error, void> => {
       clearAuth();
       // Clear only auth persistence
       await AsyncStorage.removeItem("auth-storage");
-      await AsyncStorage.removeItem("onboarding-storage"); //TODO: Remove this after onboarding is implemented
       router.replace(ROUTES.SELECT_ROLE);
     },
   });

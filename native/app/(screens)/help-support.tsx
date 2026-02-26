@@ -20,9 +20,9 @@ import { AppHeader } from "@/components";
 
 const isRTL = false;
 
-const SUPPORT_PHONE = "+911234567890";
+const SUPPORT_PHONE = "+918899080590";
 const SUPPORT_EMAIL = "support@rozgaarpro.com";
-const SUPPORT_WHATSAPP = "911234567890";
+const SUPPORT_WHATSAPP = "918899080590";
 
 function SectionTitle({ label }: { label: string }) {
   return (
@@ -43,18 +43,39 @@ export default function HelpSupport() {
   const iconMuted = isDark ? "#9ca3af" : "#6b7280";
 
   const faqs: { q: string; a: string }[] = [
-    { q: "How do I find a worker?", a: "Search by category or location on the home screen." },
-    { q: "How do I get verified?", a: "Upload your ID in your profile. Verification takes 24-48 hours." },
-    { q: "Is RozgaarPro free?", a: "Yes, finding and contacting workers is completely free." },
-    { q: "How do I report a problem?", a: "Contact us through any channel listed below." },
+    {
+      q: "How do I find a worker?",
+      a: "Search by category or location on the home screen.",
+    },
+    {
+      q: "How do I get verified?",
+      a: "Upload your ID in your profile. Verification takes 24-48 hours.",
+    },
+    {
+      q: "Is RozgaarPro free?",
+      a: "Yes, finding and contacting workers is completely free.",
+    },
+    {
+      q: "How do I report a problem?",
+      a: "Contact us through any channel listed below.",
+    },
   ];
 
   const handleCall = () => {
     Linking.openURL(`tel:${SUPPORT_PHONE}`);
   };
 
-  const handleWhatsApp = () => {
-    Linking.openURL(`https://wa.me/${SUPPORT_WHATSAPP}`);
+  const handleWhatsApp = async () => {
+    const url = `https://wa.me/${SUPPORT_WHATSAPP}`;
+
+    try {
+      await Linking.openURL(url);
+    } catch (err: any) {
+      // // Ignore the known false-negative error
+      // if (__DEV__) {
+      //   console.log("WhatsApp open warning:", err?.message);
+      // }
+    }
   };
 
   const handleEmail = () => {
