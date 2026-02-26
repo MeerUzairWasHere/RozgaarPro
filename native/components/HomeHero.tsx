@@ -43,7 +43,7 @@ export default function HomeHero({ query, onChangeQuery }: Props) {
           className="text-white text-2xl font-bold leading-tight mt-1"
           style={styles.title}
         >
-          Let's find best talent for you
+          Let's find best freelancer for you
         </Text>
 
         {/* Search bar - overlaps into content area */}
