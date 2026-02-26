@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export type ColorSchemePreference = "light" | "dark";
+export type ColorSchemePreference = "light" | "dark" | "system";
 
 type ThemeState = {
   colorScheme: ColorSchemePreference;
@@ -12,7 +12,7 @@ type ThemeState = {
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      colorScheme: "light",
+      colorScheme: "system",
       setColorScheme: (colorScheme) => set({ colorScheme }),
     }),
     {

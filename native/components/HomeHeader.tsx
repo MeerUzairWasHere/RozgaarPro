@@ -1,11 +1,8 @@
 import { View } from "react-native";
 import { Text } from "react-native";
-import SearchBar from "./SearchBar";
 import ProfessionsFilter from "./ProfessionsFilter";
-import SectionHeader from "./SectionHeader";
 import TopRatedFreelancers from "./freelancer/TopRatedFreelancers";
 import EmptyState from "./common/EmptyState";
-import { MAX_RADIUS_KM } from "@/constants";
 import HomeHero from "./HomeHero";
 
 type Props = {
@@ -26,9 +23,8 @@ export default function HomeHeader({
   const hasTyped = query.trim().length > 0;
 
   return (
-    <View className="pt-4">
-      <HomeHero />
-      <SearchBar value={query} onChange={setQuery} />
+    <View>
+      <HomeHero query={query} onChangeQuery={setQuery} />
       {isSearching && (
         <Text className="text-md text-brand-400 mb-4">
           {itemsLength === 0

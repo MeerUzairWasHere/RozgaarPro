@@ -1,12 +1,5 @@
 import { useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Pressable,
-  Switch,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, ScrollView, Pressable, Switch } from "react-native";
 import {
   ChevronRight,
   Moon,

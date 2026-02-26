@@ -1,45 +1,148 @@
 import React from "react";
-import { View, Text, useColorScheme } from "react-native";
-import { Zap } from "lucide-react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  useColorScheme,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { Search, X } from "lucide-react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { useAuthStore } from "@/store";
 
 const BRAND_HERO = { light: "#6B4EEA", dark: "#5A3DD6" };
 
-export default function HomeHero() {
+type Props = {
+  query: string;
+  onChangeQuery: (text: string) => void;
+};
+
+export default function HomeHero({ query, onChangeQuery }: Props) {
   const isDark = useColorScheme() === "dark";
   const brandColor = isDark ? BRAND_HERO.dark : BRAND_HERO.light;
+  const { user } = useAuthStore();
+  const displayName = user?.name?.trim() || "there";
+  const isSearching = query.trim().length > 0;
 
   return (
     <Animated.View
-      entering={FadeInDown.duration(500)}
-      className="rounded-3xl overflow-hidden mb-6 p-4"
-      style={{
-        backgroundColor: brandColor,
-        shadowColor: brandColor,
-      }}
+      entering={FadeInDown.duration(400)}
+      style={[styles.outer, { backgroundColor: brandColor }]}
     >
-      <View className="flex-row items-center justify-between">
-        <View className="flex-1">
-          <View className="flex-row items-center gap-2 mb-1">
-            <Zap size={22} color="#FFF" fill="#FFF" strokeWidth={2.5} />
-            <Text className="text-white/90 text-sm font-semibold uppercase tracking-wide">
-              Quick Help
-            </Text>
-          </View>
-          <Text className="text-2xl font-bold text-white leading-tight">
-            Help in minutes,{"\n"}not hours
-          </Text>
-          <Text className="text-white/85 text-sm mt-2">
-            Skilled pros near you • Verified • Ready now
+      <View style={styles.inner}>
+        {/* Top row: greeting + notification */}
+        <View style={styles.topRow}>
+          <Text className="text-white text-base" numberOfLines={1}>
+            Hello, {displayName} 👋
           </Text>
         </View>
-        <View
-          className="w-20 h-20 rounded-2xl items-center justify-center"
-          style={{ backgroundColor: "rgba(255,255,255,0.2)" }}
+
+        {/* Main title */}
+        <Text
+          className="text-white text-2xl font-bold leading-tight mt-1"
+          style={styles.title}
         >
-          <Zap size={40} color="#FFF" fill="#FFF" strokeWidth={2} />
+          Let's find best talent for you
+        </Text>
+
+        {/* Search bar - overlaps into content area */}
+        <View style={styles.searchWrap}>
+          <View
+            style={[
+              styles.searchBox,
+              isDark ? styles.searchBoxDark : styles.searchBoxLight,
+            ]}
+          >
+            <Search
+              size={20}
+              color={isDark ? "#9CA3AF" : "#6B7280"}
+              style={styles.searchIcon}
+            />
+            <TextInput
+              value={query}
+              onChangeText={onChangeQuery}
+              placeholder="Search service"
+              placeholderTextColor={isDark ? "#9CA3AF" : "#6B7280"}
+              style={[
+                styles.input,
+                isDark ? styles.inputDark : styles.inputLight,
+              ]}
+            />
+            {isSearching && (
+              <TouchableOpacity
+                onPress={() => onChangeQuery("")}
+                style={styles.clearBtn}
+                hitSlop={8}
+              >
+                <X size={18} color={isDark ? "#9CA3AF" : "#6B7280"} />
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
     </Animated.View>
   );
 }
+
+const styles = StyleSheet.create({
+  outer: {
+    marginHorizontal: -16,
+    marginBottom: 16,
+    paddingBottom: 12,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+  },
+  inner: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  title: {
+    maxWidth: "90%",
+  },
+  searchWrap: {
+    marginTop: 20,
+    marginBottom: 4,
+  },
+  searchBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 16,
+    minHeight: 52,
+    paddingHorizontal: 14,
+  },
+  searchBoxLight: {
+    backgroundColor: "#FFF",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  searchBoxDark: {
+    backgroundColor: "#1A1A1A",
+  },
+  searchIcon: {
+    marginRight: 10,
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    paddingVertical: 14,
+    paddingRight: 8,
+  },
+  inputLight: {
+    color: "#1A1A1A",
+  },
+  inputDark: {
+    color: "#F2F2F2",
+  },
+  clearBtn: {
+    padding: 4,
+  },
+});
