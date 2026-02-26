@@ -432,18 +432,14 @@ export default function CompleteProfile() {
                           onPress={handleTakeIdPhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">
-                            Retake
-                          </Text>
+                          <Text className="text-sm font-medium">Retake</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickIdImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">
-                            Gallery
-                          </Text>
+                          <Text className="text-sm font-medium">Gallery</Text>
                         </TouchableOpacity>
                       </View>
                     </>
@@ -501,18 +497,14 @@ export default function CompleteProfile() {
                           onPress={handleTakeProfilePhoto}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">
-                            Retake
-                          </Text>
+                          <Text className="text-sm font-medium">Retake</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                           onPress={handlePickProfileImage}
                           className="px-4 py-2 bg-primary-200 dark:bg-primary-700 rounded-xl"
                         >
-                          <Text className="text-sm font-medium">
-                            Gallery
-                          </Text>
+                          <Text className="text-sm font-medium">Gallery</Text>
                         </TouchableOpacity>
                       </View>
                     </>

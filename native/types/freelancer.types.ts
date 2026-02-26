@@ -57,3 +57,12 @@ export interface NearbyFreelancerDetail extends NearbyFreelancer {
   description: string | null;
   availability: AVAILABILITY_STATUS;
 }
+
+export interface FreelancerImage {
+  image_id: string;
+  freelancer_id: string;
+  image_key: string;
+  image_url: string;
+  alt_text?: string;
+  created_at: string;
+}

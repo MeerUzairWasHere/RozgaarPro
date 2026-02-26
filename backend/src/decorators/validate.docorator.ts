@@ -14,9 +14,10 @@ export const validate =
     try {
       // Validate body
       if (schemas.body) {
-
         if (!req.body || Object.keys(req.body).length === 0) {
-          throw new BadRequestError("Please provide a valid request body");
+          throw new BadRequestError(
+            "Please provide a valid request body or try sending ListQueryDto",
+          );
         }
 
         req.body = await schemas.body.parseAsync(req.body);

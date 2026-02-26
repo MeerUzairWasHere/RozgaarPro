@@ -4,6 +4,7 @@ import { IFreelancerService } from "../interfaces";
 import { currentUser, getBody } from "../decorators";
 import { BadRequestError } from "../errors";
 import { FreelancerUploadFiles } from "../types";
+import { FilterOperator } from "../dto";
 
 export class FreelancerController {
   constructor(private freelancerService: IFreelancerService) {}
@@ -62,5 +63,47 @@ export class FreelancerController {
       );
 
     res.status(StatusCodes.OK).json(freelancer);
+  };
+
+  public addGalleryImages = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const { freelancerId } = req.params;
+    // @ts-ignore
+    if (!req.files?.images) {
+      throw new BadRequestError("images is required");
+    }
+
+    await this.freelancerService.addImagesToFreelancerProfile({
+      freelancerId,
+      files: req.files as FreelancerUploadFiles,
+    });
+
+    res.status(StatusCodes.OK).json({
+      msg: "Images added successfully!",
+    });
+  };
+
+  public getGalleryImages = async (
+    req: Request,
+    res: Response,
+  ): Promise<void> => {
+    const { freelancerId } = req.params;
+
+    let query = getBody(req);
+
+    query.filters = [
+      ...(query.filters ?? []),
+      {
+        field: "freelancerId",
+        operator: FilterOperator.EQUAL_TO,
+        value: freelancerId,
+      },
+    ];
+
+    const result = await this.freelancerService.getGalleryImages(query);
+
+    res.status(StatusCodes.OK).json(result);
   };
 }

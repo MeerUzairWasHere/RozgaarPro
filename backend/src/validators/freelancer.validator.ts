@@ -60,4 +60,10 @@ export const freelancerIdParamSchema = z.object({
   freelancerId: z.uuid("freelancerId is required and must be a valid UUID"),
 });
 
+export const imageIdParamSchema = z.object({
+  imageId: z.uuid("imageId is required and must be a valid UUID"),
+});
 
+export const validateGetFreelancersGalleryInput = z.object({
+  pagination: validatePaginationInput.optional(),
+});

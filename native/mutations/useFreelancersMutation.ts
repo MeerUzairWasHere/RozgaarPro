@@ -139,3 +139,29 @@ export const useGetSingleVisibleFreelancerDetail = (query: ListQuery) => {
     enabled,
   });
 };
+
+export const useGetFreelancerGallery = (query: ListQuery = {}) => {
+  return useInfiniteQuery({
+    queryKey: QUERY_KEYS.FREELANCERS.listQuery(query),
+    initialPageParam: 1,
+
+    queryFn: ({ pageParam }) =>
+      freelancerApiClient.getFreelancerGallery(
+        query.filters?.find((f) => f.field === "freelancerId")?.value as string,
+        {
+          ...query,
+          pagination: {
+            page: pageParam,
+            pageSize: query.pagination?.pageSize ?? 15,
+          },
+        },
+      ),
+
+    getNextPageParam: (lastPage) => {
+      if (lastPage.meta.hasNext) {
+        return lastPage.meta.page + 1;
+      }
+      return undefined;
+    },
+  });
+};

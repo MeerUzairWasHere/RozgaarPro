@@ -16,6 +16,7 @@ export { default as HomeHero } from "./HomeHero";
 export { default as StatusBanner } from "./common/StatusBanner";
 export { default as AvailabilityStatus } from "./common/AvailabilityStatus";
 
+
 export { default as LogoutButton } from "./LogoutButton";
 export { default as ProfileApprovedCard } from "./ProfileApprovedCard";
 export { default as ProfileCard } from "./ProfileCard";
@@ -32,6 +33,7 @@ export { default as LocationSection } from "./freelancer/LocationSection";
 export { default as ProfileHeader } from "./freelancer/ProfileHeader";
 export { default as QuickStats } from "./freelancer/QuickStats";
 export { default as ReviewsSection } from "./freelancer/ReviewsSection";
+export { default as ImageGallery } from "./freelancer/ImageGallery";
 export { default as HomeHeader } from "./HomeHeader";
 export { default as FreelancerCard } from "./freelancer/FreelancerCard";
 export { default as TopRatedFreelancers } from "./freelancer/TopRatedFreelancers";

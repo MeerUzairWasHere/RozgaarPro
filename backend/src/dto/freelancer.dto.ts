@@ -22,6 +22,13 @@ export interface NearbyFreelancer {
   id_image_url: string | null;
 }
 
+export interface FreelancerImage {
+  image_id: string;
+  freelancer_id: string;
+  image_key: string;
+  alt_text?: string;
+  created_at: Date;
+}
 export interface NearbyFreelancerDetail extends NearbyFreelancer {
   latitude: number;
   longitude: number;

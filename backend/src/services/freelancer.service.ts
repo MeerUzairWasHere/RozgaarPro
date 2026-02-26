@@ -1,7 +1,14 @@
-import { Freelancer, FreelancerStatus, Prisma, Role } from "@prisma/client";
+import {
+  Freelancer,
+  FreelancerStatus,
+  Image,
+  Prisma,
+  Role,
+} from "@prisma/client";
 import {
   Coordinates,
   FilterOperator,
+  FreelancerImage,
   FreelancerProfileCompletedInput,
   ListFilter,
   ListQueryDto,
@@ -9,6 +16,7 @@ import {
   NearbyFreelancerDetail,
 } from "../dto";
 import {
+  BucketType,
   IFreelancerService,
   ILocationService,
   IPrismaService,
@@ -16,9 +24,14 @@ import {
   IStorageService,
   IUserService,
   ProcessedImageResult,
+  StorageUploadResult,
 } from "../interfaces";
 import { BadRequestError, ForbiddenError, NotFoundError } from "../errors";
-import { MAX_NUMBER_OF_SKILLS } from "../utils/constants";
+import {
+  MAX_NUMBER_OF_GALLERY_IMAGES,
+  MAX_NUMBER_OF_SKILLS,
+  MAX_TOTAL_GALLERY_IMAGES,
+} from "../utils/constants";
 import { FreelancerUploadFiles, PaginatedResponse } from "../types";
 import { executePaginatedRawQuery } from "../utils";
 
@@ -307,5 +320,109 @@ export class FreelancerService implements IFreelancerService {
   `;
 
     return rows.map((r) => r.id);
+  }
+
+  async addImagesToFreelancerProfile({
+    freelancerId,
+    files,
+  }: {
+    freelancerId: string;
+    files: FreelancerUploadFiles;
+  }) {
+    if (!files.images || files.images.length === 0) {
+      throw new BadRequestError("At least one image is required");
+    }
+
+    if (files.images.length > MAX_NUMBER_OF_GALLERY_IMAGES) {
+      throw new BadRequestError(
+        `You can upload up to ${MAX_NUMBER_OF_GALLERY_IMAGES} images at a time`,
+      );
+    }
+
+    // Find freelancer or throw
+    const freelancer = await this.findFreelancerByIdOrThrowError({
+      id: freelancerId,
+    });
+
+    // Check total existing images don't exceed the cap
+    const existingCount = await this.prismaService.image.count({
+      where: { freelancerId: freelancer.id },
+    });
+
+    if (existingCount + files.images.length > MAX_TOTAL_GALLERY_IMAGES) {
+      throw new BadRequestError(
+        `You can have at most ${MAX_TOTAL_GALLERY_IMAGES} gallery images total. You currently have ${existingCount}.`,
+      );
+    }
+
+    const uploadedResults: StorageUploadResult[] = [];
+
+    try {
+      // Upload all images first
+      for (const file of files.images) {
+        const extension = file.mimetype.split("/")[1];
+
+        const key = `gallery/${freelancerId}-${Date.now()}.${extension}`;
+
+        const result = await this.storageService.upload(
+          file.buffer,
+          key,
+          file.mimetype,
+          BucketType.PUBLIC,
+        );
+        uploadedResults.push(result);
+      }
+
+      // Save all to DB in a single transaction
+      await this.prismaService.$transaction(async (tx) => {
+        await tx.image.createMany({
+          data: uploadedResults.map((result) => ({
+            freelancerId: freelancer.id,
+            imageKey: result.key,
+          })),
+        });
+      });
+    } catch (error) {
+      // Cleanup any successfully uploaded files on failure
+      for (const result of uploadedResults) {
+        await this.storageService.delete(result.key, BucketType.PUBLIC);
+      }
+
+      console.error("Failed to upload gallery images:", error);
+      throw error;
+    }
+  }
+
+  async getGalleryImages(
+    query: ListQueryDto,
+  ): Promise<PaginatedResponse<FreelancerImage>> {
+    const response = await executePaginatedRawQuery<FreelancerImage>({
+      prisma: this.prismaService,
+      query,
+      defaultFilters: query.filters,
+      baseQuery: (sqlFilters, sqlOrder, sqlSearch, take, skip) => Prisma.sql`
+        SELECT 
+          "id" AS image_id,
+          "freelancerId" AS freelancer_id,
+          "imageKey" AS image_key,
+          "altText" AS alt_text,
+          "createdAt" AS created_at
+        FROM "Image"
+      ${sqlFilters}
+      LIMIT ${take}
+      OFFSET ${skip}
+    `,
+      countQuery: (sqlFilters) => Prisma.sql`
+        SELECT COUNT(*)::int AS count FROM "Image"`,
+    });
+
+    response.data = response.data.map((item) => ({
+      ...item,
+      image_url: item.image_key
+        ? this.storageService.getPublicUrl(item.image_key)
+        : null,
+    }));
+
+    return response;
   }
 }

@@ -1,6 +1,7 @@
 import { api } from "@/lib";
 import {
   FREELANCER_STATUS,
+  FreelancerImage,
   ListQuery,
   NearbyFreelancer,
   NearbyFreelancerDetail,
@@ -50,6 +51,17 @@ export const freelancerApiClient = {
   ): Promise<NearbyFreelancerDetail> => {
     const { data } = await api.post<NearbyFreelancerDetail>(
       `/freelancers/${freelancerId}`,
+      query,
+    );
+    return data;
+  },
+
+  getFreelancerGallery: async (
+    freelancerId: string,
+    query: ListQuery,
+  ): Promise<PaginatedResponse<FreelancerImage>> => {
+    const { data } = await api.post<PaginatedResponse<FreelancerImage>>(
+      `/freelancers/${freelancerId}/gallery/list`,
       query,
     );
     return data;

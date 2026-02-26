@@ -1,13 +1,13 @@
 import { Freelancer, FreelancerStatus } from "@prisma/client";
 import {
   Coordinates,
+  FreelancerImage,
   FreelancerProfileCompletedInput,
   ListQueryDto,
   NearbyFreelancer,
   NearbyFreelancerDetail,
 } from "../dto";
 import { FreelancerUploadFiles, PaginatedResponse } from "../types";
-import { Request } from "express";
 
 export interface IFreelancerService {
   createAndCompleteFreelancerProfile({
@@ -31,4 +31,16 @@ export interface IFreelancerService {
     coords: Coordinates,
     freelancerId: string,
   ): Promise<NearbyFreelancerDetail>;
+
+  addImagesToFreelancerProfile({
+    freelancerId,
+    files,
+  }: {
+    freelancerId: string;
+    files: FreelancerUploadFiles;
+  }): Promise<void>;
+
+  getGalleryImages(
+    query: ListQueryDto,
+  ): Promise<PaginatedResponse<FreelancerImage>>;
 }
