@@ -1,18 +1,22 @@
-import { Calendar, Star } from "lucide-react-native";
+import { Calendar, PenLine, Star } from "lucide-react-native";
 import React from "react";
-import { View, useColorScheme } from "react-native";
+import { Pressable, TouchableOpacity, View, useColorScheme } from "react-native";
 import { Text } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 export default function ReviewsSection() {
   const isDark = useColorScheme() === "dark";
   return (
-    <Animated.View entering={FadeInDown.delay(600)} className="mb-6">
-      <View className="flex-row items-center gap-2 mb-3">
+    <Animated.View entering={FadeInDown.delay(600)} className="mb-6 ">
+      <View className="flex-row items-center gap-2 mb-3 ">
         <View className="w-1 h-6 bg-brand dark:bg-brand-400 rounded-full" />
         <Text className="text-xl font-bold text-primary-950 dark:text-primary-50">
           Recent Reviews
         </Text>
+        <TouchableOpacity className="rounded-full ml-auto flex flex-row gap-2 items-center justify-center py-2 px-3 bg-brand text-primary-foreground">
+          <PenLine color="#FFF" size={14} />
+          <Text className="text-primary-50 text-lg ">Write Review</Text>
+        </TouchableOpacity>
       </View>
 
       <View className="bg-white dark:bg-primary-900 rounded-2xl p-5 border border-primary-100 dark:border-primary-800">
