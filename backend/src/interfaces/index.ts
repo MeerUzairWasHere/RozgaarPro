@@ -13,3 +13,4 @@ export * from "./conversation.interface";
 export * from "./rekognition.interface";
 export * from "./image.interface";
 export * from "./profile.image.interface";
+export * from "./review.interface";

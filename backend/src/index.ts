@@ -19,6 +19,7 @@ import skillRoutes from "./routes/skill.routes";
 import professionRoutes from "./routes/profession.routes";
 import freelancerRoutes from "./routes/freelancer.routes";
 import conversationRoutes from "./routes/conversation.routes";
+import reviewRoutes from "./routes/review.routes";
 
 // Middleware
 import { prismaService } from "./container";
@@ -78,6 +79,7 @@ app.use("/api/v1/professions", professionRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/freelancers", freelancerRoutes);
 app.use("/api/v1/conversations", conversationRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
 
 // The error handler must be registered before any other error middleware and after all controllers
 Sentry.setupExpressErrorHandler(app);

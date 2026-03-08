@@ -13,3 +13,4 @@ export * from "./rekognition.service";
 export * from "./image.service";
 export * from "./profile.image.service";
 export * from "./conversation.service";
+export * from "./review.service";

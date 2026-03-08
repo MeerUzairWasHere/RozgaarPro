@@ -6,3 +6,4 @@ export * from "./freelancer.types";
 export * from "./profession.types";
 export * from "./list.types";
 export * from "./conversation.types";
+export * from "./review.types";

@@ -37,4 +37,16 @@ export const QUERY_KEYS = {
     messages: (conversationId: string) =>
       [...QUERY_KEYS.CONVERSATIONS.all, "messages", conversationId] as const,
   },
+  REVIEWS: {
+    all: ["reviews"] as const,
+    canRate: (freelancerId: string) =>
+      [...QUERY_KEYS.REVIEWS.all, "canRate", freelancerId] as const,
+    byFreelancer: (freelancerId: string, query: ListQuery) =>
+      [
+        ...QUERY_KEYS.REVIEWS.all,
+        "byFreelancer",
+        freelancerId,
+        JSON.stringify(query),
+      ] as const,
+  },
 } as const;

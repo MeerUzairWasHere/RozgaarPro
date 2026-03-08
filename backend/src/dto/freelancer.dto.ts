@@ -15,6 +15,7 @@ export interface NearbyFreelancer {
   experience: number;
   status: FreelancerStatus;
   rating: number;
+  review_count: number;
   distance_km: number;
   profile_image_key: string | null;
   profile_image_url: string | null;

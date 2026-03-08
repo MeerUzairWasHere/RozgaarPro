@@ -49,17 +49,11 @@ export default function ConversationThreadScreen() {
   const user = useAuthStore((s) => s.user);
   const { data: messages = [], isLoading } = useGetMessages(conversationId);
   const sendMessage = useSendMessage(conversationId ?? "");
+  const isUser = user?.role === USER_ROLE.USER;
+  const lastMessage = messages.length ? messages[messages.length - 1] : null;
 
-  const canSend = (() => {
-    if (!messages.length) return true;
-    const last = messages[messages.length - 1];
-    if (messages.length === 1) return last.isFromSelf ? false : true;
-    return true;
-  })();
-  const userWaitingForReply =
-    messages.length === 1 &&
-    messages[0]?.isFromSelf &&
-    user?.role === USER_ROLE.USER;
+  const canSend = isUser ? !lastMessage?.isFromSelf : true;
+  const userWaitingForReply = isUser && !!lastMessage?.isFromSelf;
 
   useEffect(() => {
     if (messages.length > 0) {

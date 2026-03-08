@@ -6,3 +6,4 @@ export * from "./freelancer.dto";
 export * from "./profession.dto";
 export * from "./list-query.dto";
 export * from "./conversation.dto";
+export * from "./review.dto";

@@ -13,7 +13,7 @@ import {
   Text,
   Pressable,
 } from "react-native";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { useGetSingleVisibleFreelancerDetail } from "@/mutations";
 import { useLocationStore } from "@/store";
 import { FreelancerDetailSkeleton } from "@/components/Skeletons";
@@ -24,7 +24,7 @@ import { useState } from "react";
 import { cn } from "@/utils";
 import ImageGallery from "./ImageGallery";
 
-type Tab = "about" | "gallery";
+type Tab = "about" | "gallery" | "reviews";
 
 export default function FreelancerDetails() {
   const { freelancerId } = useLocalSearchParams<{
@@ -48,7 +48,6 @@ export default function FreelancerDetails() {
       },
     ],
   });
-
   if (isLoading) {
     return <FreelancerDetailSkeleton />;
   }
@@ -90,7 +89,7 @@ export default function FreelancerDetails() {
           entering={FadeInDown.delay(100)}
           className="flex-row bg-brand/10 dark:bg-brand-500/20 rounded-xl p-1 my-4 border border-brand/20 dark:border-brand-500/30"
         >
-          {(["about", "gallery"] as Tab[]).map((tab) => (
+          {(["about", "gallery", "reviews"] as Tab[]).map((tab) => (
             <Pressable
               key={tab}
               onPress={() => setActiveTab(tab)}
@@ -130,10 +129,15 @@ export default function FreelancerDetails() {
               location={freelancer.location}
               distance={freelancer.distance_km}
             />
-            <ReviewsSection />
           </View>
-        ) : (
+        ) : activeTab === "gallery" ? (
           <ImageGallery freelancer={freelancer} />
+        ) : (
+          <ReviewsSection
+            freelancerId={freelancer.freelancer_id}
+            averageRating={freelancer.rating}
+            reviewCount={freelancer.review_count}
+          />
         )}
       </ScrollView>
 

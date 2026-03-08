@@ -96,7 +96,7 @@ export class FreelancerController {
     query.filters = [
       ...(query.filters ?? []),
       {
-        field: "freelancerId",
+        field: "entityId",
         operator: FilterOperator.EQUAL_TO,
         value: freelancerId,
       },

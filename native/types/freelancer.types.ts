@@ -46,6 +46,7 @@ export interface NearbyFreelancer {
   experience: number;
   status: FREELANCER_STATUS;
   rating: number;
+  review_count: number;
   distance_km: number; // raw DB value
 }
 

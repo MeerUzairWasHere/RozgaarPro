@@ -29,6 +29,7 @@ model User {
   refreshTokens               Token[]
   conversationsAsUser         Conversation[]
   sentMessages                Message[]
+  reviews                     Review[]
 }
 
 /// /////////////////
@@ -64,6 +65,7 @@ model Freelancer {
   skills              FreelancerSkill[]
   conversations       Conversation[]
   images              Image[]
+  reviews             Review[]
 }
 
 model FreelancerLocation {
@@ -148,6 +150,22 @@ model Image {
   freelancer Freelancer @relation(fields: [entityId], references: [id], onDelete: Cascade)
 
   @@index([entityId, createdAt])
+}
+
+model Review {
+  id           String     @id @default(uuid())
+  userId       String
+  freelancerId String
+  rating       Int
+  comment      String?    @db.VarChar(500)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  freelancer   Freelancer @relation(fields: [freelancerId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, freelancerId])
+  @@index([freelancerId, createdAt])
+  @@index([userId])
 }
 
 model Company {

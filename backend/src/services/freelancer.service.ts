@@ -186,6 +186,11 @@ export class FreelancerService implements IFreelancerService {
         f.experience AS experience,
         f.status AS status,
         f.rating AS rating,
+        (
+          SELECT COUNT(*)::int
+          FROM "Review" r
+          WHERE r."freelancerId" = f.id
+        ) AS review_count,
         p.name AS primary_profession_name,
         p.id AS primary_profession_id,
         get_distance_km(
@@ -252,6 +257,11 @@ export class FreelancerService implements IFreelancerService {
       f.experience AS experience,
       f.status AS status,
       f.rating AS rating,
+      (
+        SELECT COUNT(*)::int
+        FROM "Review" r
+        WHERE r."freelancerId" = f.id
+      ) AS review_count,
       f.description AS description,
       p.name AS primary_profession_name,
       p.id AS primary_profession_id,
@@ -346,7 +356,7 @@ export class FreelancerService implements IFreelancerService {
 
     // Check total existing images don't exceed the cap
     const existingCount = await this.prismaService.image.count({
-      where: { freelancerId: freelancer.id },
+      where: { entityId: freelancer.id },
     });
 
     if (existingCount + files.images.length > MAX_TOTAL_GALLERY_IMAGES) {
@@ -377,7 +387,7 @@ export class FreelancerService implements IFreelancerService {
       await this.prismaService.$transaction(async (tx) => {
         await tx.image.createMany({
           data: uploadedResults.map((result) => ({
-            freelancerId: freelancer.id,
+            entityId: freelancer.id,
             imageKey: result.key,
           })),
         });
@@ -403,17 +413,18 @@ export class FreelancerService implements IFreelancerService {
       baseQuery: (sqlFilters, sqlOrder, sqlSearch, take, skip) => Prisma.sql`
         SELECT 
           "id" AS image_id,
-          "freelancerId" AS freelancer_id,
+          "entityId" AS freelancer_id,
           "imageKey" AS image_key,
           "altText" AS alt_text,
           "createdAt" AS created_at
         FROM "Image"
       ${sqlFilters}
+      ${sqlOrder}
       LIMIT ${take}
       OFFSET ${skip}
     `,
       countQuery: (sqlFilters) => Prisma.sql`
-        SELECT COUNT(*)::int AS count FROM "Image"`,
+        SELECT COUNT(*)::int AS count FROM "Image" ${sqlFilters}`,
     });
 
     response.data = response.data.map((item) => ({

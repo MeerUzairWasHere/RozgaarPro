@@ -2,6 +2,7 @@ import {
   AuthController,
   CompanyController,
   ConversationController,
+  ReviewController,
   FreelancerController,
   LocationController,
   ProfessionController,
@@ -27,6 +28,7 @@ import {
   SkillService,
   TwilioVerifyService,
   UserService,
+  ReviewService,
 } from "./services";
 
 // Container to hold all instances
@@ -49,6 +51,7 @@ class Container {
   public locationService: LocationService;
   public imageService: ImageService;
   public conversationService: ConversationService;
+  public reviewService: ReviewService;
 
   // Controllers
   public authController: AuthController;
@@ -59,6 +62,7 @@ class Container {
   public professionController: ProfessionController;
   public freelancerController: FreelancerController;
   public conversationController: ConversationController;
+  public reviewController: ReviewController;
 
   constructor() {
     // Initialize Database
@@ -103,6 +107,10 @@ class Container {
       this.prismaService,
       this.storageService,
     );
+    this.reviewService = new ReviewService(
+      this.prismaService,
+      this.storageService,
+    );
 
     // Initialize Controllers
     this.authController = new AuthController(this.authService);
@@ -119,6 +127,7 @@ class Container {
     this.conversationController = new ConversationController(
       this.conversationService,
     );
+    this.reviewController = new ReviewController(this.reviewService);
   }
 }
 
@@ -136,4 +145,5 @@ export const {
   professionController,
   locationController,
   conversationController,
+  reviewController,
 } = container;

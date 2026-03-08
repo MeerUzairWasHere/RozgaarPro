@@ -5,3 +5,4 @@ export * from "./user.validator";
 export * from "./freelancer.validator";
 export * from "./profession.validator";
 export * from "./location.validator";
+export * from "./review.validator";
