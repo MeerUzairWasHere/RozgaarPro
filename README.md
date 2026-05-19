@@ -1,107 +1,30 @@
 # RozgaarPro
 
-RozgaarPro is a full-stack project with:
-- `backend`: Node.js + TypeScript + Express + Prisma API
-- `native`: Expo React Native mobile app
+RozgaarPro is a local services marketplace that helps people find trusted skilled freelancers nearby. It is built for everyday work needs such as plumbing, electrical repairs, carpentry, home services, and other professional help.
 
-## Repository Structure
+The app gives customers a simple way to search for professionals, compare profiles, check ratings, view distance, and contact freelancers directly. Freelancers can create a professional profile, list their profession and skills, verify their identity, and become visible to customers in their area.
 
-- `backend/` API server, Prisma schema, migrations
-- `native/` Expo mobile application
+## What The App Does
 
-## Prerequisites
+- Helps customers discover skilled freelancers near their current location.
+- Supports search by name, profession, or service.
+- Shows freelancer profiles with profession, experience, rating, availability, location, gallery, and reviews.
+- Lets customers filter and sort professionals by rating, distance, and experience.
+- Allows direct contact through calls and in-app messaging.
+- Gives customers a way to leave reviews after working with a freelancer.
+- Helps freelancers set up a profile with profession, skills, experience, ID verification, profile photo, and location.
+- Shows profile approval status so freelancers know when they are visible to customers.
 
-- Node.js 18+
-- npm
-- PostgreSQL database (or Neon/Postgres-compatible connection)
-- Expo CLI (optional, via `npx expo ...` is enough)
+## Who It Is For
 
-## Backend Setup
+RozgaarPro is for customers who need reliable local help without searching through informal contacts or middlemen. It is also for skilled workers who want a cleaner way to be discovered, build trust, and receive work opportunities from nearby customers.
 
-1. Go to backend:
+## Core Experience
 
-```bash
-cd backend
-```
+Customers open the app, choose their role, search for the service they need, review nearby freelancers, and contact the right person directly. Freelancer profiles provide practical decision-making details such as distance, experience, reviews, work photos, and verification indicators.
 
-2. Install dependencies:
+Freelancers join the app, choose their profession, add up to three skills, provide experience details, complete identity verification, and share their work location. Once approved, their profile becomes visible to customers looking for their services.
 
-```bash
-npm install
-```
+## Trust And Discovery
 
-3. Create env file:
-
-```bash
-cp .env.example .env
-```
-
-4. Fill required values in `.env`.
-
-5. Run Prisma migrations/generate client:
-
-```bash
-npm run migrate
-npm run generate
-```
-
-6. Start backend:
-
-```bash
-npm run dev
-```
-
-Backend default URL: `http://localhost:3000`
-
-## Native Setup
-
-1. Go to native:
-
-```bash
-cd native
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Create env file:
-
-```bash
-cp .env.example .env.local
-```
-
-4. Set `EXPO_PUBLIC_API_URL` in `.env.local`:
-- Simulator: `http://localhost:3000/api/v1`
-- Physical device: `http://<YOUR_LAN_IP>:3000/api/v1`
-
-5. Start Expo app:
-
-```bash
-npm run start
-```
-
-## Useful Scripts
-
-### Backend
-
-- `npm run dev` build + start server
-- `npm run build` compile TypeScript
-- `npm run migrate` run Prisma migrations
-- `npm run generate` generate Prisma client
-
-### Native
-
-- `npm run start` start Expo
-- `npm run android` run Android app
-- `npm run ios` run iOS app
-- `npm run web` run web target
-
-## Environment Files Added
-
-- `backend/.env.example`
-- `native/.env.example`
-
-Use these templates and keep real secrets only in local env files.
+RozgaarPro focuses on direct local connections backed by verification, ratings, reviews, and location-aware search. The goal is to make hiring skilled help easier for customers while giving freelancers a straightforward way to grow their local presence.
